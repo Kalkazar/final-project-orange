@@ -30,8 +30,16 @@ export const UploadCard = ({ fileType, upload }) => (
 export const FolderFunctionsCard = ({ createFolder, uploadFolder }) => (
   <Card>
     <div className={styles.trashCardHolder}>
-      <InnerButton name='Create Folder' onClick={createFolder} />
-      <InnerButton name='Upload Folder' onClick={uploadFolder} />
+      <InnerButton
+        name='Create Folder'
+        onClick={createFolder}
+        icon={<CreateFolderIcon onClick={createFolder} />}
+      />
+      <InnerButton
+        name='Upload Folder'
+        onClick={uploadFolder}
+        icon={<UploadIcon onClick={uploadFolder} />}
+      />
     </div>
   </Card>
 )
