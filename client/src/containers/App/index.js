@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Icon from '../../components/Icon'
 import styles from './app.module.scss'
 
 class App extends Component {
