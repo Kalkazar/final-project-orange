@@ -1,20 +1,30 @@
 package com.cooksys.ftd.drivestorageorange.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
+import com.cooksys.ftd.drivestorageorange.mappers.FolderMapper;
 import com.cooksys.ftd.drivestorageorange.repositories.FolderRepository;
 
 @Service
 public class FolderService {
 	
 	private FolderRepository folderRepository;
+	private FolderMapper folderMapper;
 	
 	@Autowired
-	public FolderService(FolderRepository folderRepository) {
+	public FolderService(FolderRepository folderRepository, FolderMapper folderMapper) {
 		super();
 		this.folderRepository = folderRepository;
+		this.folderMapper = folderMapper;
+	}
+	
+	public List<FolderDTO> getAllFolders() {
+		return this.folderMapper.entitiesToDtos(this.folderRepository.findAll());
 	}
 	
 //	@POST /folder/{folder_name}/upload
@@ -23,30 +33,20 @@ public class FolderService {
 //		return null;
 //	}
 	
-	// @POST /folder/{folder_name}
 	public Long createFolder(String folderName) {
-//		FolderEntity folder = this.folderRepository.save(new FolderEntity(folderName));
-//		return folder.getId(); // can this be one line?
 		return this.folderRepository.save(new FolderEntity(folderName)).getId();
-
 	}
 	
-	
-//	@PATCH /folder/{folder_uid}/rename/{new_name}
-//	renames a folder
-	// I think it should return a String: the new folder name
+	// I think this should return a String: the new folder name
 	public String renameFolder(Long id, String folderName) {
-		FolderEntity folder = this.folderRepository.findFolderEntityById(id); // SHOULDN'T THIS BE ONE LINE?
+		FolderEntity folder = this.folderRepository.findFolderEntityById(id);
 		folder.setFolderName(folderName);
 		this.folderRepository.save(folder);
 		return folder.getFolderName();
-		//return this.folderRepository.save(this.folderRepository.findFolderEntityById(id).setFolderName(folderName));
 	}// can this be further condensed?
 	// should this account for when the id is not found?
 	
-//	@DELETE /folder/{folder_uid}/
-//	Moves a given folder to the trash
-	// I think it should return a Long: the deleted folder id
+	// I think this should return a Long: the deleted folder id
 	public Long deleteFolder(Long id) {
 		FolderEntity folder = this.folderRepository.findFolderEntityById(id);
 		folder.setInTrash(true);

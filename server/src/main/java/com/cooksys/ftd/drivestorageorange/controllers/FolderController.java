@@ -1,13 +1,17 @@
 package com.cooksys.ftd.drivestorageorange.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
 import com.cooksys.ftd.drivestorageorange.services.FolderService;
 
 @RestController
@@ -20,6 +24,11 @@ public class FolderController {
 	public FolderController(FolderService folderService) {
 		super();
 		this.folderService = folderService;
+	}
+	
+	@GetMapping("")
+	public List<FolderDTO> getAllFolders() {
+		return this.folderService.getAllFolders();
 	}
 	
 //	@POST /folder/{folder_name}/upload

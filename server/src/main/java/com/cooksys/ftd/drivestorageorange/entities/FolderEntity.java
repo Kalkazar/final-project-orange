@@ -18,7 +18,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "folders")
-public class FolderEntity { // make shit nullable?
+public class FolderEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
