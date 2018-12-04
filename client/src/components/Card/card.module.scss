@@ -1,0 +1,27 @@
+.cardHolder {
+  display: flex;
+  width: 200pt;
+  height: 150pt;
+  flex-direction: column;
+  box-shadow: 0 0 3px 1px rgba(107, 101, 101, 0.35);
+}
+
+.cardTitle {
+  border-bottom: 1pt solid #f3f3f3;
+  padding: 5pt 10pt;
+  text-align: center;
+}
+
+.cardBody {
+  padding: 5pt 10pt;
+  height: 100%;
+  align-items: flex-end;
+  display: flex;
+}
+
+.fileCardBody {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
