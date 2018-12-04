@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,7 +20,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Table(name = "files")
 public class FileEntity {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long uid;
@@ -33,7 +32,7 @@ public class FileEntity {
 	@Column(nullable = false, name = "date_created")
 	@CreationTimestamp
 	private Date created;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, name = "date_last_modified")
 	@UpdateTimestamp
@@ -41,16 +40,17 @@ public class FileEntity {
 
 	@Column(nullable = false, name = "file_data")
 	private byte[] data;
-	
-//	@ManyToOne(cascade = CascadeType.ALL)
-//	@JoinColumn(nullable = true)
-//	private FolderEntity container;
-	
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(nullable = true)
+	private FolderEntity container;
+
 	@Column(nullable = false, name = "in_trash")
 	private boolean inTrash;
-	
-	public FileEntity() {}
-	
+
+	public FileEntity() {
+	}
+
 	public Long getUid() {
 		return uid;
 	}
@@ -91,13 +91,13 @@ public class FileEntity {
 		this.data = data;
 	}
 
-//	public FolderEntity getContainer() {
-//		return container;
-//	}
-//
-//	public void setContainer(FolderEntity container) {
-//		this.container = container;
-//	}
+	public FolderEntity getContainer() {
+		return container;
+	}
+
+	public void setContainer(FolderEntity container) {
+		this.container = container;
+	}
 
 	public boolean isInTrash() {
 		return inTrash;
@@ -106,7 +106,5 @@ public class FileEntity {
 	public void setInTrash(boolean inTrash) {
 		this.inTrash = inTrash;
 	}
-
-	
 
 }
