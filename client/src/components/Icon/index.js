@@ -55,4 +55,20 @@ export const RestoreIcon = props => (
   />
 )
 
+export const FileIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-file'}
+    wrapper={styles.cardIcon}
+  />
+)
+
+export const FolderIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-folder'}
+    wrapper={styles.cardIcon}
+  />
+)
+
 export default Icon
