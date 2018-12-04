@@ -1,15 +1,58 @@
 import React from 'react'
+import styles from './icon.module.scss'
 
-/**
- *
- * @param {Any} props Contains a props.wrapper to style the div containing the icon,
- * a props.iconClass which takes a font awesome icon class, and a props.onClick which takes
- * an onClick function that tells the icon how to behave when clicked.
- */
 const Icon = props => (
-  <div className={props.wrapper}>
+  <div className={`${styles.iconClass} ${props.wrapper}`}>
     <i className={props.iconClass} onClick={props.onClick} />
   </div>
+)
+
+export const DownloadIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-arrow-alt-circle-down'}
+    wrapper={styles.cardIcon}
+  />
+)
+
+export const UploadIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-upload'}
+    wrapper={styles.cardIcon}
+  />
+)
+
+export const TrashIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-trash-alt'}
+    wrapper={styles.cardIcon}
+  />
+)
+
+export const OpenFolderIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-folder-open'}
+    wrapper={styles.cardIcon}
+  />
+)
+
+export const CreateFolderIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-folder-plus'}
+    wrapper={styles.cardIcon}
+  />
+)
+
+export const RestoreIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-window-restore'}
+    wrapper={styles.cardIcon}
+  />
 )
 
 export default Icon
