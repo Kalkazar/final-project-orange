@@ -9,6 +9,7 @@ import styles from './innerButton.module.scss'
 const InnerButton = props => (
   <div className={`${styles.innerButtonClass}`} onClick={props.onClick}>
     {props.name}
+    <div className={`${styles.buttonIcon}`}>{props.icon}</div>
   </div>
 )
 

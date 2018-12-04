@@ -1,10 +1,13 @@
 @import '../../index.scss';
 
 .innerButtonClass {
-  width: 200pt;
-  height: 40pt;
+  display: flex;
+  flex-direction: row;
+  align-items: space-around;
+  width: 15%;
+  height: auto;
   background-color: lightseagreen;
-  font-size: 24pt;
+  font-size: 12pt;
   color: white;
   border: 1px solid gray;
   &:hover {
@@ -15,4 +18,11 @@
   &:active {
     background-color: teal;
   }
+}
+
+.buttonIcon {
+  display: flex;
+  flex-direction: row;
+  margin-left: 10%;
+  font-size: 8pt;
 }

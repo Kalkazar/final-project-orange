@@ -43,8 +43,13 @@ export const TrashCard = ({ name, fileType, id, deleteForever, restore }) => (
       <InnerButton
         name={`Delete ${fileType}`}
         onClick={() => deleteForever(id)}
+        icon={<TrashIcon onClick={() => deleteForever(id)} />}
       />
-      <InnerButton name={`Restore ${fileType}`} onClick={() => restore(id)} />
+      <InnerButton
+        name={`Restore ${fileType}`}
+        onClick={() => restore(id)}
+        icon={<RestoreIcon onClick={() => restore(id)} />}
+      />
     </div>
   </Card>
 )
