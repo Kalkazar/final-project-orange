@@ -12,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -29,15 +27,13 @@ public class FolderEntity { // make shit nullable?
 	@Column(nullable = false)
 	private String folderName; // make it so these are unique
 	
-	//@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	@CreationTimestamp
-	private Timestamp dateCreated;
+	private Timestamp dateCreated; // consider making final
 	
-	//@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	@UpdateTimestamp
-	private Timestamp dateLastModified; //consider making final
+	private Timestamp dateLastModified;
 	
 	@ManyToOne
 	@JoinColumn(nullable=true) // IS THIS RIGHT?
@@ -54,12 +50,9 @@ public class FolderEntity { // make shit nullable?
 	@JoinColumn(nullable=true) // IS THIS RIGHT?
 	private Set<FolderEntity> containerFolders; // rename?
 	
-	public FolderEntity() {
-//		this.dateCreated = new Timestamp(System.currentTimeMillis());
-	}
+	public FolderEntity() {}
 	
 	public FolderEntity(String folderName) {
-//		this.dateCreated = new Timestamp(System.currentTimeMillis());
 		this.folderName = folderName;
 	}
 
@@ -83,7 +76,7 @@ public class FolderEntity { // make shit nullable?
 		return dateCreated;
 	}
 
-	public void setDateCreated(Timestamp dateCreated) {
+	public void setDateCreated(Timestamp dateCreated) { // consider deleting
 		this.dateCreated = dateCreated;
 	}
 
