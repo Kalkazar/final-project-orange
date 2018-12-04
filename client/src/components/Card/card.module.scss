@@ -1,27 +1,70 @@
+@import "../../index.scss";
+
+
+.uploadIconHolder {
+  height: 80%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.uploadIconHolder:hover, .folderCardBody:hover {
+  background-color: #ccc;
+  border-radius: 5pt;
+}
+
 .cardHolder {
   display: flex;
   width: 200pt;
   height: 150pt;
   flex-direction: column;
   box-shadow: 0 0 3px 1px rgba(107, 101, 101, 0.35);
+  @include noselecttext;
 }
+
+
 
 .cardTitle {
   border-bottom: 1pt solid #f3f3f3;
   padding: 5pt 10pt;
   text-align: center;
+  height: 20%;
 }
 
 .cardBody {
   padding: 5pt 10pt;
   height: 100%;
-  align-items: flex-end;
-  display: flex;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.fileCardBody {
+.fileCardBody, .folderCardBody {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+  height: 80%;
+  align-items: flex-end;
+  box-sizing: border-box;
+  padding: 10pt;
+}
+
+.titleIconHolder {
+  float: right;
+}
+
+.folderCardBody {
+  cursor: pointer;
+}
+
+.folderText {
+  position: relative;
+  text-align: center;
+  height: 0pt;
+  top: 25%;
+  font-size: 1.5em;
+  opacity: 0.4;
+  @include unselectable;
 }
