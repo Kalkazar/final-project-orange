@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
 import styles from './app.module.scss'
-import { FileCard, FolderCard, UploadCard } from '../../components/Card'
+import {
+  FileCard,
+  FolderCard,
+  UploadCard,
+  TrashCard,
+  FolderFunctionsCard
+} from '../../components/Card'
 
 class App extends Component {
   render () {
@@ -22,6 +28,17 @@ class App extends Component {
         <UploadCard
           fileType='file'
           upload={() => console.log('uploading file...')}
+        />
+        <TrashCard
+          name="Don't delete me.txt"
+          id={2}
+          deleteForever={console.log}
+          restore={console.log}
+          fileType='file'
+        />
+        <FolderFunctionsCard
+          createFolder={console.log}
+          uploadFolder={console.log}
         />
       </div>
     )

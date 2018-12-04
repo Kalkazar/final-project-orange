@@ -10,6 +10,7 @@ import {
   FileIcon,
   FolderIcon
 } from '../Icon'
+import InnerButton from '../InnerButton'
 
 const Card = ({ children }) => (
   <div className={styles.cardHolder}>
@@ -26,18 +27,30 @@ export const UploadCard = ({ fileType, upload }) => (
   </Card>
 )
 
-export const TrashCard = ({ name, id, deleteForever, restore }) => (
-  <Card title={name}>
+export const FolderFunctionsCard = ({ createFolder, uploadFolder }) => (
+  <Card>
+    <div className={styles.trashCardHolder}>
+      <InnerButton name='Create Folder' onClick={createFolder} />
+      <InnerButton name='Upload Folder' onClick={uploadFolder} />
+    </div>
+  </Card>
+)
+
+export const TrashCard = ({ name, fileType, id, deleteForever, restore }) => (
+  <Card>
     <div className={styles.cardTitle}>{name}</div>
-    <div className={styles.fileCardBody}>
-      <TrashIcon onClick={() => deleteForever(id)} />
-      <RestoreIcon onClick={() => restore(id)} />
+    <div className={styles.trashCardHolder}>
+      <InnerButton
+        name={`Delete ${fileType}`}
+        onClick={() => deleteForever(id)}
+      />
+      <InnerButton name={`Restore ${fileType}`} onClick={() => restore(id)} />
     </div>
   </Card>
 )
 
 export const FileCard = ({ fileName, fileId, trashFile, downloadFile }) => (
-  <Card title={fileName}>
+  <Card>
     <div className={styles.cardTitle}>{fileName}</div>
     <div className={styles.fileCardBody}>
       <TrashIcon onClick={() => trashFile(fileId)} />
@@ -53,7 +66,7 @@ export const FolderCard = ({
   downloadFolder,
   openFolder
 }) => (
-  <Card title={folderName}>
+  <Card>
     <div className={styles.cardTitle}>
       {folderName}
       <div className={styles.titleIconHolder}>

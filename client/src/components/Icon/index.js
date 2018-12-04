@@ -3,7 +3,7 @@ import styles from './icon.module.scss'
 
 const Icon = props => (
   <div className={`${styles.iconClass} ${props.wrapper}`}>
-    <i className={props.iconClass} onClick={props.onClick} />
+    <i className={`${props.iconClass} fa-2x`} onClick={props.onClick} />
   </div>
 )
 

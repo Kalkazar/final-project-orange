@@ -1,5 +1,7 @@
 .iconClass {
-
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .cardIcon {
