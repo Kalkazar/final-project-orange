@@ -1,0 +1,18 @@
+@import '../../index.scss';
+
+.innerButtonClass {
+  width: 200pt;
+  height: 40pt;
+  background-color: lightseagreen;
+  font-size: 24pt;
+  color: white;
+  border: 1px solid gray;
+  &:hover {
+    border-color: black;
+    cursor: pointer;
+    @include noselecttext;
+  }
+  &:active {
+    background-color: teal;
+  }
+}
