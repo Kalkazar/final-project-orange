@@ -1,10 +1,16 @@
 package com.cooksys.ftd.drivestorageorange.dtos;
 
+import java.util.Date;
+
 public class FileDTO {
 
 	private Long uid;
 
 	private String name;
+
+	private Date created;
+
+	private Date lastModified;
 
 	private Long containerId;
 
@@ -27,6 +33,22 @@ public class FileDTO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	public Date getLastModified() {
+		return lastModified;
+	}
+
+	public void setLastModified(Date lastModified) {
+		this.lastModified = lastModified;
 	}
 
 	public Long getContainerId() {
