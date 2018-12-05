@@ -43,23 +43,23 @@ public class FolderController {
 //		Create an empty folder
 //		Returns id
 	@PostMapping("{folder_name}")
-	public Long createFolder(@PathVariable("folder_name") String folderName) {
-		return this.folderService.createFolder(folderName);
+	public FolderDTO createFolder(@PathVariable("folder_name") String name) {
+		return this.folderService.createFolder(name);
 	}
 	
 	
 //	@PATCH /folder/{folder_uid}/rename/{new_name}
 	@PatchMapping("{folder_uid}/rename/{new_name}")
-	public String renameFolder(@PathVariable("folder_uid") Long id, @PathVariable("new_name") String folderName) {
-		return this.folderService.renameFolder(id, folderName);
+	public FolderDTO renameFolder(@PathVariable("folder_uid") Long uid, @PathVariable("new_name") String name) {
+		return this.folderService.renameFolder(uid, name);
 	}
 	
 	
 //	@DELETE /folder/{folder_uid}/
 //		Moves a given folder to the trash
 	@DeleteMapping("{folder_uid}")
-	public Long deleteFolder(@PathVariable("folder_uid") Long id) {
-		return this.folderService.deleteFolder(id);
+	public FolderDTO trashFolder(@PathVariable("folder_uid") Long uid) {  // was "deleteFolder", renamed
+		return this.folderService.trashFolder(uid);
 	}
 	
 	
@@ -69,9 +69,13 @@ public class FolderController {
 //			(optional) page (default 1, 1-based indexing)
 //			(optional) limit: 1-100 (default 100)
 //		Returns a list of all current folders names and ids
-	@PostMapping("get-folders")
-	public void getFolders() {
-		//
-	}
+//	@PostMapping("get-folders")
+//	public List<FolderDTO> getFolders() {
+//		return this.folderService.getFolders(100);
+//	}
+//	@PostMapping("get-folders/{limit}")
+//	public List<FolderDTO> getFolders(int limit) {
+//		return this.folderService.getFolders(limit);
+//	}
 
 }

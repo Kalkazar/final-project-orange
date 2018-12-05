@@ -2,26 +2,26 @@ package com.cooksys.ftd.drivestorageorange.dtos;
 
 public class FolderDTO {
 	
-	private Long id;
-	private String folderName;
+	private Long uid;
+	private String name;
 	private boolean inTrash;
 	
 	public FolderDTO() {}
 
-	public Long getId() {
-		return id;
+	public Long getUid() {
+		return uid;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setUid(Long uid) {
+		this.uid = uid;
 	}
 
-	public String getFolderName() {
-		return folderName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFolderName(String folderName) {
-		this.folderName = folderName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public boolean isInTrash() {

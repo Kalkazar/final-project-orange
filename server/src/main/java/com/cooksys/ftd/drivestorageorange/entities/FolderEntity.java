@@ -22,14 +22,14 @@ public class FolderEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long uid;
 	
 	@Column(nullable = false)
-	private String folderName; // make it so these are unique
+	private String name; // make it so these are unique
 	
 	@Column(nullable = false)
 	@CreationTimestamp
-	private Timestamp dateCreated; // consider making final
+	private Timestamp dateCreated;
 	
 	@Column(nullable = false)
 	@UpdateTimestamp
@@ -53,23 +53,23 @@ public class FolderEntity {
 	public FolderEntity() {}
 	
 	public FolderEntity(String folderName) {
-		this.folderName = folderName;
+		this.name = folderName;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getUid() {
+		return uid;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setUid(Long uid) {
+		this.uid = uid;
 	}
 
-	public String getFolderName() {
-		return folderName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFolderName(String folderName) {
-		this.folderName = folderName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Timestamp getDateCreated() {

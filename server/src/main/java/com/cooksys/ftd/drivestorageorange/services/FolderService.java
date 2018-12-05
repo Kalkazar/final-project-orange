@@ -29,29 +29,40 @@ public class FolderService {
 	
 //	@POST /folder/{folder_name}/upload
 	//	Upload a folder
-//	public FolderEntity uploadFolder(String foldername) {
-//		return null;
-//	}
-	
-	public Long createFolder(String folderName) {
-		return this.folderRepository.save(new FolderEntity(folderName)).getId();
+	public FolderDTO uploadFolder(String name) {
+		return null;
 	}
 	
-	// I think this should return a String: the new folder name
-	public String renameFolder(Long id, String folderName) {
-		FolderEntity folder = this.folderRepository.findFolderEntityById(id);
-		folder.setFolderName(folderName);
-		this.folderRepository.save(folder);
-		return folder.getFolderName();
-	}// can this be further condensed?
-	// should this account for when the id is not found?
+	public FolderDTO createFolder(String name) {
+		return this.folderMapper.entityToDto(this.folderRepository.save(new FolderEntity(name)));
+	}
 	
-	// I think this should return a Long: the deleted folder id
-	public Long deleteFolder(Long id) {
-		FolderEntity folder = this.folderRepository.findFolderEntityById(id);
+	public FolderDTO renameFolder(Long uid, String name) {
+		FolderEntity folder = this.folderRepository.findFolderEntityByUid(uid);
+		folder.setName(name);
+		return this.folderMapper.entityToDto(this.folderRepository.save(folder));
+	}
+	
+	public FolderDTO trashFolder(Long uid) {
+		FolderEntity folder = this.folderRepository.findFolderEntityByUid(uid);
 		folder.setInTrash(true);
-		this.folderRepository.save(folder);
-		return folder.getId();
+		return this.folderMapper.entityToDto(this.folderRepository.save(folder));
+	}
+	
+	public FolderDTO restoreFolder(Long uid) {
+		FolderEntity folder = this.folderRepository.findFolderEntityByUid(uid);
+		folder.setInTrash(false);
+		return this.folderMapper.entityToDto(this.folderRepository.save(folder));
+	}
+	
+	public void deleteFolder(Long uid) {
+		FolderEntity deleteTarget = this.folderRepository.getOneTrashed(uid);
+		
+		if(deleteTarget != null) {
+			this.folderRepository.delete(deleteTarget);
+		} else {
+			System.out.println("No matching target for deletion!");
+		}
 	}
 	
 //	@POST /get-folders/
@@ -61,4 +72,11 @@ public class FolderService {
 //		(optional) limit: 1-100 (default 100)
 //	Returns a list of all current folders names and ids
 	// would this be done with a whole lotta method overloading?
+//	public List<FolderDTO> getFolders(int limit) {
+//		List<FolderDTO> dtoList = this.folderMapper.entitiesToDtos(this.folderRepository.findAll());
+//		if(dtoList.size() > limit) {
+//			dtoList.subList(limit, dtoList.size()).clear();
+//		}
+//		return dtoList;
+//	}
 }
