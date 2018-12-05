@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import styles from './app.module.scss'
 import { Library } from '../Library'
 import { SideNav } from '../SideNav/SideNav'
+import { NavButton } from '../../components/NavButton'
+import { Trash } from '../Trash'
+import { Route } from 'react-router-dom'
 
 class App extends Component {
   render () {
@@ -12,7 +15,8 @@ class App extends Component {
             <SideNav />
           </div>
           <div className=' col-sm-12 col-md-9 col-lg-8 col-xl-7'>
-            <Library />
+            <Route path='/library' component={Library} />
+            <Route path='/trash' component={Trash} />
           </div>
         </div>
       </div>

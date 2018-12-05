@@ -48,6 +48,34 @@ export class Trash extends Component {
           restore={console.log}
           fileType='file'
         />
+        <TrashCard
+          name="Don't delete me.txt"
+          id={2}
+          deleteForever={console.log}
+          restore={console.log}
+          fileType='file'
+        />
+        <TrashCard
+          name="Don't delete me.txt"
+          id={2}
+          deleteForever={console.log}
+          restore={console.log}
+          fileType='file'
+        />
+        <TrashCard
+          name="Don't delete me.txt"
+          id={2}
+          deleteForever={console.log}
+          restore={console.log}
+          fileType='file'
+        />
+        <TrashCard
+          name="Don't delete me.txt"
+          id={2}
+          deleteForever={console.log}
+          restore={console.log}
+          fileType='file'
+        />
       </div>
     )
   }

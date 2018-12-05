@@ -27,20 +27,18 @@ export class Library extends Component {
           downloadFolder={console.log}
           openFolder={console.log}
         />
-        <UploadCard
-          fileType='file'
-          upload={() => console.log('uploading file...')}
+        <FileCard
+          fileName={'PooFile.txt'}
+          fileId={1}
+          trashFile={console.log}
+          downloadFile={console.log}
         />
-        <TrashCard
-          name="Don't delete me.txt"
-          id={2}
-          deleteForever={console.log}
-          restore={console.log}
-          fileType='file'
-        />
-        <FolderFunctionsCard
-          createFolder={console.log}
-          uploadFolder={console.log}
+        <FolderCard
+          folderName={'PooFile.txt'}
+          folderId={1}
+          trashFolder={console.log}
+          downloadFolder={console.log}
+          openFolder={console.log}
         />
         <FileCard
           fileName={'PooFile.txt'}
@@ -55,20 +53,24 @@ export class Library extends Component {
           downloadFolder={console.log}
           openFolder={console.log}
         />
-        <UploadCard
-          fileType='file'
-          upload={() => console.log('uploading file...')}
+        <FileCard
+          fileName={'PooFile.txt'}
+          fileId={1}
+          trashFile={console.log}
+          downloadFile={console.log}
         />
-        <TrashCard
-          name="Don't delete me.txt"
-          id={2}
-          deleteForever={console.log}
-          restore={console.log}
-          fileType='file'
+        <FolderCard
+          folderName={'PooFile.txt'}
+          folderId={1}
+          trashFolder={console.log}
+          downloadFolder={console.log}
+          openFolder={console.log}
         />
-        <FolderFunctionsCard
-          createFolder={console.log}
-          uploadFolder={console.log}
+        <FileCard
+          fileName={'PooFile.txt'}
+          fileId={1}
+          trashFile={console.log}
+          downloadFile={console.log}
         />
       </div>
     )

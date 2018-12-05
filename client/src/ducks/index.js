@@ -6,6 +6,8 @@ import uiReducer from './ui.duck'
 import libraryReducer from './library.duck'
 import trashReducer from './trash.duck'
 
+export { getFiles, getCurrentList } from './library.duck'
+
 export function routes (state = { location: null }, action) {
   switch (action.type) {
     case LOCATION_CHANGE:
@@ -20,9 +22,8 @@ export function routes (state = { location: null }, action) {
 
 function createReducer () {
   return combineReducers({
-    ...libraryReducer,
-    ...trashReducer,
-    ...uiReducer
+    library: libraryReducer,
+    ui: uiReducer
   })
 }
 
