@@ -10,6 +10,9 @@ import {
 } from '../../components/Card'
 
 export class Library extends Component {
+  componentDidMount () {
+    console.log('Get All Files and Folders')
+  }
   render () {
     return (
       <div className={styles.libDiv}>

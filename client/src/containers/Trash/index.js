@@ -10,6 +10,10 @@ import {
 } from '../../components/Card'
 
 export class Trash extends Component {
+  componentDidMount () {
+    console.log('Get All TRASHED Files and Folders')
+  }
+
   render () {
     return (
       <div className={styles.trashDiv}>

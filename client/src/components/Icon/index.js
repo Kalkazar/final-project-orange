@@ -59,7 +59,7 @@ export const FileIcon = props => (
   <Icon
     onClick={props.onClick}
     iconClass={'fas fa-file'}
-    wrapper={styles.cardIcon}
+    wrapper={styles.noHover}
   />
 )
 
@@ -67,7 +67,7 @@ export const FolderIcon = props => (
   <Icon
     onClick={props.onClick}
     iconClass={'fas fa-folder'}
-    wrapper={styles.cardIcon}
+    wrapper={styles.noHover}
   />
 )
 

@@ -7,3 +7,9 @@
 .cardIcon {
 
 }
+
+.noHover {
+  &:hover{
+    cursor: default;
+  }
+}

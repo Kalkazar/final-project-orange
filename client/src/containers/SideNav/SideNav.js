@@ -20,11 +20,11 @@ export class SideNav extends Component {
         />
         <FolderFunctionsCard
           createFolder={console.log}
-          uploadFolder={console.log}
+          uploadFolder={() => console.log('UPLOADING FOLDER')}
         />
         <UploadCard
           fileType='file'
-          upload={() => console.log('uploading file...')}
+          upload={() => console.log('UPLOADING FILE')}
         />
       </div>
     )
