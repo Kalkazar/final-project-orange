@@ -1,4 +1,4 @@
-import { getFileList } from '../api'
+import { getFileList, getFolderList } from '../api'
 
 export const LOAD_FILES = 'LOAD_FILES'
 export const LOAD_FOLDERS = 'LOAD_FOLDERS'
@@ -17,6 +17,15 @@ const initialState = {
   loadingError: null
 }
 
+export const getFolders = () => dispatch => {
+  getFolderList()
+    .then(folderList => {
+      dispatch(loadFolders(folderList))
+      dispatch(getCurrentList())
+    })
+    .catch(err => dispatch(loadError(err)))
+}
+
 export const getFiles = () => dispatch => {
   getFileList()
     .then(fileList => {
@@ -28,18 +37,14 @@ export const getFiles = () => dispatch => {
 
 export const getCurrentList = () => (dispatch, getState) => {
   const { fileList, folderList } = getState().library
-  const {
-    trashLoaded,
-    foldersLoaded,
-    currentPage,
-    currentFolder
-  } = getState().ui
-  const list = foldersLoaded ? folderList : fileList
-  const currentList = list.filter(
+  const { trashLoaded, currentPage, currentFolder } = getState().ui
+  const currentFileList = fileList.filter(
     x =>
       (trashLoaded ? x.inTrash : !x.inTrash) &&
       (!currentFolder || x.folder === currentFolder.uid)
   )
+  const currentFolderList = currentFolder ? [] : [...folderList]
+  const currentList = [...currentFolderList, ...currentFileList]
   dispatch(
     loadCurrentList(
       currentList.slice(
@@ -65,6 +70,11 @@ export const loadFiles = fileList => ({
   fileList
 })
 
+export const loadFolders = folderList => ({
+  type: LOAD_FILES,
+  folderList
+})
+
 export default function config (state = initialState, action) {
   switch (action.type) {
     case LOAD_ERROR:
@@ -76,6 +86,11 @@ export default function config (state = initialState, action) {
       return {
         ...state,
         fileList: action.fileList
+      }
+    case LOAD_FOLDERS:
+      return {
+        ...state,
+        folderList: action.folderList
       }
     case LOAD_CURRENT_LIST:
       return {
