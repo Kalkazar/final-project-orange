@@ -21,8 +21,8 @@ public interface FileMapper {
 //	@Mapping(target = "containerId", source = "container")
 	List<FileDTO> toDto(List<FileEntity> entity);
 
-	FileEntity toEntity(FileDTO dto);
-
-	List<FileEntity> toEntity(List<FileDTO> entity);
+	// Unused methods
+//	FileEntity toEntity(FileDTO dto);
+//	List<FileEntity> toEntity(List<FileDTO> entity);
 
 }
