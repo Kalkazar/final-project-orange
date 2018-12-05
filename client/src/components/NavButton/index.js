@@ -12,3 +12,5 @@ export const NavButton = ({ text, route, onClick }) => (
     <div className={styles.navButtonText}>{text}</div>
   </NavLink>
 )
+
+export default NavButton
