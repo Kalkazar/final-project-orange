@@ -4,7 +4,6 @@ import { routerMiddleware, LOCATION_CHANGE } from 'react-router-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import uiReducer from './ui.duck'
 import libraryReducer from './library.duck'
-import trashReducer from './trash.duck'
 
 export { getFiles, getCurrentList } from './library.duck'
 
