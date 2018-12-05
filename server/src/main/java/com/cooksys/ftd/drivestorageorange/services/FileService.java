@@ -131,21 +131,6 @@ public class FileService {
 //	public void getFiles(String sortBy, Long page, Long limit) {
 ////		this.fileRepository.findAll(sort)
 //	}
-	
-	/**
-	 * Permanently deletes file by UID File must be inTrash to do so
-	 * 
-	 * @param uid to permanently delete
-	 */
-	public void deleteFile(Long uid) {
-		FileEntity deleteTarget = this.fileRepository.getOneTrashed(uid);
-
-		if (deleteTarget != null) {
-			this.fileRepository.delete(deleteTarget);
-		} else {
-			System.out.println("No matching target for deletion!");
-		}
-	}
 
 	/**
 	 * Returns a file entity via UID
