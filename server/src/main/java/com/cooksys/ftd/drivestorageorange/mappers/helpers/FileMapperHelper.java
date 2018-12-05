@@ -9,7 +9,7 @@ public class FileMapperHelper {
 	
 	public Long map(FolderEntity folder) {
 		try {
-			return folder.getId();
+			return folder.getUid();
 		} catch (Exception e) {
 			return null;
 		}
