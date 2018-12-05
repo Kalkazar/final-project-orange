@@ -1,12 +1,5 @@
 import React, { Component } from 'react'
 import styles from './app.module.scss'
-import {
-  FileCard,
-  FolderCard,
-  UploadCard,
-  TrashCard,
-  FolderFunctionsCard
-} from '../../components/Card'
 import { Library } from '../Library'
 import { SideNav } from '../SideNav/SideNav'
 
@@ -15,12 +8,12 @@ class App extends Component {
     return (
       <div className='container-fluid '>
         <div className='row justify-content-center'>
-          <SideNav className=' col-sm-12 col-md-3 col-lg-2 col-xl-2'>
-            Navigation
-          </SideNav>
-          <Library className=' col-sm-12 col-md-9 col-lg-7 col-xl-6'>
-            Library
-          </Library>
+          <div className=' col-sm-12 col-md-3 col-lg-3 col-xl-3'>
+            <SideNav />
+          </div>
+          <div className=' col-sm-12 col-md-9 col-lg-8 col-xl-7'>
+            <Library />
+          </div>
         </div>
       </div>
     )

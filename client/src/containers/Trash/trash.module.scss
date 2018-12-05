@@ -1,13 +1,14 @@
-.navDiv {
+.trashDiv{
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  flex-direction: row;
   justify-content: space-evenly;
-  border: 2pt solid black;
+  border: 2px solid black;
   background-color: whitesmoke;
   margin: 20px;
   padding: 10px;
 }
 
-.navDiv > * {
-  margin: 5px 0px;
+.trashDiv > * {
+   margin: 5px 0px;
 }
