@@ -1,0 +1,14 @@
+.trashDiv{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-evenly;
+  border: 2px solid black;
+  background-color: whitesmoke;
+  margin: 20px;
+  padding: 10px;
+}
+
+.trashDiv > * {
+   margin: 5px 0px;
+}

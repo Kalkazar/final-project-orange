@@ -1,7 +1,15 @@
 .iconClass {
-
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .cardIcon {
 
+}
+
+.noHover {
+  &:hover{
+    cursor: default;
+  }
 }

@@ -1,0 +1,37 @@
+@import '../../index.scss';
+
+.innerButtonClass {
+  display: flex;
+  flex-direction: row;
+  align-items: space-around;
+  margin: 5px;
+  align-content: center;
+  width: 80%;
+  height: auto;
+  background-color: #212529;
+  font-size: 12pt;
+  color: white;
+  border: 1px solid #212529;
+  &:hover {
+    border-color: gray;
+    cursor: pointer;
+    @include noselecttext;
+  }
+  &:active {
+    background-color: gray;
+  }
+}
+
+.buttonIcon {
+  display: flex;
+  flex-direction: row;
+  margin-left: 10px;
+  font-size: 8pt;
+}
+
+.buttonContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+}

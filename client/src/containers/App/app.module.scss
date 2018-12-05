@@ -1,14 +1,9 @@
 .App {
-  text-align: center;
+  height: 100%;
+  width: 100%;
 }
 
-.AppHeader {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.nopadding {
+  padding: 0 !important;
+  margin: 0 !important;
 }

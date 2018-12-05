@@ -1,0 +1,30 @@
+@import "../../index.scss";
+
+.navButton {
+  width: 90%;
+  box-sizing: border-box;
+  margin: 5%;
+  text-align: center;
+  font-size: 1.3em;
+  color: $Light;
+  background: $Dark;
+  border-radius: 5pt;
+  padding: 20pt 5pt;
+  border: 2pt solid white;
+  font-weight: bold;
+}
+
+.activeNav {
+  border: 2pt solid $Highlight;
+}
+
+.navButtonText {
+  @include noselecttext;
+  text-decoration: none;
+}
+
+.navButton:hover {
+  text-decoration: none;
+  background-color: $Highlight;
+  color: black;
+}

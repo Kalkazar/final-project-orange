@@ -1,0 +1,14 @@
+.navDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 2pt solid black;
+  background-color: whitesmoke;
+  margin: 20px;
+  padding: 10px;
+}
+
+.navDiv > * {
+  margin: 5px 0px;
+}

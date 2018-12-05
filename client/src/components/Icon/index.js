@@ -3,7 +3,7 @@ import styles from './icon.module.scss'
 
 const Icon = props => (
   <div className={`${styles.iconClass} ${props.wrapper}`}>
-    <i className={props.iconClass} onClick={props.onClick} />
+    <i className={`${props.iconClass} fa-2x`} onClick={props.onClick} />
   </div>
 )
 
@@ -59,7 +59,7 @@ export const FileIcon = props => (
   <Icon
     onClick={props.onClick}
     iconClass={'fas fa-file'}
-    wrapper={styles.cardIcon}
+    wrapper={styles.noHover}
   />
 )
 
@@ -67,6 +67,14 @@ export const FolderIcon = props => (
   <Icon
     onClick={props.onClick}
     iconClass={'fas fa-folder'}
+    wrapper={styles.noHover}
+  />
+)
+
+export const MoveIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-directions'}
     wrapper={styles.cardIcon}
   />
 )
