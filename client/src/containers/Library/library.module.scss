@@ -1,4 +1,4 @@
-.libDiv{
+.libDiv {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -11,4 +11,9 @@
 
 .libDiv > * {
    margin: 5px 0px;
+}
+
+.pathSpan {
+  display: block;
+  width: 100%;
 }

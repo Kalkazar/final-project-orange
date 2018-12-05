@@ -71,4 +71,12 @@ export const FolderIcon = props => (
   />
 )
 
+export const MoveIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-directions'}
+    wrapper={styles.cardIcon}
+  />
+)
+
 export default Icon

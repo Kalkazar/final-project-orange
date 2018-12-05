@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styles from './sideNav.module.scss'
+import { FolderFunctionsCard, UploadCard } from '../../components/Card'
 
 export class SideNav extends Component {
   render () {
@@ -8,6 +9,14 @@ export class SideNav extends Component {
       <div className={styles.navDiv}>
         <button>Library Nav</button>
         <button>Trash Nav</button>
+        <FolderFunctionsCard
+          createFolder={console.log}
+          uploadFolder={console.log}
+        />
+        <UploadCard
+          fileType='file'
+          upload={() => console.log('uploading file...')}
+        />
       </div>
     )
   }
