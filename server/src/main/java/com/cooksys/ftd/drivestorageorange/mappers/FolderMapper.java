@@ -14,4 +14,5 @@ public interface FolderMapper {
 	FolderDTO entityToDto(FolderEntity entity);
 	
 	List<FolderDTO> entitiesToDtos(List<FolderEntity> entities);
+
 }
