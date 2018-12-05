@@ -7,3 +7,7 @@ export const file = {
     'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
   inTrash: false
 }
+
+export const files = [
+  { uid: 1, filename: 'My life.txt', folder: null, inTrash: false }
+]
