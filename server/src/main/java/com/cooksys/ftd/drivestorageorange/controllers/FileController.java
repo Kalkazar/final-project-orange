@@ -47,6 +47,7 @@ public class FileController {
 	 * Returns a file via UID, if it exists
 	 * 
 	 * @return FileDTO
+	 * @param uid of the file to get
 	 * @see FileDTO
 	 */
 	@GetMapping("{uid}")
@@ -81,9 +82,9 @@ public class FileController {
 	/**
 	 * Returns all files
 	 * 
-	 * @return
+	 * @return all FileDTOs
 	 */
-	@GetMapping("all")
+	@GetMapping("")
 	public List<FileDTO> getAllFiles() {
 		return this.fileService.getAllFiles();
 	}
@@ -91,55 +92,47 @@ public class FileController {
 	/**
 	 * Renames a file by UID
 	 * 
+	 * @return FileDTO
 	 * @param uid     of file to rename
 	 * @param newName to be assigned to file
 	 */
 	@PatchMapping("{uid}/rename/{newName}")
-	public void renameFile(@PathVariable("uid") Long uid, @PathVariable("newName") String newName) {
-		this.fileService.renameFile(uid, newName);
+	public FileDTO renameFile(@PathVariable("uid") Long uid, @PathVariable("newName") String newName) {
+		return this.fileService.renameFile(uid, newName);
 	}
 
 	/**
 	 * Moves a file to the trash via UID
 	 * 
+	 * @return FileDTO
 	 * @param uid of file to move to trash
 	 */
 	@DeleteMapping("{uid}")
-	public void trashFile(@PathVariable("uid") Long uid) {
-		this.fileService.trashFile(uid);
+	public FileDTO trashFile(@PathVariable("uid") Long uid) {
+		return this.fileService.trashFile(uid);
 	}
 
 	/**
 	 * Moves a file to the root folder
 	 * 
+	 * @return FileDTO
 	 * @param fileUid
 	 */
-	@PatchMapping("move/{fileUid}")
-	public void moveFileToRoot(@PathVariable("fileUid") Long fileUid) {
-		this.fileService.moveFile(fileUid);
+	@PatchMapping("{uid}/move")
+	public FileDTO moveFileToRoot(@PathVariable("uid") Long uid) {
+		return this.fileService.moveFile(uid);
 	}
 
 	/**
 	 * Moves a file into a folder via UID
 	 * 
+	 * @return FileDTO
 	 * @param fileUid   of file being moved
 	 * @param folderUid of destination being moved to
 	 */
-	@PatchMapping("move/{fileUid}/{folderUid}")
-	public void moveFile(@PathVariable("fileUid") Long fileUid, @PathVariable("folderUid") Long folderUid) {
-		this.fileService.moveFile(fileUid, folderUid);
+	@PatchMapping("{fileUid}/move/{folderUid}")
+	public FileDTO moveFile(@PathVariable("fileUid") Long fileUid, @PathVariable("folderUid") Long folderUid) {
+		return this.fileService.moveFile(fileUid, folderUid);
 	}
-
-//	[NOT IMPLEMENTED]
-//	@POST /get-files/
-//		Params:
-//			(optional) sort_by: filename (default), uid
-//	(optional) page (default 1, 1-based indexing) 
-//	(optional) limit: 1-100 (default 100)
-//		Returns a list of up current file names and ids
-//	@PostMapping("get-files")
-//	public void getFiles(@RequestBody GetFilesDTO options) {
-//		this.fileService.getFiles(options.getSortBy(), options.getPage(), options.getLimit());
-//	}
 
 }
