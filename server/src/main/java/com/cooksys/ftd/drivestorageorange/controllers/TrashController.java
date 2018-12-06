@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cooksys.ftd.drivestorageorange.dtos.FileDTO;
 import com.cooksys.ftd.drivestorageorange.services.FileService;
 import com.cooksys.ftd.drivestorageorange.services.FolderService;
 import com.cooksys.ftd.drivestorageorange.services.TrashService;
@@ -23,43 +24,57 @@ public class TrashController {
 	@Autowired
 	TrashService trashService;
 
-//	@DELETE /file/{file_uid}/delete
-//		Removes a file permanently
+	/**
+	 * Permanently deletes a file by uid
+	 * 
+	 * @param uid of the file to permanently delete
+	 */
 	@DeleteMapping("/file/{file_uid}/delete")
 	public void deleteFile(@PathVariable("uid") Long uid) {
 		this.trashService.deleteFile(uid);
 	}
 
-//	@Patch /file/{file_uid}/restore
-//		Restores a file
+	/**
+	 * Restores a file by uid
+	 * 
+	 * @param uid of the file to restore
+	 */
 	@PatchMapping("file/{file_uid}/restore")
 	public void restoreFile(@PathVariable("file_uid") Long uid) {
 		this.trashService.restoreFile(uid);
 	}
-
-//	@DELETE /folder/{folder_uid}/delete
-//		Removes a folder permanently
+	
+	/**
+	 * Permanently deletes a folder by uid
+	 * 
+	 * @param uid of the fold to permanently delete
+	 */
 	@DeleteMapping("folder/{folder_uid}/delete")
 	public void deleteFolder(@PathVariable("uid") Long uid) {
 		this.trashService.deleteFolder(uid);
 	}
 
-//	@Patch /file/{folder_uid}/restore
-//		Restores a folder
+	/**
+	 * Restores a folder by uid
+	 * 
+	 * @param uid of the fold to restore
+	 */
 	@PatchMapping("folder/{folder_uid}/restore")
 	public void restoreFolder(@PathVariable("folder_uid") Long uid) {
 		this.trashService.restoreFolder(uid);
 	}
 
-//	@DELETE /file/{folder_uid}/restore
-//		Restores a folder
+	/**
+	 * Permanently deletes all files and folders in trash
+	 */
 	@PatchMapping("delete")
 	public void deleteAll() {
 		this.trashService.deleteAll();
 	}
 
-//	@Patch /file/{folder_uid}/restore
-//		Restores all files and folders in trash
+	/**
+	 * Restores all files and folders in trash
+	 */
 	@PatchMapping("restore")
 	public void restoreAll() {
 		this.trashService.restoreAll();
