@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { FILES_PER_PAGE, setPage } from '../../ducks/library.duck'
+import { connect } from 'react-redux'
 
 const LEFT_PAGE = 'LEFT'
 const RIGHT_PAGE = 'RIGHT'
@@ -20,7 +22,7 @@ class Pagination extends Component {
     super(props)
     const {
       totalRecords = null,
-      pageLimit = 30,
+      pageLimit = FILES_PER_PAGE,
       pageNeighbours = 0,
       currentPage
     } = props
@@ -32,7 +34,8 @@ class Pagination extends Component {
       typeof pageNeighbours === 'number'
         ? Math.max(0, Math.min(pageNeighbours, 2))
         : 0
-    this.totalPages = Math.ceil(this.totalRecords / this.pageLimit)
+    // this.totalPages = Math.ceil(this.totalRecords / this.pageLimit)
+    this.totalPages = this.props.totalPages
     this.state = { currentPage }
   }
 
@@ -79,7 +82,7 @@ class Pagination extends Component {
     // if (!this.totalRecords || this.totalPages === 1) return null
 
     const { currentPage } = this.state
-    const pages = this.fetchPageNumbers()
+    const pages = new Array(this.props.totalPages).fill(0).map((e, i) => i + 1)
 
     return (
       <Fragment>
@@ -90,15 +93,13 @@ class Pagination extends Component {
                 <li
                   key={index}
                   className={`page-item${
-                    currentPage === page ? 'active' : ' '
+                    this.props.currentPage - 1 === index ? 'active' : ' '
                   }`}
                 >
                   <a
                     className='page-link'
                     href='#'
-                    onClick={
-                      console.log
-                    }
+                    onClick={() => this.props.setPage(index)}
                   >
                     {page}
                   </a>
@@ -118,7 +119,25 @@ Pagination.propTypes = {
   pageNeighbours: PropTypes.number,
   onPageChanged: PropTypes.func,
   totalPages: PropTypes.number,
-  currentPage: PropTypes.number
+  currentPage: PropTypes.number,
+  setPage: PropTypes.func
 }
 
 export default Pagination
+
+// const mapStateToProps = state => ({
+//   totalRecords: state.library.totalDisplayElements,
+//   currentPage: state.library.currentPage + 1
+// })
+
+// const mapDispatchToProps = dispatch => ({
+//   // Hook up appropriate Redux methods
+//   setPage: page => dispatch(setPage(page))
+//   // uploadFolder: folder => dispatch(uploadFolder(folder)),
+//   // uploadFile: file => dispatch(uploadFile(file))
+// })
+
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(Pagination)
