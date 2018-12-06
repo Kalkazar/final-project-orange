@@ -184,7 +184,7 @@ const restoreAll = () =>
  * @param {Number} uid UID of file to permanently delete
  */
 const deleteFile = uid =>
-  Axios.patch(`trash/file/${uid}/delete`)
+  Axios.delete(`trash/file/${uid}/delete`)
 
 /**
  * Permanently deletes a folder by uid
