@@ -1,6 +1,5 @@
 package com.cooksys.ftd.drivestorageorange.services;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,11 +95,16 @@ public class TrashService {
 		List<FileEntity> deleteTrashedFiles = this.fileRepository.getAllTrashed();
 		List<FolderEntity> deleteTrashedFolders = this.folderRepository.getAllTrashed();
 
-		if (deleteTrashedFiles != null || deleteTrashedFolders != null) {
+		if (deleteTrashedFiles != null) {
 			this.fileRepository.deleteAll(deleteTrashedFiles);
+		} else {
+			System.out.println("No files for deletion!");
+		}
+		
+		if (deleteTrashedFolders != null) {
 			this.folderRepository.deleteAll(deleteTrashedFolders);
 		} else {
-			System.out.println("No targets for deletion!");
+			System.out.println("No folders for deletion!");
 		}
 	}
 
@@ -112,19 +116,19 @@ public class TrashService {
 		List<FolderEntity> restoreTrashedFolders = this.folderRepository.getAllTrashed();
 
 		if (restoreTrashedFiles != null) {
-			for(FileEntity file : restoreTrashedFiles) {
+			for (FileEntity file : restoreTrashedFiles) {
 				file.setInTrash(false);
 				this.fileRepository.save(file);
 			}
 		} else {
 			System.out.println("No files for restoration!");
 		}
-			
+
 		if (restoreTrashedFolders != null) {
-				for(FolderEntity folder : restoreTrashedFolders) {
-					folder.setInTrash(false);
-					this.folderRepository.save(folder);
-				}
+			for (FolderEntity folder : restoreTrashedFolders) {
+				folder.setInTrash(false);
+				this.folderRepository.save(folder);
+			}
 		} else {
 			System.out.println("No folders for restoration!");
 		}
