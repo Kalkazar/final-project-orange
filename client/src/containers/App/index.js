@@ -22,10 +22,7 @@ class App extends Component {
             <Route path='/library' component={Library} />
             <Route path='/trash' component={Trash} />
             <Pagination currentPage={this.props.currentPage + 1}
-            totalRecords={
-              this.props.totalRecords + 24
-              // 12345
-              } 
+              totalPages={this.props.totalPages}
               setPage={this.props.setPage}
               />
           </div>
@@ -43,7 +40,7 @@ App.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  totalRecords: state.library.totalDisplayElements,
+  totalPages: state.library.totalPages,
   currentPage: state.library.currentPage
 })
 

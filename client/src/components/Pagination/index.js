@@ -34,7 +34,8 @@ class Pagination extends Component {
       typeof pageNeighbours === 'number'
         ? Math.max(0, Math.min(pageNeighbours, 2))
         : 0
-    this.totalPages = Math.ceil(this.totalRecords / this.pageLimit)
+    // this.totalPages = Math.ceil(this.totalRecords / this.pageLimit)
+    this.totalPages = this.props.totalPages
     this.state = { currentPage }
   }
 
@@ -81,7 +82,7 @@ class Pagination extends Component {
     // if (!this.totalRecords || this.totalPages === 1) return null
 
     const { currentPage } = this.state
-    const pages = this.fetchPageNumbers()
+    const pages = new Array(this.props.totalPages).fill(0).map((e, i) => i + 1)
 
     return (
       <Fragment>

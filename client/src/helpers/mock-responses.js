@@ -1,25 +1,31 @@
 export const files = [
-  { uid: 1, name: 'My life.txt', containerId: null, inTrash: false },
-  { uid: 4, name: 'My life.txt', containerId: null, inTrash: false },
-  { uid: 5, name: 'My life.txt', containerId: null, inTrash: false },
-  { uid: 6, name: 'My life.txt', containerId: null, inTrash: false },
-  { uid: 7, name: 'My life.txt', containerId: null, inTrash: false },
-  { uid: 8, name: 'My life.txt', containerId: null, inTrash: false },
-  { uid: 9, name: 'My life.txt', containerId: null, inTrash: false },
+  ...(new Array(15).fill({ uid: 1, name: 'My life.txt', containerId: null, inTrash: false })),
+  ...(new Array(15).fill({ uid: 1, name: 'Josh\'s fun times in paintball.mpeg', containerId: null, inTrash: false })),
+  ...(new Array(15).fill({ uid: 1, name: 'John doing his thing but thrown away.mpeg', containerId: null, inTrash: false }))
+]
 
-  {
-    uid: 2,
-    name: 'Josh\'s fun times in paintball.mpeg',
-    containerId: 1,
-    inTrash: false
-  },
-  {
-    uid: 3,
-    name: 'John doing his thing but thrown away.mpeg',
-    containerId: 1,
-    inTrash: true
-  }
-].map((e, i, arr) => arr).reduce((acc, curr) => [...acc, ...curr], [])
+// [
+//   { uid: 1, name: 'My life.txt', containerId: null, inTrash: false },
+//   { uid: 4, name: 'My life.txt', containerId: null, inTrash: false },
+//   { uid: 5, name: 'My life.txt', containerId: null, inTrash: false },
+//   { uid: 6, name: 'My life.txt', containerId: null, inTrash: false },
+//   { uid: 7, name: 'My life.txt', containerId: null, inTrash: false },
+//   { uid: 8, name: 'My life.txt', containerId: null, inTrash: false },
+//   { uid: 9, name: 'My life.txt', containerId: null, inTrash: false },
+
+  // {
+  //   uid: 2,
+  //   name: 'Josh\'s fun times in paintball.mpeg',
+  //   containerId: 1,
+  //   inTrash: false
+  // },
+  // {
+  //   uid: 3,
+  //   name: 'John doing his thing but thrown away.mpeg',
+  //   containerId: 1,
+  //   inTrash: true
+  // }
+// ].map((e, i, arr) => arr).reduce((acc, curr) => [...acc, ...curr], [])
 
 export const folders = [
   {
