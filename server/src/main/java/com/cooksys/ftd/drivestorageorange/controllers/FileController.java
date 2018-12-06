@@ -47,6 +47,7 @@ public class FileController {
 	 * Returns a file via UID, if it exists
 	 * 
 	 * @return FileDTO
+	 * @param uid of the file to get
 	 * @see FileDTO
 	 */
 	@GetMapping("{uid}")
@@ -133,17 +134,5 @@ public class FileController {
 	public FileDTO moveFile(@PathVariable("fileUid") Long fileUid, @PathVariable("folderUid") Long folderUid) {
 		return this.fileService.moveFile(fileUid, folderUid);
 	}
-
-//	[NOT IMPLEMENTED]
-//	@POST /get-files/
-//		Params:
-//			(optional) sort_by: filename (default), uid
-//	(optional) page (default 1, 1-based indexing) 
-//	(optional) limit: 1-100 (default 100)
-//		Returns a list of up current file names and ids
-//	@PostMapping("get-files")
-//	public void getFiles(@RequestBody GetFilesDTO options) {
-//		this.fileService.getFiles(options.getSortBy(), options.getPage(), options.getLimit());
-//	}
 
 }
