@@ -46,7 +46,7 @@ export const UPDATE_TOTAL_PAGES = 'UPDATE_TOTAL_PAGES'
 /**
  * Max number of file cards to display per page
  */
-const FILES_PER_PAGE = 6
+const FILES_PER_PAGE = 9
 
 /**
  * Initial base-line library state
