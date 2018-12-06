@@ -62,6 +62,7 @@ export const FILES_PER_PAGE = 9
  * Initial base-line library state
  * @type {LibraryState}
  */
+
 const initialState = {
   fileList: [],
   folderList: [],
@@ -102,6 +103,7 @@ export const getFiles = () => dispatch => {
     .catch(err => dispatch(loadError(err)))
 }
 
+
 /**
  * Selects which page of results Cards to display via index, if valid index
  * @param {Number} pageIndex Index of Cards to display
@@ -131,15 +133,12 @@ export const getCurrentList = () => (dispatch, getState) => {
   )
   const currentFolderList = currentFolder ? [] : [...folderList]
   const currentList = [...currentFolderList, ...currentFileList]
-
   const pages = groupArray(currentList, FILES_PER_PAGE)
-
   dispatch(loadPages(pages))
   dispatch(updateTotalPages())
   dispatch(setPage(0))
   dispatch(updateActivePage())
   dispatch(updateTotalDisplayElements())
-
   dispatch(
     loadCurrentList(
       currentList.slice(

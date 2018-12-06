@@ -21,7 +21,6 @@ export class Trash extends Component {
   render () {
     return (
       <div className={styles.trashDiv}>
-
         {/* If props.activePage exists, render cards for items */}
         {this.props.activePage ? this.props.activePage.map((e, i) =>
           (<TrashCard
@@ -32,7 +31,6 @@ export class Trash extends Component {
             fileType='file'
           />)
         ) : null}
-
       </div>
     )
   }
