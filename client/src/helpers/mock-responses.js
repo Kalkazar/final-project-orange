@@ -19,3 +19,11 @@ export const folders = [
   { uid: 2, name: 'Empty Times', inTrash: false },
   { uid: 3, name: 'Trash times', inTrash: true }
 ]
+
+/**
+ * @typedef FileResponse
+ * @property {Number} uid File's unique ID
+ * @property {String} name File's name
+ * @property {Number} [containerId] File's containing folder, file contained in root if null or undefined
+ * @property {Boolean} inTrash Whether or not file is currently in the trash bin/staged for permanent deletion
+ */
