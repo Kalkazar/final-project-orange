@@ -99,10 +99,10 @@ public class FolderService {
 	 * @param uid     of folder to rename
 	 * @param newName to assign to folder
 	 */
-	public void renameFolder(Long uid, String newName) {
+	public FolderDTO renameFolder(Long uid, String newName) {
 		FolderEntity editingFolder = getFolder(uid);
 		editingFolder.setName(newName);
-		saveFolder(editingFolder);
+		return toDto(saveFolder(editingFolder));
 	}
 
 	/**
@@ -110,10 +110,10 @@ public class FolderService {
 	 * 
 	 * @param uid of folder to put "in trash"
 	 */
-	public void trashFolder(Long uid) {
+	public FolderDTO trashFolder(Long uid) {
 		FolderEntity editingFolder = getFolder(uid);
 		editingFolder.setInTrash(true);
-		saveFolder(editingFolder);
+		return toDto(saveFolder(editingFolder));
 	}
 
 	/**
@@ -121,10 +121,10 @@ public class FolderService {
 	 * 
 	 * @param folderUid of folder to move
 	 */
-	public void moveFolder(Long uid) {
+	public FolderDTO moveFolder(Long uid) {
 		FolderEntity editingFolder = getFolder(uid);
 		editingFolder.setContainer(null);
-		saveFolder(editingFolder);
+		return toDto(saveFolder(editingFolder));
 	}
 
 	/**
@@ -133,14 +133,14 @@ public class FolderService {
 	 * @param folderUid    of folder to move
 	 * @param containerUid of destination to move file to
 	 */
-	public void moveFolder(Long folderUid, Long containerUid) {
+	public FolderDTO moveFolder(Long folderUid, Long containerUid) {
 		FolderEntity editingFolder = getFolder(folderUid);
 		editingFolder.setContainer(getFolder(containerUid));
-		saveFolder(editingFolder);
+		return toDto(saveFolder(editingFolder));
 	}
 	
 	// Utility methods
-	private FolderEntity getFolder(Long folderUid) {
+	public FolderEntity getFolder(Long folderUid) {
 		return this.folderRepository.getOne(folderUid);
 	}
 	

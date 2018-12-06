@@ -1,7 +1,11 @@
 package com.cooksys.ftd.drivestorageorange.controllers;
 
+//import java.io.IOException;
+//import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+
+//import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
+//import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
+//import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
 import com.cooksys.ftd.drivestorageorange.services.FolderService;
 
 @RestController
@@ -63,6 +69,30 @@ public class FolderController {
 	}
 	
 	/**
+	 * Used to download a folder's data
+	 * 
+	 * @param uid      of folder to download
+	 * @param response for interaction with client
+	 * @see HttpServletResponse
+	 */
+//	@GetMapping("{uid}/download")
+//	public void downloadFile(@PathVariable("uid") Long uid, HttpServletResponse response) {
+//		FolderEntity serveFolder = this.folderService.getFolder(uid);
+//
+//		response.setContentType("application/pdf");
+//		response.setHeader("Content-Disposition", "attachment; foldername=\"" + serveFolder.getName() + "\"");
+//
+//		try {
+//			OutputStream outStr = response.getOutputStream();
+//			outStr.write(serveFile.getData());
+//			response.flushBuffer();
+//		} catch (IOException ex) {
+//			System.out.println("Error writing file to output stream.");
+//			throw new RuntimeException("IOError writing file to output stream");
+//		}
+//	}
+	
+	/**
 	 * Returns all folders
 	 * 
 	 * @return all FolderDTOs
@@ -79,8 +109,8 @@ public class FolderController {
 	 * @param newName to be assigned to folder
 	 */
 	@PatchMapping("{uid}/rename/{newName}")
-	public void renameFolder(@PathVariable("uid") Long uid, @PathVariable("newName") String newName) {
-		this.folderService.renameFolder(uid, newName);
+	public FolderDTO renameFolder(@PathVariable("uid") Long uid, @PathVariable("newName") String newName) {
+		return this.folderService.renameFolder(uid, newName);
 	}
 	
 	/**
@@ -89,8 +119,8 @@ public class FolderController {
 	 * @param uid of folder to move to trash
 	 */
 	@DeleteMapping("{uid}")
-	public void trashFolder(@PathVariable("uid") Long uid) {
-		this.folderService.trashFolder(uid);
+	public FolderDTO trashFolder(@PathVariable("uid") Long uid) {
+		return this.folderService.trashFolder(uid);
 	}
 	
 	/**
@@ -99,8 +129,8 @@ public class FolderController {
 	 * @param folderUid of folder being moved
 	 */
 	@PatchMapping("move/{uid}")
-	public void moveFolderToRoot(@PathVariable("uid") Long uid) {
-		this.folderService.moveFolder(uid);
+	public FolderDTO moveFolderToRoot(@PathVariable("uid") Long uid) {
+		return this.folderService.moveFolder(uid);
 	}
 
 	/**
@@ -110,8 +140,8 @@ public class FolderController {
 	 * @param folderUid of destination being moved to
 	 */
 	@PatchMapping("move/{folderUid}/{containerUid}")
-	public void folderService(@PathVariable("folderUid") Long folderUid, @PathVariable("containerUid") Long containerUid) {
-		this.folderService.moveFolder(folderUid, containerUid);
+	public FolderDTO folderService(@PathVariable("folderUid") Long folderUid, @PathVariable("containerUid") Long containerUid) {
+		return this.folderService.moveFolder(folderUid, containerUid);
 	}
 
 }
