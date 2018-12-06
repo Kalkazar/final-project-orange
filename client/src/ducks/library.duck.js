@@ -1,4 +1,4 @@
-import { getFileList, getFolderList } from '../api'
+import { getFileList, getFolderList, LiveEndpoints } from '../api'
 import { groupArray } from '../helpers/util'
 
 import { FileResponse, FolderResponse } from '../helpers/mock-responses'
@@ -88,9 +88,10 @@ export const getFolders = () => dispatch => {
  * Calls API for a list of all files
  */
 export const getFiles = () => dispatch => {
-  getFileList()
-    .then(fileList => {
-      dispatch(loadFiles(fileList))
+  // getFileList()
+  LiveEndpoints.File.getAllFiles()
+    .then(({ data }) => {
+      dispatch(loadFiles(data))
       dispatch(getCurrentList())
     })
     .catch(err => dispatch(loadError(err)))

@@ -43,6 +43,24 @@ const getFile = uid =>
  */
 const downloadFile = uid =>
   Axios.get(`file/${uid}/download`)
+    .then(response => {
+      getFile(uid).then(({ data }) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', data.name)
+        document.body.appendChild(link)
+        link.click()
+        // document.body.removeChild(link)
+      })
+      // const url = window.URL.createObjectURL(new Blob([response.data]))
+      // const link = document.createElement('a')
+      // link.href = url
+      // link.setAttribute('download', 'file.pdf')
+      // document.body.appendChild(link)
+      // link.click()
+      // document.body.removeChild(link)
+    })
 
 /**
  * Returns all files

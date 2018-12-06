@@ -10,6 +10,8 @@ import {
   FolderFunctionsCard
 } from '../../components/Card'
 
+import { LiveEndpoints } from '../../api'
+
 export class Library extends Component {
   componentDidMount () {
     console.log('Get All Files and Folders')
@@ -29,8 +31,8 @@ export class Library extends Component {
             key={i}
             fileName={e.name}
             fileId={e.uid}
-            trashFile={console.log}
-            downloadFile={console.log}
+            trashFile={() => LiveEndpoints.File.trashFile(e.uid)}
+            downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
           />)
         ) : null }
 

@@ -1,4 +1,4 @@
-import { getCurrentList } from './'
+import { getFiles } from './'
 
 export const CHANGE_PAGE = 'CHANGE_PAGE'
 export const SELECT_LIBRARY = 'SELECT_LIBRARY'
@@ -44,22 +44,22 @@ export default function config (state = initialState, action) {
 
 export const openFolder = folder => dispatch => {
   dispatch({ type: OPEN_FOLDER, folder })
-  dispatch(getCurrentList())
+  dispatch(getFiles())
 }
 
 export const changePage = page => dispatch => {
   dispatch({ type: CHANGE_PAGE, page })
-  dispatch(getCurrentList())
+  dispatch(getFiles())
 }
 
 export const selectTrash = () => dispatch => {
   dispatch({ type: SELECT_TRASH })
-  dispatch(getCurrentList())
+  dispatch(getFiles())
 }
 
 export const selectLibrary = () => dispatch => {
   dispatch({ type: SELECT_LIBRARY })
-  dispatch(getCurrentList())
+  dispatch(getFiles())
 }
 
 /**
