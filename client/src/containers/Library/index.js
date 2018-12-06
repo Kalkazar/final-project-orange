@@ -11,6 +11,7 @@ import {
 } from '../../components/Card'
 
 import { LiveEndpoints } from '../../api'
+import { trashBinFile } from '../../ducks/library.duck'
 
 export class Library extends Component {
   componentDidMount () {
@@ -31,7 +32,7 @@ export class Library extends Component {
             key={i}
             fileName={e.name}
             fileId={e.uid}
-            trashFile={() => LiveEndpoints.File.trashFile(e.uid)}
+            trashFile={() => this.props.trashBinFile(e.uid)}
             downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
           />)
         ) : null }
@@ -49,7 +50,12 @@ const mapStateToProps = state => ({
   activePage: state.library.activePage
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = dispatch => ({
+  // Hook up appropriate Redux methods
+  trashBinFile: uid => dispatch(trashBinFile(uid))
+  // uploadFolder: folder => dispatch(uploadFolder(folder)),
+  // uploadFile: file => dispatch(uploadFile(file))
+})
 
 export default connect(
   mapStateToProps,

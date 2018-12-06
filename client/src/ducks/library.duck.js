@@ -49,6 +49,11 @@ export const UPDATE_TOTAL_PAGES = 'UPDATE_TOTAL_PAGES'
 export const UPDATE_TOTAL_DISPLAY_ELEMENTS = 'UPDATE_TOTAL_DISPLAY_ELEMENTS'
 
 /**
+ * Move file to trash bin
+ */
+export const TRASH_FILE = 'TRASH_FILE'
+
+/**
  * Max number of file cards to display per page
  */
 export const FILES_PER_PAGE = 9
@@ -144,6 +149,49 @@ export const getCurrentList = () => (dispatch, getState) => {
     )
   )
 }
+
+/**
+ * Send a file to trashbin by UID
+ * @param {Number} uid of file to trash bin
+ */
+export const trashBinFile = uid => (dispatch, getState) => {
+  LiveEndpoints.File.trashFile(uid)
+    .then(({ data }) => {
+      dispatch(getFiles())
+    })
+}
+
+/**
+ * Restores a trashbinned file by UID
+ * @param {Number} uid of file to restore
+ */
+export const restoreFile = uid => (dispatch, getState) => {
+  LiveEndpoints.Trash.restoreFile(uid)
+    .then(({ data }) => {
+      dispatch(getFiles())
+    })
+}
+
+/**
+ * Permanently deletes file by UID
+ * @param {Number} uid of file to permanently delete
+ */
+export const deleteFile = uid => (dispatch, getState) => {
+  LiveEndpoints.Trash.deleteFile(uid)
+    .then(({ data }) => {
+      dispatch(getFiles())
+    })
+}
+
+// /**
+//  * Updates total display elements
+//  * @param {Number} uid File to trash bin
+//  * @returns {ReduxAction}
+//  */
+// export const trashBinFile = uid => ({
+//   type: UPDATE_TOTAL_DISPLAY_ELEMENTS,
+//   payload: uid
+// })
 
 /**
  * Updates total display elements
