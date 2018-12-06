@@ -1,4 +1,4 @@
-import { files, folders, file, FileResponse } from '../helpers/mock-responses'
+import { files, folders, file, FileResponse, FolderResponse } from '../helpers/mock-responses'
 import Axios, { AxiosPromise } from 'axios'
 
 export const getFileList = () =>
@@ -83,7 +83,7 @@ const trashFile = uid =>
 /**
  * [PARTIALLY IMPLEMENTED] Upload a new folder
  * @param {Any} folder Folder to upload
- * @returns {AxiosPromise<Any>}
+ * @returns {AxiosPromise<FolderResponse>}
  */
 const uploadFolder = folder =>
   Axios.post('folder', folder)
@@ -91,14 +91,14 @@ const uploadFolder = folder =>
 /**
  * Creates a new empty folder
  * @param {String} folderName Name of newly created folder
- * @returns folder dto of newly created folder
+ * @returns {AxiosPromise<FolderResponse>}
  */
 const createFolder = folderName =>
   Axios.post(`folder/create/${folderName}`)
 
 /**
  * Gets all folders (dtos as List)
- * @returns {AxiosPromise<Any[]>}
+ * @returns {AxiosPromise<FolderResponse[]>}
  */
 const getAllFolders = () =>
   Axios.get(`folder`)
@@ -106,7 +106,7 @@ const getAllFolders = () =>
 /**
  * Gets a folder via UID
  * @param {Number} uid UID of folder to get
- * @returns {AxiosPromise<Any>}
+ * @returns {AxiosPromise<FolderResponse>}
  */
 const getFolder = uid =>
   Axios.get(`folder/${uid}`)
@@ -115,7 +115,7 @@ const getFolder = uid =>
  * Renames a folder by UID
  * @param {Number} uid UID of folder to rename
  * @param {String} newName New name to assign to folder
- * @returns {AxiosPromise<Any>}
+ * @returns {AxiosPromise<FolderResponse>}
  */
 const renameFolder = (uid, newName) =>
   Axios.get(`folder/${uid}/rename/${newName}`)
@@ -124,7 +124,7 @@ const renameFolder = (uid, newName) =>
  * Moves a folder to the destination folder
  * @param {Number} folderUid UID of folder to move
  * @param {Number} [containerUid] Destination folder, moves to root if undefined
- * @returns {AxiosPromise<Any>}
+ * @returns {AxiosPromise<FolderResponse>}
  */
 const moveFolder = (folderUid, containerUid) =>
   Axios.patch(
@@ -136,7 +136,7 @@ const moveFolder = (folderUid, containerUid) =>
 /**
  * Moves a folder to trash bin via uid
  * @param {Number} uid UID of folder to trash bin
- * @returns {AxiosPromise<Any>} trashbinned folder
+ * @returns {AxiosPromise<FolderResponse>} trashbinned folder
  */
 const trashFolder = uid =>
   Axios.delete(`folder/${uid}`)
