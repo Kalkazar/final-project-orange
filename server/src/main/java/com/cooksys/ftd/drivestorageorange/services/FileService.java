@@ -100,25 +100,22 @@ public class FileService {
 	 * 
 	 * @param fileUid of file to move
 	 */
-	public FileDTO moveFile(Long fileUid) {
-		FileEntity editingFile = this.fileRepository.getOne(fileUid);
+	public FileDTO moveFile(Long uid) {
+		FileEntity editingFile = this.fileRepository.getOne(uid);
 		editingFile.setContainer(null);
 		return this.fileMapper.toDto(this.fileRepository.save(editingFile));
 	}
 
 	/**
-	 * [NOT FULLY IMPLEMENTED] Moves file into specified directory by UID
+	 * Moves file into specified directory by UID
 	 * 
 	 * @param fileUid   of file to move
 	 * @param folderUid of destination to move file to
 	 */
 	public FileDTO moveFile(Long fileUid, Long folderUid) {
 		FileEntity editingFile = this.fileRepository.getOne(fileUid);
-
-		// Requires FolderEntity implementation
-		 editingFile.setContainer(this.folderRepository.getOne(folderUid));
-		
-		 return this.fileMapper.toDto(this.fileRepository.save(editingFile));
+		editingFile.setContainer(this.folderRepository.getOne(folderUid));
+		return this.fileMapper.toDto(this.fileRepository.save(editingFile));
 	}
 
 	/**
@@ -131,21 +128,6 @@ public class FileService {
 //	public void getFiles(String sortBy, Long page, Long limit) {
 ////		this.fileRepository.findAll(sort)
 //	}
-	
-	/**
-	 * Permanently deletes file by UID File must be inTrash to do so
-	 * 
-	 * @param uid to permanently delete
-	 */
-	public void deleteFile(Long uid) {
-		FileEntity deleteTarget = this.fileRepository.getOneTrashed(uid);
-
-		if (deleteTarget != null) {
-			this.fileRepository.delete(deleteTarget);
-		} else {
-			System.out.println("No matching target for deletion!");
-		}
-	}
 
 	/**
 	 * Returns a file entity via UID
