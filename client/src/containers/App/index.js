@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import styles from './app.module.scss'
-// import { Library } from '../Library'
 import Library from '../Library'
 import { SideNav } from '../SideNav/SideNav'
 import { NavButton } from '../../components/NavButton'
