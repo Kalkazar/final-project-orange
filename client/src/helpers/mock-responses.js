@@ -13,18 +13,19 @@ export const files = [
 //   { uid: 8, name: 'My life.txt', containerId: null, inTrash: false },
 //   { uid: 9, name: 'My life.txt', containerId: null, inTrash: false },
 
-  // {
-  //   uid: 2,
-  //   name: 'Josh\'s fun times in paintball.mpeg',
-  //   containerId: 1,
-  //   inTrash: false
-  // },
-  // {
-  //   uid: 3,
-  //   name: 'John doing his thing but thrown away.mpeg',
-  //   containerId: 1,
-  //   inTrash: true
-  // }
+// {
+//   uid: 2,
+//   name: 'Josh\'s fun times in paintball.mpeg',
+//   containerId: 1,
+//   inTrash: false
+// },
+// {
+//   uid: 3,
+//   name: 'John doing his thing but thrown away.mpeg',
+//   containerId: 1,
+//   inTrash: true
+// }
+
 // ].map((e, i, arr) => arr).reduce((acc, curr) => [...acc, ...curr], [])
 
 export const folders = [
