@@ -92,7 +92,7 @@ public class TrashController {
 	/**
 	 * Permanently deletes all files and folders in trash
 	 */
-	@PatchMapping("delete")
+	@DeleteMapping("delete")
 	public void deleteAll() {
 		this.trashService.deleteAll();
 	}
