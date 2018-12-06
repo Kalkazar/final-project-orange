@@ -21,19 +21,21 @@ export class Library extends Component {
         <span className={styles.pathSpan}>this/is/the/path/span</span>
 
         {/* Checking props manually for testing */}
-        { console.log('Library props', this.props) }
+        {console.log('Library props', this.props)}
 
         {/* If props.activePage exists, render cards for items */}
-        { this.props.activePage ? this.props.activePage.map((e, i) =>
-          (<FileCard
-            key={i}
-            fileName={e.name}
-            fileId={e.uid}
-            trashFile={console.log}
-            downloadFile={console.log}
-          />)
-        ) : null }
-
+        {this.props.activePage
+          ? this.props.activePage.map((e, i) => (
+            <FileCard
+              className='fileCard'
+              key={i}
+              fileName={e.name}
+              fileId={e.uid}
+              trashFile={console.log}
+              downloadFile={console.log}
+            />
+          ))
+          : null}
       </div>
     )
   }

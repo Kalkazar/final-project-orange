@@ -14,14 +14,33 @@
   background-color: #ccc;
   border-radius: 5pt;
 }
-
+.uploadCard {
+  border: 3px solid black
+}
+//centered create an upload within the card
 .trashCardHolder {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   align-content: space-between;
-  padding: 10pt;
+  padding: 5pt;
   height: 80%;
   width: 100%;
+}
+// //changes to create/upload card
+// .createAndUploadCardHolder {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   flex-direction: column;
+//   align-content: space-between;
+//   padding: 5pt;
+// }
+
+.card.cardBody {
+  display: flex;
+
 }
 
 .cardHolder {
@@ -34,9 +53,9 @@
 }
 
 
-
+// made changes to the border bottom( revert to #f3f3f3)
 .cardTitle {
-  border-bottom: 1pt solid #f3f3f3;
+  border-bottom: 1pt solid #221d1d;
   padding: 5pt 10pt;
   text-align: center;
   height: 40%;
@@ -47,6 +66,7 @@
   height: 100%;
   width: 100%;
   box-sizing: border-box;
+
 }
 
 .fileCardBody, .folderCardBody {

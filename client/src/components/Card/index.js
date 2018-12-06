@@ -19,18 +19,44 @@ const Card = ({ children }) => (
   </div>
 )
 
+// export const UploadCard = ({ fileType, upload }) => (
+//   <Card>
+//     <div className={styles.cardTitle}>Upload {fileType}</div>
+//     <div onClick={upload} className={styles.uploadIconHolder}>
+//       <UploadIcon onClick={() => {}} />
+//     </div>
+//   </Card>
+// )
+
 export const UploadCard = ({ fileType, upload }) => (
-  <Card>
+  <div>
     <div className={styles.cardTitle}>Upload {fileType}</div>
     <div onClick={upload} className={styles.uploadIconHolder}>
       <UploadIcon onClick={() => {}} />
     </div>
-  </Card>
+  </div>
 )
 
+// export const FolderFunctionsCard = ({ createFolder, uploadFolder }) => (
+//   <Card>
+//     <div className={styles.createAndUploadCardHolder}>
+//       <InnerButton
+//         name='Create Folder'
+//         onClick={createFolder}
+//         icon={<CreateFolderIcon onClick={() => {}} />}
+//       />
+//       <InnerButton
+//         name='Upload Folder'
+//         onClick={uploadFolder}
+//         icon={<UploadIcon onClick={() => {}} />}
+//       />
+//     </div>
+//   </Card>
+// )
+
 export const FolderFunctionsCard = ({ createFolder, uploadFolder }) => (
-  <Card>
-    <div className={styles.trashCardHolder}>
+  <div>
+    <div>
       <InnerButton
         name='Create Folder'
         onClick={createFolder}
@@ -42,7 +68,7 @@ export const FolderFunctionsCard = ({ createFolder, uploadFolder }) => (
         icon={<UploadIcon onClick={() => {}} />}
       />
     </div>
-  </Card>
+  </div>
 )
 
 export const TrashCard = ({ name, fileType, id, deleteForever, restore }) => (
@@ -77,7 +103,6 @@ export const FileCard = ({
         <FileIcon onClick={() => {}} />
       </div>
     </div>
-
     <div className={styles.fileCardBody}>
       <TrashIcon onClick={() => trashFile(fileId)} />
       <MoveIcon onClick={() => moveFile(fileId)} />
