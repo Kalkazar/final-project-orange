@@ -21,41 +21,33 @@ public class TrashController {
 	FolderService folderService;
 	@Autowired
 	TrashService trashService;
-	// Pending implementation
-//	@Autowired
-//	FolderService folderService;
 
-//	/trash
-//	@DELETE /file/
+//	@DELETE /file/{file_uid}/delete
 //		Removes a file permanently
-
 	@DeleteMapping("/file/{file_uid}/delete")
 	public void deleteFile(@PathVariable("uid") Long uid) {
 		this.trashService.deleteFile(uid);
 	}
 
+//	@DELETE /file/{file_uid}/restore
+//		Restores a file
 	@PatchMapping("file/{file_uid}/restore")
 	public void restoreFile(@PathVariable("file_uid") Long uid) {
 		this.trashService.restoreFile(uid);
 	}
-	// Consider restore/dump all endpoints for both files and folders?
 
-//	@DELETE /folder/
+//	@DELETE /folder/{folder_uid}/delete
 //		Removes a folder permanently
 	@DeleteMapping("folder/{folder_uid}/delete")
 	public void deleteFolder(@PathVariable("uid") Long uid) {
 		this.trashService.deleteFolder(uid);
 	}
 
+//	@DELETE /file/{folder_uid}/restore
+//	Restores a folder
 	@PatchMapping("folder/{folder_uid}/restore")
 	public void restoreFolder(@PathVariable("folder_uid") Long uid) {
 		this.trashService.restoreFolder(uid);
 	}
-
-	// Pending implementation
-//	@DeleteMapping("folder/{uid}")
-//	public void deleteFolder(@PathVariable("uid") Long uid) {
-//		this.folderService.permanentlyDeleteFolder(uid);
-//	}
 
 }
