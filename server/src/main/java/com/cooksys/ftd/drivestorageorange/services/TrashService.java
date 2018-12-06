@@ -1,5 +1,7 @@
 package com.cooksys.ftd.drivestorageorange.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,4 +77,35 @@ public class TrashService {
 			System.out.println("No matching target for restoration!");
 		}
 	}
+
+	/**
+	 * Delete all by files and folders in trash
+	 */
+	public void deleteAll() {
+		List<FileEntity> deleteTrashedFiles = this.fileRepository.getAllTrashed();
+		List<FolderEntity> deleteTrashedFolders = this.folderRepository.getAllTrashed();
+
+		if (deleteTrashedFiles != null || deleteTrashedFolders != null) {
+			this.fileRepository.deleteAll(deleteTrashedFiles);
+			this.folderRepository.deleteAll(deleteTrashedFolders);
+		} else {
+			System.out.println("No targets for deletion!");
+		}
+	}
+
+	/**
+	 * Restores all by files and folders in trash
+	 */
+	public void restoreAll() {
+		List<FileEntity> restoreTrashedFiles = this.fileRepository.getAllTrashed();
+		List<FolderEntity> restoreTrashedFolders = this.folderRepository.getAllTrashed();
+
+		if (restoreTrashedFiles != null || restoreTrashedFolders != null) {
+			this.fileRepository.saveAll(restoreTrashedFiles);
+			this.folderRepository.saveAll(restoreTrashedFolders);
+		} else {
+			System.out.println("No targets for restoration!");
+		}
+	}
+
 }
