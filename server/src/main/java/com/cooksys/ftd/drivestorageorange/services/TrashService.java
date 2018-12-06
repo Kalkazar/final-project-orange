@@ -5,8 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cooksys.ftd.drivestorageorange.dtos.FileDTO;
+import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
 import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
+import com.cooksys.ftd.drivestorageorange.mappers.FileMapper;
+import com.cooksys.ftd.drivestorageorange.mappers.FolderMapper;
 import com.cooksys.ftd.drivestorageorange.repositories.FileRepository;
 import com.cooksys.ftd.drivestorageorange.repositories.FolderRepository;
 
@@ -17,6 +21,10 @@ public class TrashService {
 	FileRepository fileRepository;
 	@Autowired
 	FolderRepository folderRepository;
+	@Autowired
+	FileMapper fileMapper;
+	@Autowired
+	FolderMapper folderMapper;
 
 	/**
 	 * Permanently deletes file by UID File must be inTrash to do so
@@ -106,6 +114,22 @@ public class TrashService {
 		} else {
 			System.out.println("No targets for restoration!");
 		}
+	}
+
+	/**
+	 * Retrieves all files in trash
+	 */
+	public List<FileDTO> getTrashedFiles() {
+		List<FileEntity> trashedFiles = this.fileRepository.getAllTrashed();
+		return fileMapper.toDto(trashedFiles);
+	}
+
+	/**
+	 * Retrieves all folders in trash
+	 */
+	public List<FolderDTO> getTrashedFolders() {
+		List<FolderEntity> trashedFolders = this.folderRepository.getAllTrashed();
+		return folderMapper.toDto(trashedFolders);
 	}
 
 }
