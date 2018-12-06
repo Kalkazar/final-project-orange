@@ -19,7 +19,7 @@ export const files = [
     containerId: 1,
     inTrash: true
   }
-]
+].map((e, i, arr) => arr).reduce((acc, curr) => [...acc, ...curr], [])
 
 export const folders = [
   {
