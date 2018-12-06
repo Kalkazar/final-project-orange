@@ -118,9 +118,9 @@ public class FileController {
 	 * @return FileDTO
 	 * @param fileUid
 	 */
-	@PatchMapping("move/{fileUid}")
-	public FileDTO moveFileToRoot(@PathVariable("fileUid") Long fileUid) {
-		return this.fileService.moveFile(fileUid);
+	@PatchMapping("{uid}/move")
+	public FileDTO moveFileToRoot(@PathVariable("uid") Long uid) {
+		return this.fileService.moveFile(uid);
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class FileController {
 	 * @param fileUid   of file being moved
 	 * @param folderUid of destination being moved to
 	 */
-	@PatchMapping("move/{fileUid}/{folderUid}")
+	@PatchMapping("{fileUid}/move/{folderUid}")
 	public FileDTO moveFile(@PathVariable("fileUid") Long fileUid, @PathVariable("folderUid") Long folderUid) {
 		return this.fileService.moveFile(fileUid, folderUid);
 	}

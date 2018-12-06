@@ -128,7 +128,7 @@ public class FolderController {
 	 * 
 	 * @param folderUid of folder being moved
 	 */
-	@PatchMapping("move/{uid}")
+	@PatchMapping("{uid}/move")
 	public FolderDTO moveFolderToRoot(@PathVariable("uid") Long uid) {
 		return this.folderService.moveFolder(uid);
 	}
@@ -139,8 +139,8 @@ public class FolderController {
 	 * @param folderUid of folder being moved
 	 * @param folderUid of destination being moved to
 	 */
-	@PatchMapping("move/{folderUid}/{containerUid}")
-	public FolderDTO folderService(@PathVariable("folderUid") Long folderUid, @PathVariable("containerUid") Long containerUid) {
+	@PatchMapping("{folderUid}/move/{containerUid}")
+	public FolderDTO moveFolder(@PathVariable("folderUid") Long folderUid, @PathVariable("containerUid") Long containerUid) {
 		return this.folderService.moveFolder(folderUid, containerUid);
 	}
 
