@@ -1,6 +1,7 @@
 package com.cooksys.ftd.drivestorageorange.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
 import com.cooksys.ftd.drivestorageorange.services.FolderService;
@@ -18,64 +21,85 @@ import com.cooksys.ftd.drivestorageorange.services.FolderService;
 @RequestMapping("folder")
 public class FolderController {
 	
-	private FolderService folderService;
-	
 	@Autowired
-	public FolderController(FolderService folderService) {
-		super();
-		this.folderService = folderService;
+	FolderService folderService;
+	
+	/**
+	 * Upload a new folder
+	 * 
+	 * @return uid of newly uploaded folder
+	 */
+	@PostMapping("")
+	public FolderDTO uploadFolder(@RequestParam("name") String name, @RequestParam("file") Map<String, MultipartFile> uploadFolder) {
+		FolderDTO newUpload = this.folderService.uploadFolder(name, uploadFolder);
+
+		if (newUpload != null) {
+			return newUpload;
+		}
+		return null;
 	}
 	
+	/**
+	 * Returns a folder via UID, if it exists
+	 * 
+	 * @return FolderDTO
+	 * @see FolderDTO
+	 */
+	@GetMapping("{uid}")
+	public FolderDTO getFolder(@PathVariable("uid") Long uid) {
+		return this.folderService.getFolderByUID(uid);
+	}
+	
+	/**
+	 * Returns all folders
+	 * 
+	 * @return all FolderDTOs
+	 */
 	@GetMapping("")
 	public List<FolderDTO> getAllFolders() {
 		return this.folderService.getAllFolders();
 	}
-	
-//	@POST /folder/{folder_name}/upload
-	//Upload a folder
-//	@PostMapping("{folder_name}/upload")
-//	public void uploadFolder() {
-//		//
-//	}
-	
-	
-//	@POST /folder/{folder_name}
-//		Create an empty folder
-//		Returns id
-	@PostMapping("{folder_name}")
-	public FolderDTO createFolder(@PathVariable("folder_name") String name) {
-		return this.folderService.createFolder(name);
+
+	/**
+	 * Renames a folder by UID
+	 * 
+	 * @param uid     of folder to rename
+	 * @param newName to be assigned to folder
+	 */
+	@PatchMapping("{uid}/rename/{newName}")
+	public void renameFile(@PathVariable("uid") Long uid, @PathVariable("newName") String newName) {
+		this.folderService.renameFolder(uid, newName);
 	}
 	
-	
-//	@PATCH /folder/{folder_uid}/rename/{new_name}
-	@PatchMapping("{folder_uid}/rename/{new_name}")
-	public FolderDTO renameFolder(@PathVariable("folder_uid") Long uid, @PathVariable("new_name") String name) {
-		return this.folderService.renameFolder(uid, name);
+	/**
+	 * Moves a folder to the trash via UID
+	 * 
+	 * @param uid of folder to move to trash
+	 */
+	@DeleteMapping("{uid}")
+	public void trashFolder(@PathVariable("uid") Long uid) {
+		this.folderService.trashFolder(uid);
 	}
 	
-	
-//	@DELETE /folder/{folder_uid}/
-//		Moves a given folder to the trash
-	@DeleteMapping("{folder_uid}")
-	public FolderDTO trashFolder(@PathVariable("folder_uid") Long uid) {  // was "deleteFolder", renamed
-		return this.folderService.trashFolder(uid);
+	/**
+	 * Moves a folder to the root folder
+	 * 
+	 * @param folderUid of folder being moved
+	 */
+	@PatchMapping("move/{uid}")
+	public void moveFolderToRoot(@PathVariable("uid") Long uid) {
+		this.folderService.moveFolder(uid);
 	}
-	
-	
-//	@POST /get-folders/
-//		Params:
-//			(optional) sort_by: foldername (default), uid,
-//			(optional) page (default 1, 1-based indexing)
-//			(optional) limit: 1-100 (default 100)
-//		Returns a list of all current folders names and ids
-//	@PostMapping("get-folders")
-//	public List<FolderDTO> getFolders() {
-//		return this.folderService.getFolders(100);
-//	}
-//	@PostMapping("get-folders/{limit}")
-//	public List<FolderDTO> getFolders(int limit) {
-//		return this.folderService.getFolders(limit);
-//	}
+
+	/**
+	 * Moves a folder into a folder via UID
+	 * 
+	 * @param folderUid of folder being moved
+	 * @param folderUid of destination being moved to
+	 */
+	@PatchMapping("move/{folderUid}/{containerUid}")
+	public void folderService(@PathVariable("folderUid") Long folderUid, @PathVariable("containerUid") Long containerUid) {
+		this.folderService.moveFolder(folderUid, containerUid);
+	}
 
 }

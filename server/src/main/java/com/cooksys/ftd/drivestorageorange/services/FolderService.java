@@ -1,82 +1,141 @@
 package com.cooksys.ftd.drivestorageorange.services;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.cooksys.ftd.drivestorageorange.dtos.FileDTO;
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
+import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
 import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
 import com.cooksys.ftd.drivestorageorange.mappers.FolderMapper;
+import com.cooksys.ftd.drivestorageorange.repositories.FileRepository;
 import com.cooksys.ftd.drivestorageorange.repositories.FolderRepository;
 
 @Service
 public class FolderService {
 	
-	private FolderRepository folderRepository;
-	private FolderMapper folderMapper;
+	@Autowired
+	FileRepository fileRepository;
 	
 	@Autowired
-	public FolderService(FolderRepository folderRepository, FolderMapper folderMapper) {
-		super();
-		this.folderRepository = folderRepository;
-		this.folderMapper = folderMapper;
-	}
-	
-	public List<FolderDTO> getAllFolders() {
-		return this.folderMapper.entitiesToDtos(this.folderRepository.findAll());
-	}
-	
-//	@POST /folder/{folder_name}/upload
-	//	Upload a folder
-	public FolderDTO uploadFolder(String name) {
+	FolderRepository folderRepository;
+
+	@Autowired
+	FolderMapper folderMapper;
+
+	/**
+	 * [NOT FULLY IMPLEMENTED] Uploads a folder and all files contained within,
+	 * and returns DTO of newly uploaded folder
+	 * @param name to assign uploaded folder
+	 * @param uploadFolder folder data uploaded
+	 * @return FileDTO
+	 * @see FileDTO
+	 * @see MultipartFile
+	 */
+	public FolderDTO uploadFolder(String name, Map<String, MultipartFile> uploadFolder) {
+		FolderEntity uploadedFolder = new FolderEntity();
+		uploadedFolder.setName(name);
+
+		try {
+			for(String fileName : uploadFolder.keySet()) {
+				FileEntity uploadedFile = new FileEntity();
+				uploadedFile.setData(uploadFolder.get(fileName).getBytes());
+				
+				if(uploadedFile.getData() != null) {
+					this.fileRepository.save(uploadedFile);
+				}
+			}
+			
+			return toDto(saveFolder(uploadedFolder));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return null;
 	}
 	
-	public FolderDTO createFolder(String name) {
-		return this.folderMapper.entityToDto(this.folderRepository.save(new FolderEntity(name)));
+	/**
+	 * Returns a folder by UID
+	 * 
+	 * @param uid to search for
+	 * @return FolderDTO
+	 * @see FolderDTO
+	 */
+	public FolderDTO getFolderByUID(Long uid) {
+		return toDto(getFolder(uid));
 	}
 	
-	public FolderDTO renameFolder(Long uid, String name) {
-		FolderEntity folder = this.folderRepository.findFolderEntityByUid(uid);
-		folder.setName(name);
-		return this.folderMapper.entityToDto(this.folderRepository.save(folder));
+	/**
+	 * Returns a list of all stored folders
+	 * 
+	 * @return List<FolderDTO>
+	 * @see FolderDTO
+	 */
+	public List<FolderDTO> getAllFolders() {
+		return this.folderMapper.toDto(this.folderRepository.findAll());
 	}
-	
+
+	/**
+	 * Renames a folder by UID
+	 * 
+	 * @param uid     of folder to rename
+	 * @param newName to assign to folder
+	 */
+	public FolderDTO renameFolder(Long uid, String newName) {
+		FolderEntity editingFolder = getFolder(uid);
+		editingFolder.setName(newName);
+		return toDto(saveFolder(editingFolder));
+	}
+
+	/**
+	 * Stages a folder for deletion "in trash" by UID
+	 * 
+	 * @param uid of folder to put "in trash"
+	 */
 	public FolderDTO trashFolder(Long uid) {
-		FolderEntity folder = this.folderRepository.findFolderEntityByUid(uid);
-		folder.setInTrash(true);
-		return this.folderMapper.entityToDto(this.folderRepository.save(folder));
+		FolderEntity editingFolder = getFolder(uid);
+		editingFolder.setInTrash(true);
+		return toDto(saveFolder(editingFolder));
+	}
+
+	/**
+	 * Moves folder into root directory by UID
+	 * 
+	 * @param folderUid of folder to move
+	 */
+	public FolderDTO moveFolder(Long uid) {
+		FolderEntity editingFolder = getFolder(uid);
+		editingFolder.setContainer(null);
+		return toDto(saveFolder(editingFolder));
+	}
+
+	/**
+	 * Moves folder into specified directory by UID
+	 * 
+	 * @param folderUid    of folder to move
+	 * @param containerUid of destination to move file to
+	 */
+	public FolderDTO moveFolder(Long folderUid, Long containerUid) {
+		FolderEntity editingFolder = getFolder(folderUid);
+		editingFolder.setContainer(getFolder(containerUid));
+		return toDto(saveFolder(editingFolder));
 	}
 	
-	public FolderDTO restoreFolder(Long uid) {
-		FolderEntity folder = this.folderRepository.findFolderEntityByUid(uid);
-		folder.setInTrash(false);
-		return this.folderMapper.entityToDto(this.folderRepository.save(folder));
+	// Utility methods
+	private FolderEntity getFolder(Long folderUid) {
+		return this.folderRepository.getOne(folderUid);
 	}
 	
-	public void deleteFolder(Long uid) {
-		FolderEntity deleteTarget = this.folderRepository.getOneTrashed(uid);
-		
-		if(deleteTarget != null) {
-			this.folderRepository.delete(deleteTarget);
-		} else {
-			System.out.println("No matching target for deletion!");
-		}
+	private FolderDTO toDto(FolderEntity folderEntity) {
+		return this.folderMapper.toDto(folderEntity);
 	}
 	
-//	@POST /get-folders/
-//	Params:
-//		(optional) sort_by: foldername (default), uid,
-//		(optional) page (default 1, 1-based indexing)
-//		(optional) limit: 1-100 (default 100)
-//	Returns a list of all current folders names and ids
-	// would this be done with a whole lotta method overloading?
-//	public List<FolderDTO> getFolders(int limit) {
-//		List<FolderDTO> dtoList = this.folderMapper.entitiesToDtos(this.folderRepository.findAll());
-//		if(dtoList.size() > limit) {
-//			dtoList.subList(limit, dtoList.size()).clear();
-//		}
-//		return dtoList;
-//	}
+	private FolderEntity saveFolder(FolderEntity folderEntity) {
+		return this.folderRepository.save(folderEntity);
+	}
 }
