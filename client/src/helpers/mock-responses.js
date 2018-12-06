@@ -9,7 +9,7 @@ export const files = [
 
   {
     uid: 2,
-    name: "Josh's fun times in paintball.mpeg",
+    name: 'Josh\'s fun times in paintball.mpeg',
     containerId: 1,
     inTrash: false
   },
@@ -22,9 +22,54 @@ export const files = [
 ]
 
 export const folders = [
-  { uid: 1, name: 'Fun Times', inTrash: false },
-  { uid: 2, name: 'Empty Times', inTrash: false },
-  { uid: 3, name: 'Trash times', inTrash: true }
+  {
+    'uid': 1,
+    'name': 'Test',
+    'created': '2018-12-06T18:10:13.641+0000',
+    'lastModified': '2018-12-06T18:10:13.641+0000',
+    'filesContained': [],
+    'foldersContained': [
+      {
+        'uid': 2,
+        'name': 'Test',
+        'created': '2018-12-06T18:12:01.174+0000',
+        'lastModified': '2018-12-06T18:12:09.053+0000',
+        'filesContained': [
+          {
+            'uid': 1,
+            'name': 'Test.txt',
+            'created': '2018-12-06T18:09:52.889+0000',
+            'lastModified': '2018-12-06T18:12:28.835+0000',
+            'containerId': 2,
+            'inTrash': false
+          }
+        ],
+        'foldersContained': [],
+        'containerId': 1,
+        'inTrash': false
+      }
+    ],
+    'inTrash': false
+  },
+  {
+    'uid': 2,
+    'name': 'Test',
+    'created': '2018-12-06T18:12:01.174+0000',
+    'lastModified': '2018-12-06T18:12:09.053+0000',
+    'filesContained': [
+      {
+        'uid': 1,
+        'name': 'Test.txt',
+        'created': '2018-12-06T18:09:52.889+0000',
+        'lastModified': '2018-12-06T18:12:28.835+0000',
+        'containerId': 2,
+        'inTrash': false
+      }
+    ],
+    'foldersContained': [],
+    'containerId': 1,
+    'inTrash': false
+  }
 ]
 
 /**
@@ -32,5 +77,15 @@ export const folders = [
  * @property {Number} uid File's unique ID
  * @property {String} name File's name
  * @property {Number} [containerId] File's containing folder, file contained in root if null or undefined
+ * @property {Boolean} inTrash Whether or not file is currently in the trash bin/staged for permanent deletion
+ */
+
+/**
+ * @typedef FolderResponse
+ * @property {Number} uid Folder's unique ID
+ * @property {String} name Folder's name
+ * @property {FileResponse[]} filesContained Files this folder directly contains
+ * @property {FolderResponse[]} foldersContained Folders this folder directly contains
+ * @property {Number} [containerId] Folder's containing folder, folder contained in root if null or undefined
  * @property {Boolean} inTrash Whether or not file is currently in the trash bin/staged for permanent deletion
  */
