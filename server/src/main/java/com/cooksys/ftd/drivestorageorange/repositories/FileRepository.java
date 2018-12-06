@@ -12,6 +12,14 @@ import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
 public interface FileRepository extends JpaRepository<FileEntity, Long> {
 	
 	/**
+	 * Gets all entities from folder via UID, if it exists
+	 * @param uid of container folder
+	 * @return
+	 */
+	@Query(value = "SELECT f FROM FileEntity f WHERE f.container = ?1")
+	FileEntity getAllInContainer(Long uid);
+	
+	/**
 	 * Gets an entity from trashbin via UID, if it exists
 	 * @param uid to return from trashbin
 	 * @return
