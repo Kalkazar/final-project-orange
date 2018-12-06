@@ -80,11 +80,6 @@ const moveFile = (fileUid, folderUid) =>
 const trashFile = uid =>
   Axios.delete(`file/${uid}`)
 
-// Folder
-// @POST /folder/
-// Uploads a new folder
-// Returns folder dto of newly uploaded folder
-
 /**
  * [PARTIALLY IMPLEMENTED] Upload a new folder
  * @param {Any} folder Folder to upload
@@ -101,18 +96,12 @@ const uploadFolder = folder =>
 const createFolder = folderName =>
   Axios.post(`folder/create/${folderName}`)
 
-// @GET /folder/
-// Returns all folders (dtos as List)
-
 /**
  * Gets all folders (dtos as List)
  * @returns {AxiosPromise<Any[]>}
  */
 const getAllFolders = () =>
   Axios.get(`folder`)
-
-// @GET /folder/{folder_uid}/
-// Returns a folder (dto) via uid if it exists
 
 /**
  * Gets a folder via UID
@@ -152,40 +141,43 @@ const moveFolder = (folderUid, containerUid) =>
 const trashFolder = uid =>
   Axios.delete(`folder/${uid}`)
 
-// Trash
-// @PATCH /trash/file/{file_uid}/restore/
-// Restores a file via uid
-
+/**
+ * Restores a file via uid
+ * @param {Number} uid UID of file to restore
+ */
 const restoreFile = uid =>
   Axios.patch(`trash/file/${uid}/restore`)
 
-// @PATCH /trash/folder/{folder_uid}/restore/
-// Restores a folder via uid
-
+/**
+ * Restores a folder via uid
+ * @param {Number} uid UID of folder to restore
+ */
 const restoreFolder = uid =>
   Axios.patch(`trash/folder/${uid}/restore`)
 
-// @PATCH /trash/restore/
-// Restores all file and folders in trash
-
+/**
+ * Restores all file and folders in trash
+ */
 const restoreAll = () =>
   Axios.patch(`trash/restore`)
 
-// @DELETE /trash/file/{file_uid}/delete/
-// Permanently deletes a file by uid
-
+/**
+ * Permanently deletes a file by uid
+ * @param {Number} uid UID of file to permanently delete
+ */
 const deleteFile = uid =>
   Axios.patch(`trash/file/${uid}/delete`)
 
-// @DELETE /trash/folder/{folder_uid}/delete/
-// Permanently deletes a folder by uid
-
+/**
+ * Permanently deletes a folder by uid
+ * @param {Number} uid UID of folder to permanently delete
+ */
 const deleteFolder = uid =>
   Axios.patch(`trash/folder/${uid}/delete`)
 
-// @DELETE /trash/delete/
-// Permanently deletes all files and folders in trash
-
+/**
+ * Permanently deletes all files and folders in trash
+ */
 const deleteAll = () =>
   Axios.patch(`trash/delete`)
 
@@ -198,5 +190,22 @@ export const LiveEndpoints = {
     renameFile,
     moveFile,
     trashFile
+  },
+  Folder: {
+    uploadFolder,
+    createFolder,
+    getFolder,
+    getAllFolders,
+    renameFolder,
+    moveFolder,
+    trashFolder
+  },
+  Trash: {
+    restoreFile,
+    restoreFolder,
+    restoreAll,
+    deleteFile,
+    deleteFolder,
+    deleteAll
   }
 }
