@@ -5,6 +5,7 @@ import { SideNav } from '../SideNav/SideNav'
 import { NavButton } from '../../components/NavButton'
 import { Trash } from '../Trash'
 import { Route } from 'react-router-dom'
+import Pagination from '../../components/Pagination'
 
 class App extends Component {
   render () {
@@ -17,6 +18,7 @@ class App extends Component {
           <div className=' col-sm-12 col-md-9 col-lg-8 col-xl-7'>
             <Route path='/library' component={Library} />
             <Route path='/trash' component={Trash} />
+            <Pagination totalPages={5} currentPage={2} totalRecords={10} />
           </div>
         </div>
       </div>

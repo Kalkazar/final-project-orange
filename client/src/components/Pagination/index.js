@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 const LEFT_PAGE = 'LEFT'
@@ -18,17 +18,22 @@ const range = (from, to, step = 1) => {
 class Pagination extends Component {
   constructor (props) {
     super(props)
-    const { totalRecords = null, pageLimit = 30, pageNeighbor = 0 } = props
+    const {
+      totalRecords = null,
+      pageLimit = 30,
+      pageNeighbours = 0,
+      currentPage
+    } = props
 
     this.pageLimit = typeof pageLimit === 'number' ? pageLimit : 30
     this.totalRecords = typeof totalRecords === 'number' ? totalRecords : 0
 
     this.pageNeighbours =
       typeof pageNeighbours === 'number'
-        ? Math.max(0, Math.min(pageNeighbors, 2))
+        ? Math.max(0, Math.min(pageNeighbours, 2))
         : 0
-    this.totalPages = math.ceil(this.totalRecords / this.pageLimit)
-    this.state = { currentPage: 1 }
+    this.totalPages = Math.ceil(this.totalRecords / this.pageLimit)
+    this.state = { currentPage }
   }
 
   fetchPageNumbers = () => {
@@ -81,36 +86,36 @@ class Pagination extends Component {
         <nav>
           <ul className='pagination'>
             {pages.map((page, index) => {
-              if (page === LEFT_PAGE) {
-                return (
-                  <li key={index} className='page-item'>
-                    <a
-                      className='page-link'
-                      href='#'
-                      aria-label='Previous'
-                      onClick={this.handleMoveLeft}
-                    >
-                      <span aria-hidden='true'>&laquo;</span>
-                      <span className='sr-only'>Previous</span>
-                    </a>
-                  </li>
-                )
-              }
-              if (page === RIGHT_PAGE) {
-                return (
-                  <li key={index} classname='page-item'>
-                    <a
-                      className='page-link'
-                      href='#'
-                      aria-label='Next'
-                      onClick={handleMoveRight}
-                    >
-                      <span aria-hidden='true'>&raquo;</span>
-                      <span className='sr-only'>Next</span>
-                    </a>
-                  </li>
-                )
-              }
+              // if (page === LEFT_PAGE) {
+              //   return (
+              //     <li key={index} className='page-item'>
+              //       <a
+              //         className='page-link'
+              //         href='#'
+              //         aria-label='Previous'
+              //         onClick={this.handleMoveLeft}
+              //       >
+              //         <span aria-hidden='true'>&laquo;</span>
+              //         <span className='sr-only'>Previous</span>
+              //       </a>
+              //     </li>
+              //   )
+              // }
+              // if (page === RIGHT_PAGE) {
+              //   return (
+              //     <li key={index} classname='page-item'>
+              //       <a
+              //         className='page-link'
+              //         href='#'
+              //         aria-label='Next'
+              //         onClick={this.handleMoveRight}
+              //       >
+              //         <span aria-hidden='true'>&raquo;</span>
+              //         <span className='sr-only'>Next</span>
+              //       </a>
+              //     </li>
+              //   )
+              // }
               return (
                 <li
                   key={index}
@@ -134,12 +139,15 @@ class Pagination extends Component {
     )
   }
 }
+//
 
 Pagination.propTypes = {
   totalRecords: PropTypes.number.isRequired,
   pageLimit: PropTypes.number,
   pageNeighbours: PropTypes.number,
-  onPageChanged: PropTypes.func
+  onPageChanged: PropTypes.func,
+  totalPages: PropTypes.number,
+  currentPage: PropTypes.number
 }
 
 export default Pagination
