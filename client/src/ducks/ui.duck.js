@@ -61,3 +61,10 @@ export const selectLibrary = () => dispatch => {
   dispatch({ type: SELECT_LIBRARY })
   dispatch(getCurrentList())
 }
+
+/**
+ * Changes displayed data
+ * @param {Boolean} view Displays trash if true
+ */
+export const changeView = view => (dispatch, getState) =>
+  view ? dispatch(selectTrash()) : dispatch(selectLibrary())

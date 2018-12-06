@@ -1,7 +1,7 @@
 import { getFileList, getFolderList } from '../api'
 import { groupArray } from '../helpers/util'
 
-import { FileResponse } from '../helpers/mock-responses'
+import { FileResponse, FolderResponse } from '../helpers/mock-responses'
 
 /**
  * Load file objects into state
@@ -44,9 +44,14 @@ export const UPDATE_ACTIVE_PAGE = 'UPDATE_ACTIVE_PAGE'
 export const UPDATE_TOTAL_PAGES = 'UPDATE_TOTAL_PAGES'
 
 /**
+ * Update total number of results elements based on state
+ */
+export const UPDATE_TOTAL_DISPLAY_ELEMENTS = 'UPDATE_TOTAL_DISPLAY_ELEMENTS'
+
+/**
  * Max number of file cards to display per page
  */
-const FILES_PER_PAGE = 9
+export const FILES_PER_PAGE = 9
 
 /**
  * Initial base-line library state
@@ -62,6 +67,7 @@ const initialState = {
   trashLoaded: false,
   loadingError: null,
   pages: [],
+  totalDisplayElements: 0,
   totalPages: 1,
   activePage: []
 }
@@ -126,6 +132,7 @@ export const getCurrentList = () => (dispatch, getState) => {
   dispatch(updateTotalPages())
   dispatch(setPage(0))
   dispatch(updateActivePage())
+  dispatch(updateTotalDisplayElements())
 
   dispatch(
     loadCurrentList(
@@ -136,6 +143,14 @@ export const getCurrentList = () => (dispatch, getState) => {
     )
   )
 }
+
+/**
+ * Updates total display elements
+ * @returns {ReduxAction}
+ */
+export const updateTotalDisplayElements = () => ({
+  type: UPDATE_TOTAL_DISPLAY_ELEMENTS
+})
 
 /**
  * Updates active page based on state
@@ -262,6 +277,11 @@ function config (state = initialState, action) {
         ...state,
         activePage: state.pages[state.currentPage]
       }
+    case UPDATE_TOTAL_DISPLAY_ELEMENTS:
+      return {
+        ...state,
+        totalDisplayElements: state.pages.reduce((acc, curr) => acc + curr.length, 0)
+      }
     default:
       return state
   }
@@ -274,16 +294,17 @@ export default config
 /**
  * @typedef LibraryState
  * @property {FileResponse[]} fileList A list of files
- * @property {Any[]} folderList
- * @property {FileResponse[]|Any[]} currentList
+ * @property {FolderResponse[]} folderList
+ * @property {FileResponse[]|FolderResponse[]} currentList
  * @property {Object} currentFolder
  * @property {Number} currentPage
  * @property {Boolean} foldersLoaded
  * @property {Boolean} trashLoaded
  * @property {Error} loadingError
- * @property {FileResponse[][]|Any[][]} pages
+ * @property {FileResponse[][]|FolderResponse[][]} pages
  * @property {Number} totalPages
- * @property {FileResponse[]|Any[]} activePage
+ * @property {Number} totalDisplayElements
+ * @property {FileResponse[]|FolderResponse[]} activePage
  */
 
 /**
