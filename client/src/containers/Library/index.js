@@ -34,64 +34,6 @@ export class Library extends Component {
           />)
         ) : null }
 
-        {/* <FileCard
-          fileName={'PooFile.txt'}
-          fileId={1}
-          trashFile={console.log}
-          downloadFile={console.log}
-        />
-        <FolderCard
-          folderName={'PooFile.txt'}
-          folderId={1}
-          trashFolder={console.log}
-          downloadFolder={console.log}
-          openFolder={console.log}
-        />
-        <FileCard
-          fileName={'PooFile.txt'}
-          fileId={1}
-          trashFile={console.log}
-          downloadFile={console.log}
-        />
-        <FolderCard
-          folderName={'PooFile.txt'}
-          folderId={1}
-          trashFolder={console.log}
-          downloadFolder={console.log}
-          openFolder={console.log}
-        />
-        <FileCard
-          fileName={'PooFile.txt'}
-          fileId={1}
-          trashFile={console.log}
-          downloadFile={console.log}
-        />
-        <FolderCard
-          folderName={'PooFile.txt'}
-          folderId={1}
-          trashFolder={console.log}
-          downloadFolder={console.log}
-          openFolder={console.log}
-        />
-        <FileCard
-          fileName={'PooFile.txt'}
-          fileId={1}
-          trashFile={console.log}
-          downloadFile={console.log}
-        />
-        <FolderCard
-          folderName={'PooFile.txt'}
-          folderId={1}
-          trashFolder={console.log}
-          downloadFolder={console.log}
-          openFolder={console.log}
-        />
-        <FileCard
-          fileName={'PooFile.txt'}
-          fileId={1}
-          trashFile={console.log}
-          downloadFile={console.log}
-        /> */}
       </div>
     )
   }
