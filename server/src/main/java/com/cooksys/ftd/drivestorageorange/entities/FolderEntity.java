@@ -42,9 +42,11 @@ public class FolderEntity {
 	private Date lastModified;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "container", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Column(nullable = true, name = "files_contained")
 	private List<FileEntity> filesContained;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "container", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Column(nullable = true, name = "folders_contained")
 	private List<FolderEntity> foldersContained;
 
 	@ManyToOne(fetch = FetchType.LAZY)
