@@ -29,7 +29,7 @@ public class TrashController {
 		this.trashService.deleteFile(uid);
 	}
 
-//	@DELETE /file/{file_uid}/restore
+//	@Patch /file/{file_uid}/restore
 //		Restores a file
 	@PatchMapping("file/{file_uid}/restore")
 	public void restoreFile(@PathVariable("file_uid") Long uid) {
@@ -43,11 +43,25 @@ public class TrashController {
 		this.trashService.deleteFolder(uid);
 	}
 
-//	@DELETE /file/{folder_uid}/restore
-//	Restores a folder
+//	@Patch /file/{folder_uid}/restore
+//		Restores a folder
 	@PatchMapping("folder/{folder_uid}/restore")
 	public void restoreFolder(@PathVariable("folder_uid") Long uid) {
 		this.trashService.restoreFolder(uid);
+	}
+
+//	@DELETE /file/{folder_uid}/restore
+//		Restores a folder
+	@PatchMapping("delete")
+	public void deleteAll() {
+		this.trashService.deleteAll();
+	}
+
+//	@Patch /file/{folder_uid}/restore
+//		Restores all files and folders in trash
+	@PatchMapping("restore")
+	public void restoreAll() {
+		this.trashService.restoreAll();
 	}
 
 }
