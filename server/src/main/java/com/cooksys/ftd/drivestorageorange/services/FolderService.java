@@ -83,6 +83,10 @@ public class FolderService {
 		return toDto(getFolder(uid));
 	}
 	
+	public FolderDTO downloadFolder() {
+		return null;
+	}
+	
 	/**
 	 * Returns a list of all stored folders
 	 * 
@@ -140,14 +144,33 @@ public class FolderService {
 	}
 	
 	// Utility methods
+	
+	/**
+	 * Get a FolderEntity by UID
+	 * 
+	 * @param folderUid
+	 * @return FolderEntity
+	 */
 	public FolderEntity getFolder(Long folderUid) {
 		return this.folderRepository.getOne(folderUid);
 	}
 	
+	/**
+	 * Map FolderEntity to FolderDTO
+	 * 
+	 * @param folderEntity
+	 * @return FolderDTO
+	 */
 	private FolderDTO toDto(FolderEntity folderEntity) {
 		return this.folderMapper.toDto(folderEntity);
 	}
 	
+	/**
+	 * Save FolderEntity to database
+	 * 
+	 * @param folderEntity
+	 * @return FolderEntity
+	 */
 	private FolderEntity saveFolder(FolderEntity folderEntity) {
 		return this.folderRepository.save(folderEntity);
 	}

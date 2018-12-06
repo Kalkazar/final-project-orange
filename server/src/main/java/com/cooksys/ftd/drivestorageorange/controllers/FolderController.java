@@ -1,11 +1,11 @@
 package com.cooksys.ftd.drivestorageorange.controllers;
 
-//import java.io.IOException;
-//import java.io.OutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
-//import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
-//import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
-//import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
+import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
+import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
 import com.cooksys.ftd.drivestorageorange.services.FolderService;
 
 @RestController
