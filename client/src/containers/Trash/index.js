@@ -10,7 +10,7 @@ import {
 } from '../../components/Card'
 import PropTypes from 'prop-types'
 import { changeView } from '../../ducks/ui.duck'
-import { restoreFile } from '../../ducks/library.duck'
+import { restoreFile, deleteFile } from '../../ducks/library.duck'
 
 export class Trash extends Component {
   componentDidMount () {
@@ -27,7 +27,7 @@ export class Trash extends Component {
           (<TrashCard
             name={e.name}
             id={e.uid}
-            deleteForever={console.log}
+            deleteForever={() => this.props.deleteFile(e.uid)}
             restore={() => this.props.restoreFile(e.uid)}
             fileType='file'
           />)
@@ -40,9 +40,9 @@ export class Trash extends Component {
 
 Trash.propTypes = {
   changeView: PropTypes.func,
-  restoreFile: PropTypes.func
+  restoreFile: PropTypes.func,
   // restoreFolder: PropTypes.func,
-  // deleteFile: PropTypes.func,
+  deleteFile: PropTypes.func
   // deleteFolder: PropTypes.func,
   // restoreAll: PropTypes.func,
   // deleteAll: PropTypes.func
@@ -55,9 +55,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   // Hook up appropriate Redux methods
   changeView: isTrash => dispatch(changeView(isTrash)),
-  restoreFile: uid => dispatch(restoreFile(uid))
+  restoreFile: uid => dispatch(restoreFile(uid)),
   // restoreFolder: folder => dispatch(restoreFolder(folder)),
-  // deleteFile: file => dispatch(deleteFile(file)),
+  deleteFile: uid => dispatch(deleteFile(uid))
   // deleteFolder: folder => dispatch(deleteFolder(folder)),
   // restoreAll: () => dispatch(restoreAll()),
   // deleteAll: () => dispatch(deleteAll())
