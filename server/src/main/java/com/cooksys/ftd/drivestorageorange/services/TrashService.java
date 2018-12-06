@@ -5,8 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cooksys.ftd.drivestorageorange.dtos.FileDTO;
+import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
 import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
+import com.cooksys.ftd.drivestorageorange.mappers.FileMapper;
+import com.cooksys.ftd.drivestorageorange.mappers.FolderMapper;
 import com.cooksys.ftd.drivestorageorange.repositories.FileRepository;
 import com.cooksys.ftd.drivestorageorange.repositories.FolderRepository;
 
@@ -17,6 +21,10 @@ public class TrashService {
 	FileRepository fileRepository;
 	@Autowired
 	FolderRepository folderRepository;
+	@Autowired
+	FileMapper fileMapper;
+	@Autowired
+	FolderMapper folderMapper;
 
 	/**
 	 * Permanently deletes file by UID File must be inTrash to do so
@@ -57,6 +65,7 @@ public class TrashService {
 		FileEntity restoreTarget = this.fileRepository.getOneTrashed(uid);
 
 		if (restoreTarget != null) {
+			restoreTarget.setInTrash(false);
 			this.fileRepository.save(restoreTarget);
 		} else {
 			System.out.println("No matching target for restoration!");
@@ -72,6 +81,7 @@ public class TrashService {
 		FolderEntity restoreTarget = this.folderRepository.getOneTrashed(uid);
 
 		if (restoreTarget != null) {
+			restoreTarget.setInTrash(false);
 			this.folderRepository.save(restoreTarget);
 		} else {
 			System.out.println("No matching target for restoration!");
@@ -85,11 +95,16 @@ public class TrashService {
 		List<FileEntity> deleteTrashedFiles = this.fileRepository.getAllTrashed();
 		List<FolderEntity> deleteTrashedFolders = this.folderRepository.getAllTrashed();
 
-		if (deleteTrashedFiles != null || deleteTrashedFolders != null) {
+		if (deleteTrashedFiles != null) {
 			this.fileRepository.deleteAll(deleteTrashedFiles);
+		} else {
+			System.out.println("No files for deletion!");
+		}
+		
+		if (deleteTrashedFolders != null) {
 			this.folderRepository.deleteAll(deleteTrashedFolders);
 		} else {
-			System.out.println("No targets for deletion!");
+			System.out.println("No folders for deletion!");
 		}
 	}
 
@@ -100,12 +115,39 @@ public class TrashService {
 		List<FileEntity> restoreTrashedFiles = this.fileRepository.getAllTrashed();
 		List<FolderEntity> restoreTrashedFolders = this.folderRepository.getAllTrashed();
 
-		if (restoreTrashedFiles != null || restoreTrashedFolders != null) {
-			this.fileRepository.saveAll(restoreTrashedFiles);
-			this.folderRepository.saveAll(restoreTrashedFolders);
+		if (restoreTrashedFiles != null) {
+			for (FileEntity file : restoreTrashedFiles) {
+				file.setInTrash(false);
+				this.fileRepository.save(file);
+			}
 		} else {
-			System.out.println("No targets for restoration!");
+			System.out.println("No files for restoration!");
 		}
+
+		if (restoreTrashedFolders != null) {
+			for (FolderEntity folder : restoreTrashedFolders) {
+				folder.setInTrash(false);
+				this.folderRepository.save(folder);
+			}
+		} else {
+			System.out.println("No folders for restoration!");
+		}
+	}
+
+	/**
+	 * Retrieves all files in trash
+	 */
+	public List<FileDTO> getTrashedFiles() {
+		List<FileEntity> trashedFiles = this.fileRepository.getAllTrashed();
+		return fileMapper.toDto(trashedFiles);
+	}
+
+	/**
+	 * Retrieves all folders in trash
+	 */
+	public List<FolderDTO> getTrashedFolders() {
+		List<FolderEntity> trashedFolders = this.folderRepository.getAllTrashed();
+		return folderMapper.toDto(trashedFolders);
 	}
 
 }
