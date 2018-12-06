@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = FileMapper.class)
 public interface FolderMapper {
 	
 	@Mapping(source = "container.uid", target = "containerId")

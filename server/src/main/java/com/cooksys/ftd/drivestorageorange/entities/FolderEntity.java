@@ -1,15 +1,18 @@
 package com.cooksys.ftd.drivestorageorange.entities;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -38,7 +41,13 @@ public class FolderEntity {
 	@UpdateTimestamp
 	private Date lastModified;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "container", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<FileEntity> filesContained;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "container", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<FolderEntity> foldersContained;
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = true)
 	private FolderEntity container;
 
@@ -78,6 +87,22 @@ public class FolderEntity {
 
 	public void setLastModified(Date lastModified) {
 		this.lastModified = lastModified;
+	}
+
+	public List<FileEntity> getFilesContained() {
+		return filesContained;
+	}
+
+	public void setFilesContained(List<FileEntity> filesContained) {
+		this.filesContained = filesContained;
+	}
+
+	public List<FolderEntity> getFoldersContained() {
+		return foldersContained;
+	}
+
+	public void setFoldersContained(List<FolderEntity> foldersContained) {
+		this.foldersContained = foldersContained;
 	}
 
 	public FolderEntity getContainer() {

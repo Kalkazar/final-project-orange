@@ -100,8 +100,8 @@ public class FileService {
 	 * 
 	 * @param fileUid of file to move
 	 */
-	public FileDTO moveFile(Long fileUid) {
-		FileEntity editingFile = this.fileRepository.getOne(fileUid);
+	public FileDTO moveFile(Long uid) {
+		FileEntity editingFile = this.fileRepository.getOne(uid);
 		editingFile.setContainer(null);
 		return this.fileMapper.toDto(this.fileRepository.save(editingFile));
 	}
