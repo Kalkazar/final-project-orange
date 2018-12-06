@@ -81,9 +81,9 @@ public class FileController {
 	/**
 	 * Returns all files
 	 * 
-	 * @return
+	 * @return all FileDTOs
 	 */
-	@GetMapping("all")
+	@GetMapping("")
 	public List<FileDTO> getAllFiles() {
 		return this.fileService.getAllFiles();
 	}
