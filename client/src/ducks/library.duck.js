@@ -273,7 +273,7 @@ export default config
 
 /**
  * @typedef LibraryState
- * @property {FileResponse[]} fileList
+ * @property {FileResponse[]} fileList A list of files
  * @property {Any[]} folderList
  * @property {FileResponse[]|Any[]} currentList
  * @property {Object} currentFolder
