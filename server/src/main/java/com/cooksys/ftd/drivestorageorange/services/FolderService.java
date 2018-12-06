@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cooksys.ftd.drivestorageorange.dtos.FileDTO;
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
 import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
@@ -27,14 +26,28 @@ public class FolderService {
 
 	@Autowired
 	FolderMapper folderMapper;
+	
+	/**
+	 * Create a new empty folder
+	 * 
+	 * @param name
+	 * @return FolderDTO
+	 * @see FolderDTO
+	 */
+	public FolderDTO createFolder(String name) {
+		FolderEntity uploadedFolder = new FolderEntity();
+		uploadedFolder.setName(name);
+		
+		return toDto(saveFolder(uploadedFolder));
+	}
 
 	/**
 	 * [NOT FULLY IMPLEMENTED] Uploads a folder and all files contained within,
 	 * and returns DTO of newly uploaded folder
 	 * @param name to assign uploaded folder
 	 * @param uploadFolder folder data uploaded
-	 * @return FileDTO
-	 * @see FileDTO
+	 * @return FolderDTO
+	 * @see FolderDTO
 	 * @see MultipartFile
 	 */
 	public FolderDTO uploadFolder(String name, Map<String, MultipartFile> uploadFolder) {
@@ -86,10 +99,10 @@ public class FolderService {
 	 * @param uid     of folder to rename
 	 * @param newName to assign to folder
 	 */
-	public FolderDTO renameFolder(Long uid, String newName) {
+	public void renameFolder(Long uid, String newName) {
 		FolderEntity editingFolder = getFolder(uid);
 		editingFolder.setName(newName);
-		return toDto(saveFolder(editingFolder));
+		saveFolder(editingFolder);
 	}
 
 	/**
@@ -97,10 +110,10 @@ public class FolderService {
 	 * 
 	 * @param uid of folder to put "in trash"
 	 */
-	public FolderDTO trashFolder(Long uid) {
+	public void trashFolder(Long uid) {
 		FolderEntity editingFolder = getFolder(uid);
 		editingFolder.setInTrash(true);
-		return toDto(saveFolder(editingFolder));
+		saveFolder(editingFolder);
 	}
 
 	/**
@@ -108,10 +121,10 @@ public class FolderService {
 	 * 
 	 * @param folderUid of folder to move
 	 */
-	public FolderDTO moveFolder(Long uid) {
+	public void moveFolder(Long uid) {
 		FolderEntity editingFolder = getFolder(uid);
 		editingFolder.setContainer(null);
-		return toDto(saveFolder(editingFolder));
+		saveFolder(editingFolder);
 	}
 
 	/**
@@ -120,10 +133,10 @@ public class FolderService {
 	 * @param folderUid    of folder to move
 	 * @param containerUid of destination to move file to
 	 */
-	public FolderDTO moveFolder(Long folderUid, Long containerUid) {
+	public void moveFolder(Long folderUid, Long containerUid) {
 		FolderEntity editingFolder = getFolder(folderUid);
 		editingFolder.setContainer(getFolder(containerUid));
-		return toDto(saveFolder(editingFolder));
+		saveFolder(editingFolder);
 	}
 	
 	// Utility methods

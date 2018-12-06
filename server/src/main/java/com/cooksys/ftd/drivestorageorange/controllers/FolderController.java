@@ -24,10 +24,22 @@ public class FolderController {
 	@Autowired
 	FolderService folderService;
 	
+	
+	/**
+	 * Create a new empty folder
+	 * 
+	 * @param name
+	 * @return FolderDTO of newly created folder
+	 */
+	@PostMapping("create/{name}")
+	public FolderDTO createFolder(@PathVariable("name") String name) {
+		return this.folderService.createFolder(name);
+	}
+	
 	/**
 	 * Upload a new folder
 	 * 
-	 * @return uid of newly uploaded folder
+	 * @return FolderDTO of newly uploaded folder
 	 */
 	@PostMapping("")
 	public FolderDTO uploadFolder(@RequestParam("name") String name, @RequestParam("file") Map<String, MultipartFile> uploadFolder) {
@@ -67,7 +79,7 @@ public class FolderController {
 	 * @param newName to be assigned to folder
 	 */
 	@PatchMapping("{uid}/rename/{newName}")
-	public void renameFile(@PathVariable("uid") Long uid, @PathVariable("newName") String newName) {
+	public void renameFolder(@PathVariable("uid") Long uid, @PathVariable("newName") String newName) {
 		this.folderService.renameFolder(uid, newName);
 	}
 	
