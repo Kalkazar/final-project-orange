@@ -85,39 +85,58 @@ const trashFile = uid =>
 // Uploads a new folder
 // Returns folder dto of newly uploaded folder
 
+/**
+ * [PARTIALLY IMPLEMENTED] Upload a new folder
+ * @param {Any} folder Folder to upload
+ * @returns {AxiosPromise<Any>}
+ */
 const uploadFolder = folder =>
   Axios.post('folder', folder)
 
-// @POST /folder/create/{name}
-// Creates a new empty folder
-// Returns folder dto of newly created folder
-
+/**
+ * Creates a new empty folder
+ * @param {String} folderName Name of newly created folder
+ * @returns folder dto of newly created folder
+ */
 const createFolder = folderName =>
   Axios.post(`folder/create/${folderName}`)
 
 // @GET /folder/
 // Returns all folders (dtos as List)
 
+/**
+ * Gets all folders (dtos as List)
+ * @returns {AxiosPromise<Any[]>}
+ */
 const getAllFolders = () =>
   Axios.get(`folder`)
 
 // @GET /folder/{folder_uid}/
 // Returns a folder (dto) via uid if it exists
 
+/**
+ * Gets a folder via UID
+ * @param {Number} uid UID of folder to get
+ * @returns {AxiosPromise<Any>}
+ */
 const getFolder = uid =>
   Axios.get(`folder/${uid}`)
 
-// @PATCH /folder/{folder_uid}/rename/{new_name}/
-// Renames a folder by uid
-// Returns renamed folder (dto)
-
+/**
+ * Renames a folder by UID
+ * @param {Number} uid UID of folder to rename
+ * @param {String} newName New name to assign to folder
+ * @returns {AxiosPromise<Any>}
+ */
 const renameFolder = (uid, newName) =>
   Axios.get(`folder/${uid}/rename/${newName}`)
 
-// @PATCH /folder/move/{uid}/
-// Moves a folder to the root folder
-// Returns moved folder (dto)
-
+/**
+ * Moves a folder to the destination folder
+ * @param {Number} folderUid UID of folder to move
+ * @param {Number} [containerUid] Destination folder, moves to root if undefined
+ * @returns {AxiosPromise<Any>}
+ */
 const moveFolder = (folderUid, containerUid) =>
   Axios.patch(
     containerUid
@@ -125,16 +144,12 @@ const moveFolder = (folderUid, containerUid) =>
       : `file/move/${folderUid}`
   )
 
-// @PATCH /folder/move/{folder_uid}/{container_uid}/
-// Moves a folder into a folder via uids
-// Returns moved folder (dto)
-
-// @DELETE /folder/{folder_uid}/
-// Moves a folder to trash via uid
-// Returns deleted folder (dto)
-// Pending documentation
-
-const deleteFolder = uid =>
+/**
+ * Moves a folder to trash bin via uid
+ * @param {Number} uid UID of folder to trash bin
+ * @returns {AxiosPromise<Any>} trashbinned folder
+ */
+const trashFolder = uid =>
   Axios.delete(`folder/${uid}`)
 
 // Trash
