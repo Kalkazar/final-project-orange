@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import styles from './library.module.scss'
 import {
   FileCard,
@@ -13,74 +14,38 @@ export class Library extends Component {
   componentDidMount () {
     console.log('Get All Files and Folders')
   }
+
   render () {
     return (
       <div className={styles.libDiv}>
         <span className={styles.pathSpan}>this/is/the/path/span</span>
-        <FileCard
-          fileName={'PooFile.txt'}
-          fileId={1}
-          trashFile={console.log}
-          downloadFile={console.log}
-        />
-        <FolderCard
-          folderName={'PooFile.txt'}
-          folderId={1}
-          trashFolder={console.log}
-          downloadFolder={console.log}
-          openFolder={console.log}
-        />
-        <FileCard
-          fileName={'PooFile.txt'}
-          fileId={1}
-          trashFile={console.log}
-          downloadFile={console.log}
-        />
-        <FolderCard
-          folderName={'PooFile.txt'}
-          folderId={1}
-          trashFolder={console.log}
-          downloadFolder={console.log}
-          openFolder={console.log}
-        />
-        <FileCard
-          fileName={'PooFile.txt'}
-          fileId={1}
-          trashFile={console.log}
-          downloadFile={console.log}
-        />
-        <FolderCard
-          folderName={'PooFile.txt'}
-          folderId={1}
-          trashFolder={console.log}
-          downloadFolder={console.log}
-          openFolder={console.log}
-        />
-        <FileCard
-          fileName={'PooFile.txt'}
-          fileId={1}
-          trashFile={console.log}
-          downloadFile={console.log}
-        />
-        <FolderCard
-          folderName={'PooFile.txt'}
-          folderId={1}
-          trashFolder={console.log}
-          downloadFolder={console.log}
-          openFolder={console.log}
-        />
-        <FileCard
-          fileName={'PooFile.txt'}
-          fileId={1}
-          trashFile={console.log}
-          downloadFile={console.log}
-        />
+
+        {/* Checking props manually for testing */}
+        { console.log('Library props', this.props) }
+
+        {/* If props.activePage exists, render cards for items */}
+        { this.props.activePage ? this.props.activePage.map((e, i) =>
+          (<FileCard
+            key={i}
+            fileName={e.name}
+            fileId={e.uid}
+            trashFile={console.log}
+            downloadFile={console.log}
+          />)
+        ) : null }
+
       </div>
     )
   }
 }
 
-const mapStateToProps = state => ({})
+Library.propTypes = {
+  activePage: PropTypes.array
+}
+
+const mapStateToProps = state => ({
+  activePage: state.library.activePage
+})
 
 const mapDispatchToProps = {}
 

@@ -8,6 +8,7 @@ import {
   TrashCard,
   FolderFunctionsCard
 } from '../../components/Card'
+import PropTypes from 'prop-types'
 
 export class Trash extends Component {
   componentDidMount () {
@@ -85,9 +86,26 @@ export class Trash extends Component {
   }
 }
 
+Trash.propTypes = {
+  restoreFile: PropTypes.func,
+  restoreFolder: PropTypes.func,
+  deleteFile: PropTypes.func,
+  deleteFolder: PropTypes.func,
+  restoreAll: PropTypes.func,
+  deleteAll: PropTypes.func
+}
+
 const mapStateToProps = state => ({})
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = dispatch => ({
+  // Hook up appropriate Redux methods
+  // restoreFile: file => dispatch(restoreFile(file)),
+  // restoreFolder: folder => dispatch(restoreFolder(folder)),
+  // deleteFile: file => dispatch(deleteFile(file)),
+  // deleteFolder: folder => dispatch(deleteFolder(folder)),
+  // restoreAll: () => dispatch(restoreAll()),
+  // deleteAll: () => dispatch(deleteAll())
+})
 
 export default connect(
   mapStateToProps,
