@@ -1,0 +1,39 @@
+@import '../../index.scss';
+
+.uploadButtonClass {
+  display: flex;
+  flex-direction: column;
+  align-items: space-around;
+  margin: 20px;
+  padding: 10px;
+  align-content: center;
+  width: 80%;
+  height: auto;
+  background-color: #212529;
+  font-size: 18pt;
+  color: white;
+  border: 1px solid #212529;
+  border-radius: 5px;
+  &:hover {
+    border-color: gray;
+    cursor: pointer;
+    @include noselecttext;
+  }
+  &:active {
+    background-color: gray;
+  }
+}
+
+.buttonIcon {
+    display: flex;
+    flex-direction: center;
+    margin-left: 35%;
+    font-size: 15pt;
+  }
+  
+  .buttonContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 100%;
+  }

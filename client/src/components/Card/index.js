@@ -12,6 +12,7 @@ import {
   FolderIcon
 } from '../Icon'
 import InnerButton from '../InnerButton'
+import UploadButton from '../UploadButton'
 
 const Card = ({ children }) => (
   <div className={styles.cardHolder}>
@@ -28,12 +29,13 @@ const Card = ({ children }) => (
 //   </Card>
 // )
 
-export const UploadCard = ({ fileType, upload }) => (
+export const UploadCard = ({ fileType, upload, uploadFolder }) => (
   <div>
-    <div className={styles.cardTitle}>Upload {fileType}</div>
-    <div onClick={upload} className={styles.uploadIconHolder}>
-      <UploadIcon onClick={() => {}} />
-    </div>
+    <UploadButton
+      name='Upload File'
+      onClick={uploadFolder}
+      icon={<UploadIcon onClick={() => {}} />}
+    />
   </div>
 )
 
