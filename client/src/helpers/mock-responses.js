@@ -1,15 +1,15 @@
 export const files = [
-  { uid: 1, name: 'My life.txt', folder: null, inTrash: false },
+  { uid: 1, name: 'My life.txt', containerId: null, inTrash: false },
   {
     uid: 2,
     name: "Josh's fun times in paintball.mpeg",
-    folder: 1,
+    containerId: 1,
     inTrash: false
   },
   {
-    uid: 2,
+    uid: 3,
     name: 'John doing his thing but thrown away.mpeg',
-    folder: 1,
+    containerId: 1,
     inTrash: true
   }
 ]
