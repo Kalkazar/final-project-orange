@@ -1,18 +1,57 @@
 import { getFileList, getFolderList } from '../api'
 import { groupArray } from '../helpers/util'
 
+import { FileResponse } from '../helpers/mock-responses'
+
+/**
+ * Load file objects into state
+ */
 export const LOAD_FILES = 'LOAD_FILES'
+
+/**
+ * Load folder objects into state
+ */
 export const LOAD_FOLDERS = 'LOAD_FOLDERS'
+
+/**
+ * Load current list of results to be displayed
+ */
 export const LOAD_CURRENT_LIST = 'LOAD_CURRENT_LIST'
+
+/**
+ * Called when a load fails
+ */
 export const LOAD_ERROR = 'LOAD_ERROR'
 
+/**
+ * Load pages of display results into state
+ */
 export const LOAD_PAGES = 'LOAD_PAGES'
+
+/**
+ * Set index of current results page to display
+ */
 export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
+
+/**
+ * Update currently displayed results page based on state
+ */
 export const UPDATE_ACTIVE_PAGE = 'UPDATE_ACTIVE_PAGE'
+
+/**
+ * Update total number of pages of results based on state
+ */
 export const UPDATE_TOTAL_PAGES = 'UPDATE_TOTAL_PAGES'
 
+/**
+ * Max number of file cards to display per page
+ */
 const FILES_PER_PAGE = 6
 
+/**
+ * Initial base-line library state
+ * @type {LibraryState}
+ */
 const initialState = {
   fileList: [],
   folderList: [],
@@ -22,12 +61,14 @@ const initialState = {
   foldersLoaded: false,
   trashLoaded: false,
   loadingError: null,
-
   pages: [],
   totalPages: 1,
   activePage: []
 }
 
+/**
+ * Calls API for a list of all folders
+ */
 export const getFolders = () => dispatch => {
   getFolderList()
     .then(folderList => {
@@ -37,6 +78,9 @@ export const getFolders = () => dispatch => {
     .catch(err => dispatch(loadError(err)))
 }
 
+/**
+ * Calls API for a list of all files
+ */
 export const getFiles = () => dispatch => {
   getFileList()
     .then(fileList => {
@@ -46,6 +90,10 @@ export const getFiles = () => dispatch => {
     .catch(err => dispatch(loadError(err)))
 }
 
+/**
+ * Selects which page of results Cards to display via index, if valid index
+ * @param {Number} pageIndex Index of Cards to display
+ */
 export const setPage = pageIndex => (dispatch, getState) => {
   const { totalPages } = getState().library
 
@@ -57,6 +105,10 @@ export const setPage = pageIndex => (dispatch, getState) => {
   }
 }
 
+/**
+ * Decides which list of results to display based on UI state
+ * [INCOMPLETE DOCS]
+ */
 export const getCurrentList = () => (dispatch, getState) => {
   const { fileList, folderList } = getState().library
   const { trashLoaded, currentPage, currentFolder } = getState().ui
@@ -85,39 +137,78 @@ export const getCurrentList = () => (dispatch, getState) => {
   )
 }
 
+/**
+ * Updates active page based on state
+ * @returns {ReduxAction}
+ */
 export const updateActivePage = () => ({
   type: UPDATE_ACTIVE_PAGE
 })
 
+/**
+ * Sets the current page
+ * @param {Number} currentPage Index of page to change to
+ * @returns {ReduxAction}
+ */
 export const setCurrentPage = currentPage => ({
   type: SET_CURRENT_PAGE,
   payload: currentPage
 })
 
+/**
+ * Updates the total number of results pages, based on state.
+ * For use with pagination components
+ * @returns {ReduxAction}
+ */
 export const updateTotalPages = () => ({
   type: UPDATE_TOTAL_PAGES
 })
 
+/**
+ * Sets current pages of results
+ * @param {Object[][]} currentPages 2D array of results, each array is a page
+ * @returns {ReduxAction}
+ */
 export const loadPages = currentPages => ({
   type: LOAD_PAGES,
   payload: currentPages
 })
 
+/**
+ * Sets current list of display results [INCOMPLETE DOCS]
+ * @param {Any[]} currentList List of objects to display
+ * @returns {ReduxAction}
+ */
 export const loadCurrentList = currentList => ({
   type: LOAD_CURRENT_LIST,
   payload: currentList
 })
 
+/**
+ * Sets loadError in state, if load has failed [INCOMPLETE DOCS]
+ * @param {Any} loadError Reason for load failure
+ * @returns {ReduxAction}
+ */
 export const loadError = loadError => ({
   type: LOAD_ERROR,
   payload: loadError
 })
 
+/**
+ * Sets list of all files [INCOMPLETE DOCS]
+ * @param {Object[]} fileList List of files from API
+ * @returns {ReduxAction}
+ */
 export const loadFiles = fileList => ({
   type: LOAD_FILES,
   payload: fileList
 })
 
+/**
+ * Sets list of all folders [INCOMPLETE DOCS]
+ * @param {Object[]} folderList List of folders from API
+ * @returns {ReduxAction}
+ */
 export const loadFolders = folderList => ({
   type: LOAD_FILES,
   payload: folderList
@@ -178,34 +269,21 @@ function config (state = initialState, action) {
 
 export default config
 
-// const initialState = {
-//   fileList: [],
-//   folderList: [],
-//   currentList: [],
-//   currentFolder: null,
-//   currentPage: 0,
-//   foldersLoaded: false,
-//   trashLoaded: false,
-//   loadingError: null,
-
-//   pages: [],
-//   totalPages: 1,
-//   activePage: []
-// }
+// Need to correct list props to reflect an array that may contain a mixture of 2+ object types
 
 /**
  * @typedef LibraryState
- * @property {Any[]} fileList
+ * @property {FileResponse[]} fileList
  * @property {Any[]} folderList
- * @property {Any[]} currentList
+ * @property {FileResponse[]|Any[]} currentList
  * @property {Object} currentFolder
  * @property {Number} currentPage
  * @property {Boolean} foldersLoaded
  * @property {Boolean} trashLoaded
  * @property {Error} loadingError
- * @property {Any[][]} pages
+ * @property {FileResponse[][]|Any[][]} pages
  * @property {Number} totalPages
- * @property {Any[]} activePage
+ * @property {FileResponse[]|Any[]} activePage
  */
 
 /**
@@ -213,3 +291,8 @@ export default config
   * @property {String} type
   * @property {Any} payload
   */
+
+/**
+ * @function ActionCreator
+ * @returns {ReduxAction}
+ */
