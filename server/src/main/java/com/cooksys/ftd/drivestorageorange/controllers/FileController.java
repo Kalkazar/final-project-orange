@@ -91,43 +91,47 @@ public class FileController {
 	/**
 	 * Renames a file by UID
 	 * 
+	 * @return FileDTO
 	 * @param uid     of file to rename
 	 * @param newName to be assigned to file
 	 */
 	@PatchMapping("{uid}/rename/{newName}")
-	public void renameFile(@PathVariable("uid") Long uid, @PathVariable("newName") String newName) {
-		this.fileService.renameFile(uid, newName);
+	public FileDTO renameFile(@PathVariable("uid") Long uid, @PathVariable("newName") String newName) {
+		return this.fileService.renameFile(uid, newName);
 	}
 
 	/**
 	 * Moves a file to the trash via UID
 	 * 
+	 * @return FileDTO
 	 * @param uid of file to move to trash
 	 */
 	@DeleteMapping("{uid}")
-	public void trashFile(@PathVariable("uid") Long uid) {
-		this.fileService.trashFile(uid);
+	public FileDTO trashFile(@PathVariable("uid") Long uid) {
+		return this.fileService.trashFile(uid);
 	}
 
 	/**
 	 * Moves a file to the root folder
 	 * 
+	 * @return FileDTO
 	 * @param fileUid
 	 */
 	@PatchMapping("move/{fileUid}")
-	public void moveFileToRoot(@PathVariable("fileUid") Long fileUid) {
-		this.fileService.moveFile(fileUid);
+	public FileDTO moveFileToRoot(@PathVariable("fileUid") Long fileUid) {
+		return this.fileService.moveFile(fileUid);
 	}
 
 	/**
 	 * Moves a file into a folder via UID
 	 * 
+	 * @return FileDTO
 	 * @param fileUid   of file being moved
 	 * @param folderUid of destination being moved to
 	 */
 	@PatchMapping("move/{fileUid}/{folderUid}")
-	public void moveFile(@PathVariable("fileUid") Long fileUid, @PathVariable("folderUid") Long folderUid) {
-		this.fileService.moveFile(fileUid, folderUid);
+	public FileDTO moveFile(@PathVariable("fileUid") Long fileUid, @PathVariable("folderUid") Long folderUid) {
+		return this.fileService.moveFile(fileUid, folderUid);
 	}
 
 //	[NOT IMPLEMENTED]
