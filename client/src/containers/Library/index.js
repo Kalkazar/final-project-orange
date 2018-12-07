@@ -9,7 +9,6 @@ import {
   TrashCard,
   FolderFunctionsCard
 } from '../../components/Card'
-
 import { LiveEndpoints } from '../../api'
 import { trashBinFile } from '../../ducks/library.duck'
 
@@ -17,12 +16,11 @@ export class Library extends Component {
   componentDidMount () {
     console.log('Get All Files and Folders')
   }
-
+  
   render () {
     return (
       <div className={styles.libDiv}>
         <span className={styles.pathSpan}>this/is/the/path/span</span>
-
         {/* Checking props manually for testing */}
         { console.log('Library props', this.props) }
 
@@ -36,7 +34,6 @@ export class Library extends Component {
             downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
           />)
         ) : null }
-
       </div>
     )
   }

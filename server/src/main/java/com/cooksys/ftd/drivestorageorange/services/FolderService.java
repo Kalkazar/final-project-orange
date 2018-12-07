@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
-import com.cooksys.ftd.drivestorageorange.dtos.FolderViewDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
 import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
 import com.cooksys.ftd.drivestorageorange.mappers.FolderMapper;
@@ -35,11 +34,11 @@ public class FolderService {
 	 * @return FolderDTO
 	 * @see FolderDTO
 	 */
-	public FolderViewDTO createFolder(String name) {
+	public FolderDTO createFolder(String name) {
 		FolderEntity uploadedFolder = new FolderEntity();
 		uploadedFolder.setName(name);
 		
-		return toFolderViewDto(saveFolder(uploadedFolder));
+		return toDto(saveFolder(uploadedFolder));
 	}
 
 	/**
@@ -51,7 +50,7 @@ public class FolderService {
 	 * @see FolderDTO
 	 * @see MultipartFile
 	 */
-	public FolderViewDTO uploadFolder(String name, Map<String, MultipartFile> uploadFolder) {
+	public FolderDTO uploadFolder(String name, Map<String, MultipartFile> uploadFolder) {
 		FolderEntity uploadedFolder = new FolderEntity();
 		uploadedFolder.setName(name);
 
@@ -65,7 +64,7 @@ public class FolderService {
 				}
 			}
 			
-			return toFolderViewDto(saveFolder(uploadedFolder));
+			return toDto(saveFolder(uploadedFolder));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -80,19 +79,8 @@ public class FolderService {
 	 * @return FolderDTO
 	 * @see FolderDTO
 	 */
-	public FolderViewDTO getFolderByUID(Long uid) {
-		return toFolderViewDto(getFolder(uid));
-	}
-	
-	
-	/**
-	 * [NOT FULLY IMPLEMENTED] Returns a folder by uid
-	 * 
-	 * @param uid
-	 * @return FolderDTO
-	 */
-	public FolderDTO downloadFolder(Long uid) {
-		return toFolderDto(getFolder(uid));
+	public FolderDTO getFolderByUID(Long uid) {
+		return toDto(getFolder(uid));
 	}
 	
 	/**
@@ -101,8 +89,8 @@ public class FolderService {
 	 * @return List<FolderDTO>
 	 * @see FolderDTO
 	 */
-	public List<FolderViewDTO> getAllFolders() {
-		return this.folderMapper.toViewDto(this.folderRepository.findAll());
+	public List<FolderDTO> getAllFolders() {
+		return this.folderMapper.toDto(this.folderRepository.findAll());
 	}
 
 	/**
@@ -111,21 +99,29 @@ public class FolderService {
 	 * @param uid     of folder to rename
 	 * @param newName to assign to folder
 	 */
-	public FolderViewDTO renameFolder(Long uid, String newName) {
+	public FolderDTO renameFolder(Long uid, String newName) {
 		FolderEntity editingFolder = getFolder(uid);
 		editingFolder.setName(newName);
-		return toFolderViewDto(saveFolder(editingFolder));
+		
+		return toDto(saveFolder(editingFolder));
 	}
 
 	/**
-	 * Stages a folder for deletion "in trash" by UID
+	 * Stages a folder and its files for deletion "in trash" by UID
 	 * 
 	 * @param uid of folder to put "in trash"
 	 */
-	public FolderViewDTO trashFolder(Long uid) {
+	public FolderDTO trashFolder(Long uid) {
 		FolderEntity editingFolder = getFolder(uid);
+		List<FileEntity> filesInFolder = getFilesInFolder(uid);
+
 		editingFolder.setInTrash(true);
-		return toFolderViewDto(saveFolder(editingFolder));
+		for(FileEntity file : filesInFolder) {
+			file.setInTrash(true);
+			file.setContainer(null);
+			this.fileRepository.save(file);
+		}
+		return toDto(saveFolder(editingFolder));
 	}
 
 	/**
@@ -133,10 +129,10 @@ public class FolderService {
 	 * 
 	 * @param folderUid of folder to move
 	 */
-	public FolderViewDTO moveFolder(Long uid) {
+	public FolderDTO moveFolder(Long uid) {
 		FolderEntity editingFolder = getFolder(uid);
 		editingFolder.setContainer(null);
-		return toFolderViewDto(saveFolder(editingFolder));
+		return toDto(saveFolder(editingFolder));
 	}
 
 	/**
@@ -145,10 +141,10 @@ public class FolderService {
 	 * @param folderUid    of folder to move
 	 * @param containerUid of destination to move file to
 	 */
-	public FolderViewDTO moveFolder(Long folderUid, Long containerUid) {
+	public FolderDTO moveFolder(Long folderUid, Long containerUid) {
 		FolderEntity editingFolder = getFolder(folderUid);
 		editingFolder.setContainer(getFolder(containerUid));
-		return toFolderViewDto(saveFolder(editingFolder));
+		return toDto(saveFolder(editingFolder));
 	}
 	
 	// Utility methods
@@ -163,24 +159,15 @@ public class FolderService {
 		return this.folderRepository.getOne(folderUid);
 	}
 	
-	/**
-	 * Map FolderEntity to FolderDTO
-	 * 
-	 * @param folderEntity
-	 * @return FolderDTO
-	 */
-	private FolderDTO toFolderDto(FolderEntity folderEntity) {
-		return this.folderMapper.toDto(folderEntity);
-	}
 	
 	/**
-	 * Map FolderEntity to FolderDTO
+	 * Returns a list of files in the folder with uid
 	 * 
-	 * @param folderEntity
-	 * @return FolderDTO
+	 * @param uid
+	 * @return List<FileEntity>
 	 */
-	private FolderViewDTO toFolderViewDto(FolderEntity folderEntity) {
-		return this.folderMapper.toViewDto(folderEntity);
+	public List<FileEntity> getFilesInFolder(Long uid) {
+		return this.fileRepository.getAllInContainer(uid);
 	}
 	
 	/**
@@ -191,5 +178,15 @@ public class FolderService {
 	 */
 	private FolderEntity saveFolder(FolderEntity folderEntity) {
 		return this.folderRepository.save(folderEntity);
+	}
+	
+	/**
+	 * Map FolderEntity to FolderDTO
+	 * 
+	 * @param folderEntity
+	 * @return FolderDTO
+	 */
+	private FolderDTO toDto(FolderEntity folderEntity) {
+		return this.folderMapper.toDto(folderEntity);
 	}
 }

@@ -68,3 +68,4 @@ export const selectLibrary = () => dispatch => {
  */
 export const changeView = view => (dispatch, getState) =>
   view ? dispatch(selectTrash()) : dispatch(selectLibrary())
+

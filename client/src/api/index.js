@@ -9,7 +9,6 @@ export const getFileList = () =>
 // Appropriate endpoint - get all files
 // Axios.get('file')
 //   .then()
-
 export const getFolderList = () =>
   new Promise((resolve, reject) => {
     resolve(folders)
