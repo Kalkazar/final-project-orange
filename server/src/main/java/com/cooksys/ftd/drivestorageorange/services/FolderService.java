@@ -118,7 +118,6 @@ public class FolderService {
 		editingFolder.setInTrash(true);
 		for(FileEntity file : filesInFolder) {
 			file.setInTrash(true);
-			file.setContainer(null);
 			this.fileRepository.save(file);
 		}
 		return toDto(saveFolder(editingFolder));
