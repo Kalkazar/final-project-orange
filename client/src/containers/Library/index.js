@@ -16,13 +16,13 @@ export class Library extends Component {
   componentDidMount () {
     console.log('Get All Files and Folders')
   }
-  
+
   render () {
     return (
       <div className={styles.libDiv}>
         <span className={styles.pathSpan}>this/is/the/path/span</span>
         {/* Checking props manually for testing */}
-        { console.log('Library props', this.props) }
+        {console.log('Library props', this.props)}
 
         {/* If props.activePage exists, render cards for items */}
         { this.props.activePage ? this.props.activePage.map((e, i) =>

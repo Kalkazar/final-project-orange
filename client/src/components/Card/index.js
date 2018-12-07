@@ -12,6 +12,8 @@ import {
   FolderIcon
 } from '../Icon'
 import InnerButton from '../InnerButton'
+import UploadButton from '../UploadButton'
+import FolderNavButton from '../FolderNavButton'
 
 const Card = ({ children }) => (
   <div className={styles.cardHolder}>
@@ -19,30 +21,48 @@ const Card = ({ children }) => (
   </div>
 )
 
-export const UploadCard = ({ fileType, upload }) => (
-  <Card>
-    <div className={styles.cardTitle}>Upload {fileType}</div>
-    <div onClick={upload} className={styles.uploadIconHolder}>
-      <UploadIcon onClick={() => {}} />
-    </div>
-  </Card>
+export const UploadCard = ({ fileType, upload, uploadFolder }) => (
+  <div>
+    <UploadButton
+      name='Upload File'
+      onClick={uploadFolder}
+      icon={<UploadIcon onClick={() => {}} />}
+    />
+  </div>
 )
 
+// export const FolderFunctionsCard = ({ createFolder, uploadFolder }) => (
+//   <Card>
+//     <div className={styles.createAndUploadCardHolder}>
+//       <InnerButton
+//         name='Create Folder'
+//         onClick={createFolder}
+//         icon={<CreateFolderIcon onClick={() => {}} />}
+//       />
+//       <InnerButton
+//         name='Upload Folder'
+//         onClick={uploadFolder}
+//         icon={<UploadIcon onClick={() => {}} />}
+//       />
+//     </div>
+//   </Card>
+// )
+
 export const FolderFunctionsCard = ({ createFolder, uploadFolder }) => (
-  <Card>
-    <div className={styles.trashCardHolder}>
-      <InnerButton
+  <div>
+    <div>
+      <FolderNavButton
         name='Create Folder'
         onClick={createFolder}
         icon={<CreateFolderIcon onClick={() => {}} />}
       />
-      <InnerButton
+      <FolderNavButton
         name='Upload Folder'
         onClick={uploadFolder}
         icon={<UploadIcon onClick={() => {}} />}
       />
     </div>
-  </Card>
+  </div>
 )
 
 export const TrashCard = ({ name, fileType, id, deleteForever, restore }) => (
@@ -77,7 +97,6 @@ export const FileCard = ({
         <FileIcon onClick={() => {}} />
       </div>
     </div>
-
     <div className={styles.fileCardBody}>
       <TrashIcon onClick={() => trashFile(fileId)} />
       <MoveIcon onClick={() => moveFile(fileId)} />

@@ -15,16 +15,18 @@ class App extends Component {
     return (
       <div className='container-fluid '>
         <div className='row justify-content-center'>
-          <div className=' col-sm-12 col-md-3 col-lg-3 col-xl-3'>
+          <div className={styles.navAndLib}>
+            <div className=' col-sm-12 col-md-3 col-lg-3 col-xl-3' />
             <SideNav />
           </div>
           <div className=' col-sm-12 col-md-9 col-lg-8 col-xl-7'>
             <Route path='/library' component={Library} />
             <Route path='/trash' component={Trash} />
-            <Pagination currentPage={this.props.currentPage + 1}
+            <Pagination
+              currentPage={this.props.currentPage + 1}
               totalPages={this.props.totalPages}
               setPage={this.props.setPage}
-              />
+            />
           </div>
         </div>
       </div>

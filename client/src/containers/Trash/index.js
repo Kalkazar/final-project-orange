@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import styles from './trash.module.scss'
 import {
   FileCard,
@@ -8,7 +9,6 @@ import {
   TrashCard,
   FolderFunctionsCard
 } from '../../components/Card'
-import PropTypes from 'prop-types'
 import { changeView } from '../../ducks/ui.duck'
 import { restoreFile, deleteFile } from '../../ducks/library.duck'
 
