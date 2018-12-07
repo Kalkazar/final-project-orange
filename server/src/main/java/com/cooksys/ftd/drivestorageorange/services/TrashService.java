@@ -48,8 +48,14 @@ public class TrashService {
 	 */
 	public void deleteFolder(Long uid) {
 		FolderEntity deleteTarget = this.folderRepository.getOneTrashed(uid);
+		List<FileEntity> deleteContained = this.fileRepository.getAllInContainer(uid);
 
 		if (deleteTarget != null) {
+			if(deleteTarget.isInTrash() == true && deleteContained != null) {
+				for(FileEntity file: deleteContained) {
+					this.fileRepository.delete(file);
+				}
+			}
 			this.folderRepository.delete(deleteTarget);
 		} else {
 			System.out.println("No matching target for deletion!");
@@ -66,6 +72,7 @@ public class TrashService {
 
 		if (restoreTarget != null) {
 			restoreTarget.setInTrash(false);
+			restoreTarget.setContainer(null);
 			this.fileRepository.save(restoreTarget);
 		} else {
 			System.out.println("No matching target for restoration!");
@@ -79,9 +86,15 @@ public class TrashService {
 	 */
 	public void restoreFolder(Long uid) {
 		FolderEntity restoreTarget = this.folderRepository.getOneTrashed(uid);
-
+		List<FileEntity> restoreContained = this.fileRepository.getAllInContainer(uid);
 		if (restoreTarget != null) {
 			restoreTarget.setInTrash(false);
+			if(restoreTarget.isInTrash() == false && restoreContained != null) {
+				for(FileEntity file: restoreContained) {
+					file.setInTrash(false);
+					this.fileRepository.save(file);
+				}
+			}
 			this.folderRepository.save(restoreTarget);
 		} else {
 			System.out.println("No matching target for restoration!");
