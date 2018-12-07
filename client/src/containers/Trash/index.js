@@ -24,6 +24,7 @@ export class Trash extends Component {
         {/* If props.activePage exists, render cards for items */}
         {this.props.activePage ? this.props.activePage.map((e, i) =>
           (<TrashCard
+            key={i}
             name={e.name}
             id={e.uid}
             deleteForever={() => this.props.deleteFile(e.uid)}

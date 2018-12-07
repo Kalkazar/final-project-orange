@@ -94,7 +94,6 @@ export const getFolders = () => dispatch => {
  * Calls API for a list of all files
  */
 export const getFiles = () => dispatch => {
-  // getFileList()
   LiveEndpoints.File.getAllFiles()
     .then(({ data }) => {
       dispatch(loadFiles(data))
@@ -103,7 +102,6 @@ export const getFiles = () => dispatch => {
     .catch(err => dispatch(loadError(err)))
 }
 
-
 /**
  * Selects which page of results Cards to display via index, if valid index
  * @param {Number} pageIndex Index of Cards to display
@@ -111,7 +109,7 @@ export const getFiles = () => dispatch => {
 export const setPage = pageIndex => (dispatch, getState) => {
   const { totalPages } = getState().library
 
-  if (pageIndex > -1 && pageIndex < totalPages) {
+  if (pageIndex > -1 && pageIndex <= totalPages) {
     dispatch(setCurrentPage(pageIndex))
     dispatch(updateActivePage())
   } else {
@@ -126,18 +124,22 @@ export const setPage = pageIndex => (dispatch, getState) => {
 export const getCurrentList = () => (dispatch, getState) => {
   const { fileList, folderList } = getState().library
   const { trashLoaded, currentPage, currentFolder } = getState().ui
-  const currentFileList = fileList.filter(
-    x =>
-      (trashLoaded ? x.inTrash : !x.inTrash) &&
-      (!currentFolder || x.folder === currentFolder.uid)
-  )
+  // const currentFileList = fileList.filter(
+  //   x => (x.inTrash === trashLoaded)
+  //     // (trashLoaded ? x.inTrash : !x.inTrash) &&
+  //     // (!currentFolder || x.folder === currentFolder.uid)
+  // )
+
+  const currentFileList = fileList.filter(e => e.inTrash === trashLoaded)
+
+  console.log(currentFileList)
+
   const currentFolderList = currentFolder ? [] : [...folderList]
   const currentList = [...currentFolderList, ...currentFileList]
   const pages = groupArray(currentList, FILES_PER_PAGE)
   dispatch(loadPages(pages))
   dispatch(updateTotalPages())
   dispatch(setPage(0))
-  dispatch(updateActivePage())
   dispatch(updateTotalDisplayElements())
   dispatch(
     loadCurrentList(
@@ -156,7 +158,12 @@ export const getCurrentList = () => (dispatch, getState) => {
 export const trashBinFile = uid => (dispatch, getState) => {
   LiveEndpoints.File.trashFile(uid)
     .then(({ data }) => {
-      dispatch(getFiles())
+      const { fileList } = getState().library
+
+      const newCurrentFiles = fileList.map(e => e.uid === data.uid ? data : e)
+
+      dispatch(loadFiles(newCurrentFiles))
+      dispatch(getCurrentList())
     })
 }
 
@@ -167,7 +174,13 @@ export const trashBinFile = uid => (dispatch, getState) => {
 export const restoreFile = uid => (dispatch, getState) => {
   LiveEndpoints.Trash.restoreFile(uid)
     .then(({ data }) => {
-      dispatch(getFiles())
+      const { fileList } = getState().library
+
+      console.log('Restore File Response Data:', data)
+      const newCurrentFiles = fileList.map(e => e.uid === data.uid ? null : e).filter(e => e !== null)
+
+      dispatch(loadFiles(newCurrentFiles))
+      dispatch(getCurrentList())
     })
 }
 
@@ -178,7 +191,12 @@ export const restoreFile = uid => (dispatch, getState) => {
 export const deleteFile = uid => (dispatch, getState) => {
   LiveEndpoints.Trash.deleteFile(uid)
     .then(({ data }) => {
-      dispatch(getFiles())
+      const { fileList } = getState().library
+
+      const newCurrentFiles = fileList.map(e => e.uid === data.uid ? null : e).filter(e => e !== null)
+
+      dispatch(loadFiles(newCurrentFiles))
+      dispatch(getCurrentList())
     })
 }
 

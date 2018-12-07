@@ -1,4 +1,6 @@
-import { getFiles } from './'
+import { Library } from './'
+
+const { getCurrentList } = Library
 
 export const CHANGE_PAGE = 'CHANGE_PAGE'
 export const SELECT_LIBRARY = 'SELECT_LIBRARY'
@@ -44,22 +46,22 @@ export default function config (state = initialState, action) {
 
 export const openFolder = folder => dispatch => {
   dispatch({ type: OPEN_FOLDER, folder })
-  dispatch(getFiles())
+  dispatch(getCurrentList()) // Redundant API calls
 }
 
 export const changePage = page => dispatch => {
   dispatch({ type: CHANGE_PAGE, page })
-  dispatch(getFiles())
+  dispatch(getCurrentList()) // Redundant API calls
 }
 
 export const selectTrash = () => dispatch => {
   dispatch({ type: SELECT_TRASH })
-  dispatch(getFiles())
+  dispatch(getCurrentList()) // Redundant API calls
 }
 
 export const selectLibrary = () => dispatch => {
   dispatch({ type: SELECT_LIBRARY })
-  dispatch(getFiles())
+  dispatch(getCurrentList()) // Redundant API calls
 }
 
 /**
@@ -68,4 +70,3 @@ export const selectLibrary = () => dispatch => {
  */
 export const changeView = view => (dispatch, getState) =>
   view ? dispatch(selectTrash()) : dispatch(selectLibrary())
-
