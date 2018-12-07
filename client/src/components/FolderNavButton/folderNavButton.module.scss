@@ -1,6 +1,6 @@
 @import '../../index.scss';
 
-.folderButtonClass {
+.folderNavButtonClass {
   display: flex;
   flex-direction: column;
   align-items: space-around;
@@ -10,7 +10,7 @@
   width: 80%;
   height: auto;
   background-color: rgb(221, 84, 10);
-  font-size: 18pt;
+  font-size: 12pt;
   color: white;
   border: 2px solid #212529;
   border-radius: 5px;

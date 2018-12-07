@@ -13,21 +13,13 @@ import {
 } from '../Icon'
 import InnerButton from '../InnerButton'
 import UploadButton from '../UploadButton'
+import FolderNavButton from '../FolderNavButton'
 
 const Card = ({ children }) => (
   <div className={styles.cardHolder}>
     <div className={styles.cardBody}>{children}</div>
   </div>
 )
-
-// export const UploadCard = ({ fileType, upload }) => (
-//   <Card>
-//     <div className={styles.cardTitle}>Upload {fileType}</div>
-//     <div onClick={upload} className={styles.uploadIconHolder}>
-//       <UploadIcon onClick={() => {}} />
-//     </div>
-//   </Card>
-// )
 
 export const UploadCard = ({ fileType, upload, uploadFolder }) => (
   <div>
@@ -59,12 +51,12 @@ export const UploadCard = ({ fileType, upload, uploadFolder }) => (
 export const FolderFunctionsCard = ({ createFolder, uploadFolder }) => (
   <div>
     <div>
-      <InnerButton
+      <FolderNavButton
         name='Create Folder'
         onClick={createFolder}
         icon={<CreateFolderIcon onClick={() => {}} />}
       />
-      <InnerButton
+      <FolderNavButton
         name='Upload Folder'
         onClick={uploadFolder}
         icon={<UploadIcon onClick={() => {}} />}
