@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import styles from './trash.module.scss'
 import {
   FileCard,
@@ -8,7 +9,7 @@ import {
   TrashCard,
   FolderFunctionsCard
 } from '../../components/Card'
-import PropTypes from 'prop-types'
+
 
 export class Trash extends Component {
   componentDidMount () {
