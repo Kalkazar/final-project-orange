@@ -16,7 +16,7 @@ public interface FileRepository extends JpaRepository<FileEntity, Long> {
 	 * @param uid of container folder
 	 * @return
 	 */
-	@Query(value = "SELECT f FROM FileEntity f WHERE f.container = ?1")
+	@Query(value = "SELECT f FROM FileEntity f WHERE f.container.uid = ?1")
 	List<FileEntity> getAllInContainer(Long uid);
 	
 	/**
