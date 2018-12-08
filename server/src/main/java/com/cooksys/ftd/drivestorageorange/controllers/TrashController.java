@@ -65,8 +65,8 @@ public class TrashController {
 	 * @param uid of the file to restore
 	 */
 	@PatchMapping("file/{file_uid}/restore")
-	public void restoreFile(@PathVariable("file_uid") Long uid) {
-		this.trashService.restoreFile(uid);
+	public FileDTO restoreFile(@PathVariable("file_uid") Long uid) {
+		return this.trashService.restoreFile(uid);
 	}
 
 	/**
@@ -85,8 +85,8 @@ public class TrashController {
 	 * @param uid of the fold to restore
 	 */
 	@PatchMapping("folder/{folder_uid}/restore")
-	public void restoreFolder(@PathVariable("folder_uid") Long uid) {
-		this.trashService.restoreFolder(uid);
+	public FolderDTO restoreFolder(@PathVariable("folder_uid") Long uid) {
+		return this.trashService.restoreFolder(uid);
 	}
 
 	/**

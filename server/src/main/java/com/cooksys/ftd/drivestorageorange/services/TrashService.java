@@ -66,39 +66,36 @@ public class TrashService {
 	 * Restores file by UID File must be inTrash to do so
 	 * 
 	 * @param uid to restore
+	 * @return restored file dto
 	 */
-	public void restoreFile(Long uid) {
+	public FileDTO restoreFile(Long uid) {
 		FileEntity restoreTarget = this.fileRepository.getOneTrashed(uid);
 
 		if (restoreTarget != null) {
 			restoreTarget.setInTrash(false);
 			restoreTarget.setContainer(null);
-			this.fileRepository.save(restoreTarget);
-		} else {
-			System.out.println("No matching target for restoration!");
 		}
+		return this.fileMapper.toDto(this.fileRepository.save(restoreTarget));
 	}
 
 	/**
 	 * Restores folder by UID Folder must be inTrash to do so
 	 * 
 	 * @param uid to restore
+	 * return restored folder dto
 	 */
-	public void restoreFolder(Long uid) {
+	public FolderDTO restoreFolder(Long uid) {
 		FolderEntity restoreTarget = this.folderRepository.getOneTrashed(uid);
 		List<FileEntity> restoreContained = this.fileRepository.getAllInContainer(uid);
 		if (restoreTarget != null) {
 			restoreTarget.setInTrash(false);
 			if(restoreTarget.isInTrash() == false && restoreContained != null) {
 				for(FileEntity file: restoreContained) {
-					file.setInTrash(false);
-					this.fileRepository.save(file);
+					this.restoreFile(file.getUid());
 				}
 			}
-			this.folderRepository.save(restoreTarget);
-		} else {
-			System.out.println("No matching target for restoration!");
 		}
+		return this.folderMapper.toDto(this.folderRepository.save(restoreTarget));
 	}
 
 	/**
@@ -130,8 +127,7 @@ public class TrashService {
 
 		if (restoreTrashedFiles != null) {
 			for (FileEntity file : restoreTrashedFiles) {
-				file.setInTrash(false);
-				this.fileRepository.save(file);
+				this.restoreFile(file.getUid());
 			}
 		} else {
 			System.out.println("No files for restoration!");
@@ -139,8 +135,7 @@ public class TrashService {
 
 		if (restoreTrashedFolders != null) {
 			for (FolderEntity folder : restoreTrashedFolders) {
-				folder.setInTrash(false);
-				this.folderRepository.save(folder);
+				this.restoreFolder(folder.getUid());
 			}
 		} else {
 			System.out.println("No folders for restoration!");
