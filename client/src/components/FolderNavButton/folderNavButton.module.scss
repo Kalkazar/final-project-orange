@@ -2,17 +2,18 @@
 
 .folderNavButtonClass {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: space-around;
-  margin: 20px;
-  padding: 10px;
+  margin: 8px;
+  padding: 5px;
   align-content: center;
-  width: 80%;
+  width: 90%;
   height: auto;
   background-color: rgb(221, 84, 10);
   font-size: 12pt;
+  font-weight: bold;
   color: white;
-  border: 2px solid #212529;
+  border: 2pt solid #212529;
   border-radius: 5px;
   &:hover {
     border-color: gray;
@@ -28,7 +29,7 @@
     display: flex;
     flex-direction: center;
     margin-left: 35%;
-    font-size: 15pt;
+    font-size: 8pt;
   }
   
   .buttonContent {

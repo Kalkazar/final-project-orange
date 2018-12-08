@@ -91,8 +91,8 @@ export const FileCard = ({
   moveFile
 }) => (
   <Card>
-    <div className={styles.cardTitle}>
-      {fileName}{' '}
+    <div className={styles.cardHeader}>
+      <div className={styles.cardTitle}>{fileName} </div>
       <div className={styles.titleIconHolder}>
         <FileIcon onClick={() => {}} />
       </div>

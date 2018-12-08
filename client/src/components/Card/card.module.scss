@@ -41,15 +41,21 @@
 
 }
 
+// changes to card background color made here
 .cardHolder {
   display: flex;
   width: 200pt;
   height: 150pt;
   flex-direction: column;
-  box-shadow: 0 0 3px 1px rgba(107, 101, 101, 0.35);
+  // box-shadow: 0 0 3px 1px rgba(248, 242, 236, 0.35);
+  box-shadow: 3px 3px;
+  border-radius: 5px;
+  // background-color: rgb(66, 252, 205);
+  background-image: linear-gradient(bottom, rgb(221, 84, 10), rgb(245, 185, 56));
+
   @include noselecttext;
 }
-
+// rgb(247, 98, 39);
 
 // made changes to the border bottom( revert to #f3f3f3)
 .cardTitle {
@@ -75,7 +81,7 @@
   height: 60%;
   align-items: flex-end;
   box-sizing: border-box;
-  padding: 10pt;
+  padding: 2pt;
 }
 
 .titleIconHolder {
@@ -94,4 +100,11 @@
   font-size: 1.5em;
   opacity: 0.4;
   @include unselectable;
+}
+//unfinished card styling
+.cardHeaderClass {
+  display: flex;
+  flex-direction: row;
+  padding: 0px;
+
 }

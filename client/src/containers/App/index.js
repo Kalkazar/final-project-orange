@@ -13,7 +13,7 @@ import { setPage } from '../../ducks/library.duck'
 class App extends Component {
   render () {
     return (
-      <div className='container-fluid '>
+      <div className='container-fluid'>
         <div className='row justify-content-center'>
           <div className={styles.navAndLib}>
             <div className=' col-sm-12 col-md-3 col-lg-3 col-xl-3' />
