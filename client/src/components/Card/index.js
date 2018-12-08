@@ -92,9 +92,11 @@ export const FileCard = ({
 }) => (
   <Card>
     <div className={styles.cardHeader}>
-      <div className={styles.cardTitle}>{fileName} </div>
-      <div className={styles.titleIconHolder}>
-        <FileIcon onClick={() => {}} />
+      <div className={styles.cardTitle}>
+        {fileName}{' '}
+        <div className={styles.titleIconHolder}>
+          <FileIcon onClick={() => {}} />
+        </div>
       </div>
     </div>
     <div className={styles.fileCardBody}>

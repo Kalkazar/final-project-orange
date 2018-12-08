@@ -63,6 +63,7 @@
   padding: 5pt 10pt;
   text-align: center;
   height: 30%;
+  position: relative;
 }
 
 .cardBody {
@@ -86,6 +87,9 @@
 
 .titleIconHolder {
   float: right;
+  position: absolute; 
+  top: 0;
+  right: 0;
 }
 
 .folderCardBody {
@@ -101,10 +105,8 @@
   opacity: 0.4;
   @include unselectable;
 }
-//unfinished card styling
+
 .cardHeaderClass {
   display: flex;
   flex-direction: row;
-  padding: 0px;
-
 }
