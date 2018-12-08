@@ -3,9 +3,9 @@ import thunk from 'redux-thunk'
 import { routerMiddleware, LOCATION_CHANGE } from 'react-router-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import uiReducer from './ui.duck'
-import libraryReducer from './library.duck'
+import libraryReducer, * as Library from './library.duck'
 
-export { getFiles, getCurrentList } from './library.duck'
+export { Library }
 
 export function routes (state = { location: null }, action) {
   switch (action.type) {

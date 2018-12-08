@@ -14,7 +14,7 @@ import { trashBinFile } from '../../ducks/library.duck'
 
 export class Library extends Component {
   componentDidMount () {
-    console.log('Get All Files and Folders')
+    // console.log('Get All Files and Folders') Unnecessary
   }
 
   render () {

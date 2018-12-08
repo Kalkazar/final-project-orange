@@ -8,7 +8,7 @@ import { Route } from 'react-router-dom'
 import Pagination from '../../components/Pagination'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { setPage } from '../../ducks/library.duck'
+import { setPage, getFiles } from '../../ducks/library.duck'
 
 class App extends Component {
   render () {
@@ -37,8 +37,8 @@ class App extends Component {
 App.propTypes = {
   totalPages: PropTypes.number,
   currentPage: PropTypes.number,
-  setPage: PropTypes.func
-  // uploadFile: PropTypes.func
+  setPage: PropTypes.func,
+  getFiles: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -47,10 +47,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  // Hook up appropriate Redux methods
-  setPage: page => dispatch(setPage(page))
-  // uploadFolder: folder => dispatch(uploadFolder(folder)),
-  // uploadFile: file => dispatch(uploadFile(file))
+  setPage: page => dispatch(setPage(page)),
+  getFiles: () => dispatch(getFiles())
 })
 
 export default connect(
