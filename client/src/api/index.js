@@ -161,6 +161,7 @@ const trashFolder = uid =>
 /**
  * Restores a file via uid
  * @param {Number} uid UID of file to restore
+ * @returns {AxiosPromise<FileResponse>} restored file
  */
 const restoreFile = uid =>
   Axios.patch(`trash/file/${uid}/restore`)
@@ -168,6 +169,7 @@ const restoreFile = uid =>
 /**
  * Restores a folder via uid
  * @param {Number} uid UID of folder to restore
+ * @returns {AxiosPromise<FolderResponse>} restored folder
  */
 const restoreFolder = uid =>
   Axios.patch(`trash/folder/${uid}/restore`)
