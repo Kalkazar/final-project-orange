@@ -145,12 +145,12 @@ export default function config (state = initialState, action) {
     case LOAD_FILES:
       return {
         ...state,
-        fileList: [ ...state.fileList, ...action.payload ]
+        fileList: [...state.fileList, ...action.payload]
       }
     case LOAD_FOLDERS:
       return {
         ...state,
-        folderList: [ ...state.folderList, ...action.payload ]
+        folderList: [...state.folderList, ...action.payload]
       }
     default:
       return state
@@ -264,9 +264,14 @@ export const loadFolders = folders => dispatch => {
  * @param {FileResponse} file File to add
  */
 export const addFile = file => dispatch => {
-  dispatch(addFileAction(file))
-  dispatch(updateCurrentListAction())
-  dispatch(updateTotalPagesAction())
+  LiveEndpoints.File.uploadFile(file).then(({ data }) => {
+    dispatch(addFileAction(file))
+    dispatch(updateCurrentListAction())
+    dispatch(updateTotalPagesAction())
+  }).catch(err => {
+    console.error(err)
+  })
+
 }
 
 /**
@@ -304,11 +309,11 @@ export const removeFolder = folder => dispatch => {
  * @param {Number} index Index of results page to show
  */
 export const setPage = index => (dispatch, getState) => {
-//   /**
-//    * @type {TrashState}
-//    */
-//   const trash = {}
-//   const { totalPages } = trash
+  //   /**
+  //    * @type {TrashState}
+  //    */
+  //   const trash = {}
+  //   const { totalPages } = trash
 
   const { totalPages } = getState().library
 

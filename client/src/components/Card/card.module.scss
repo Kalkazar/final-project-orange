@@ -47,7 +47,6 @@
   width: 200pt;
   height: 150pt;
   flex-direction: column;
-  // box-shadow: 0 0 3px 1px rgba(248, 242, 236, 0.35);
   box-shadow: 3px 3px;
   border-radius: 5px;
   // background-color: rgb(66, 252, 205);
@@ -57,7 +56,6 @@
 }
 // rgb(247, 98, 39);
 
-// made changes to the border bottom( revert to #f3f3f3)
 .cardTitle {
   border-bottom: 1pt solid #221d1d;
   padding: 5pt 10pt;
@@ -110,8 +108,4 @@
   display: flex;
   flex-direction: row;
 }
-// .cardFooterClass {
-//   display: flex;
-//   flex-direction: column;
 
-// }

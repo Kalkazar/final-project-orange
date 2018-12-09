@@ -12,8 +12,12 @@ import Axios from 'axios'
  * @param {Any} file File data to upload
  * @returns {AxiosPromise<FileResponse>}
  */
-const uploadFile = file =>
-  Axios.post('file', file)
+const uploadFile = file => {
+  const formData = new FormData()
+  formData.append('name', file.name)
+  formData.append('file', file)
+  return Axios.post('file', formData)
+}
 
 /**
  * Returns a file via UID if it exists
