@@ -9,6 +9,23 @@ import { FILES_PER_PAGE } from './ui.duck'
 import { LiveEndpoints } from '../api'
 import { Trash } from './'
 
+// import ViewDuck from './baseview.duck'
+
+// const { reducer, actionCreators, types, thunks } = new ViewDuck('library')
+
+// export const rest = { ...actionCreators, ...types, ...thunks }
+
+// export default reducer
+
+// export const {
+//   ADD_FILE,
+//   ADD_FOLDER,
+//   LOAD_FILES,
+
+// } = others
+
+// export default Library.reducer
+
 /**
  * Add file to state
  */
