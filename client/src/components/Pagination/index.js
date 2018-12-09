@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { FILES_PER_PAGE, setPage } from '../../ducks/library.duck'
+import { FILES_PER_PAGE } from '../../ducks/ui.duck'
 import { connect } from 'react-redux'
 
 const LEFT_PAGE = 'LEFT'
@@ -79,8 +79,6 @@ class Pagination extends Component {
   }
 
   render () {
-    // if (!this.totalRecords || this.totalPages === 1) return null
-
     const { currentPage } = this.state
     const pages = new Array(this.props.totalPages).fill(0).map((e, i) => i + 1)
 
@@ -124,20 +122,3 @@ Pagination.propTypes = {
 }
 
 export default Pagination
-
-// const mapStateToProps = state => ({
-//   totalRecords: state.library.totalDisplayElements,
-//   currentPage: state.library.currentPage + 1
-// })
-
-// const mapDispatchToProps = dispatch => ({
-//   // Hook up appropriate Redux methods
-//   setPage: page => dispatch(setPage(page))
-//   // uploadFolder: folder => dispatch(uploadFolder(folder)),
-//   // uploadFile: file => dispatch(uploadFile(file))
-// })
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(Pagination)
