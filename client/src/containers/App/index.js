@@ -7,6 +7,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 // import Pagination from '../../components/Pagination'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import Modal from '../../components/Modal'
 
 class App extends Component {
   render () {
@@ -30,6 +31,7 @@ class App extends Component {
             /> */}
           </div>
         </div>
+        <Modal />
       </div>
     )
   }

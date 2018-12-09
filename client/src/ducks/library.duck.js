@@ -229,7 +229,7 @@ export const loadFoldersAction = folders => ({
  * @param {FileResponse[]} files Files to load
  */
 export const loadFiles = files => dispatch => {
-  dispatch(loadFilesAction(files))
+  dispatch(loadFilesAction(files.map(e => ({ ...e, isFolder: false }))))
   dispatch(updateCurrentListAction())
 }
 
@@ -238,7 +238,7 @@ export const loadFiles = files => dispatch => {
  * @param {FolderResponse[]} folders Folders to load
  */
 export const loadFolders = folders => dispatch => {
-  dispatch(loadFoldersAction(folders))
+  dispatch(loadFoldersAction(folders.map(e => ({ ...e, isFolder: true }))))
   dispatch(updateCurrentListAction())
 }
 

@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styles from './library.module.scss'
 import {
-  FileCard
-  // FolderCard,
+  FileCard,
+  FolderCard
   // UploadCard,
   // TrashCard,
   // FolderFunctionsCard
@@ -21,14 +21,18 @@ export class Library extends Component {
         {console.log('Library props', this.props)}
 
         {/* If props.activePage exists, render cards for items */}
-        { this.props.activePage ? this.props.activePage.map((e, i) =>
-          (<FileCard
+        { this.props.activePage ? this.props.activePage.map((e, i) => {
+          const CardType = e.isFolder ? FolderCard : FileCard
+
+          return (<CardType
             key={i}
             fileName={e.name}
             fileId={e.uid}
             trashFile={() => this.props.trashBinFile(e.uid)}
             downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
           />)
+        }
+          
         ) : null }
       </div>
     )

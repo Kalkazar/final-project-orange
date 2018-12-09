@@ -5,8 +5,13 @@ import { FolderFunctionsCard, UploadCard } from '../../components/Card'
 import NavButton from '../../components/NavButton'
 import PropTypes from 'prop-types'
 import { changeView } from '../../ducks/ui.duck'
+import $ from 'jquery'
 
 export class SideNav extends Component {
+  componentDidMount () {
+    this.createFolderModal = $('#createFolderModal')
+  }
+
   render () {
     return (
       <div className={styles.navDiv}>
@@ -21,10 +26,22 @@ export class SideNav extends Component {
           onClick={() => this.props.changeView(true)}
         />
         <FolderFunctionsCard
-          createFolder={console.log}
+          createFolder={
+            () => {
+              // document.getElementById('#createFolderModal').modal()
+              // document.getElementById('createFolderModal').classList.add('show')
+              console.log($('#createFolderModal'))
+              $('#createFolderModal')[0].modal()
+              // this.createFolderModal.modal()
+            }
+          }
           uploadFolder={
             // Placeholder - pls implement
-            () => console.log('UPLOADING FOLDER')
+            () => {
+              // document.getElementById('createFolderModal').modal()
+              // document.getElementById('#createFolderModal').classList.add('show')
+            }
+            // data-toggle="modal" data-target="#exampleModal"
           }
         />
         <UploadCard
