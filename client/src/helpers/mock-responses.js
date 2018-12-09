@@ -1,7 +1,22 @@
 export const files = [
-  ...(new Array(15).fill({ uid: 1, name: 'My life.txt', containerId: null, inTrash: false })),
-  ...(new Array(15).fill({ uid: 1, name: 'Josh\'s fun times in paintball.mpeg', containerId: null, inTrash: false })),
-  ...(new Array(15).fill({ uid: 1, name: 'John doing his thing but thrown away.mpeg', containerId: null, inTrash: false }))
+  ...new Array(15).fill({
+    uid: 1,
+    name: 'My life.txt',
+    containerId: null,
+    inTrash: false
+  }),
+  ...new Array(15).fill({
+    uid: 1,
+    name: "Josh's fun times in paintball.mpeg",
+    containerId: null,
+    inTrash: false
+  }),
+  ...new Array(15).fill({
+    uid: 1,
+    name: 'John doing his thing but thrown away.mpeg',
+    containerId: null,
+    inTrash: false
+  })
 ]
 
 // [
@@ -30,52 +45,52 @@ export const files = [
 
 export const folders = [
   {
-    'uid': 1,
-    'name': 'Test',
-    'created': '2018-12-06T18:10:13.641+0000',
-    'lastModified': '2018-12-06T18:10:13.641+0000',
-    'filesContained': [],
-    'foldersContained': [
+    uid: 1,
+    name: 'Test',
+    created: '2018-12-06T18:10:13.641+0000',
+    lastModified: '2018-12-06T18:10:13.641+0000',
+    filesContained: [],
+    foldersContained: [
       {
-        'uid': 2,
-        'name': 'Test',
-        'created': '2018-12-06T18:12:01.174+0000',
-        'lastModified': '2018-12-06T18:12:09.053+0000',
-        'filesContained': [
+        uid: 2,
+        name: 'Test',
+        created: '2018-12-06T18:12:01.174+0000',
+        lastModified: '2018-12-06T18:12:09.053+0000',
+        filesContained: [
           {
-            'uid': 1,
-            'name': 'Test.txt',
-            'created': '2018-12-06T18:09:52.889+0000',
-            'lastModified': '2018-12-06T18:12:28.835+0000',
-            'containerId': 2,
-            'inTrash': false
+            uid: 1,
+            name: 'Test.txt',
+            created: '2018-12-06T18:09:52.889+0000',
+            lastModified: '2018-12-06T18:12:28.835+0000',
+            containerId: 2,
+            inTrash: false
           }
         ],
-        'foldersContained': [],
-        'containerId': 1,
-        'inTrash': false
+        foldersContained: [],
+        containerId: 1,
+        inTrash: false
       }
     ],
-    'inTrash': false
+    inTrash: false
   },
   {
-    'uid': 2,
-    'name': 'Test',
-    'created': '2018-12-06T18:12:01.174+0000',
-    'lastModified': '2018-12-06T18:12:09.053+0000',
-    'filesContained': [
+    uid: 2,
+    name: 'Test',
+    created: '2018-12-06T18:12:01.174+0000',
+    lastModified: '2018-12-06T18:12:09.053+0000',
+    filesContained: [
       {
-        'uid': 1,
-        'name': 'Test.txt',
-        'created': '2018-12-06T18:09:52.889+0000',
-        'lastModified': '2018-12-06T18:12:28.835+0000',
-        'containerId': 2,
-        'inTrash': false
+        uid: 1,
+        name: 'Test.txt',
+        created: '2018-12-06T18:09:52.889+0000',
+        lastModified: '2018-12-06T18:12:28.835+0000',
+        containerId: 2,
+        inTrash: false
       }
     ],
-    'foldersContained': [],
-    'containerId': 1,
-    'inTrash': false
+    foldersContained: [],
+    containerId: 1,
+    inTrash: false
   }
 ]
 
