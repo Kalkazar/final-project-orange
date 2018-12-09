@@ -1,22 +1,11 @@
-import { files, folders, file, FileResponse, FolderResponse } from '../helpers/mock-responses'
-import Axios, { AxiosPromise } from 'axios'
+/**
+ * @typedef {import('../helpers/types').FileResponse} FileResponse
+ * @typedef {import('../helpers/types').FolderResponse} FolderResponse
+ * @typedef {import('../helpers/types').ViewState} LibraryState
+ * @typedef {import('axios').AxiosPromise} AxiosPromise
+ */
 
-export const getFileList = () =>
-  new Promise((resolve, reject) => {
-    resolve(files)
-  })
-
-// Appropriate endpoint - get all files
-// Axios.get('file')
-//   .then()
-export const getFolderList = () =>
-  new Promise((resolve, reject) => {
-    resolve(folders)
-  })
-
-// Appropriate endpoint - get all folders
-// Axios.get('folder')
-//   .then()
+import Axios from 'axios'
 
 /**
  * [PARTIALLY IMPLEMENTED] Upload a new file

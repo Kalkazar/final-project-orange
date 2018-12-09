@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import createHistory from 'history/createBrowserHistory'
 import { BrowserRouter as Router } from 'react-router-dom'
 import getStore, { Library, UI } from './ducks'
+import 'jquery/dist/jquery'
 
 const { getFiles } = Library
 const history = createHistory()
