@@ -2,10 +2,11 @@ import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk'
 import { routerMiddleware, LOCATION_CHANGE } from 'react-router-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import uiReducer from './ui.duck'
+import uiReducer, * as UI from './ui.duck'
 import libraryReducer, * as Library from './library.duck'
+import trashReducer, * as Trash from './trash.duck'
 
-export { Library }
+export { Library, UI, Trash }
 
 export function routes (state = { location: null }, action) {
   switch (action.type) {
@@ -22,7 +23,8 @@ export function routes (state = { location: null }, action) {
 function createReducer () {
   return combineReducers({
     library: libraryReducer,
-    ui: uiReducer
+    ui: uiReducer,
+    trash: trashReducer
   })
 }
 
