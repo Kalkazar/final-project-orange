@@ -1,14 +1,13 @@
 body {
   // background: rgb(216, 97, 42);
-  background-image: linear-gradient(top,  rgb(11, 201, 248), rgb(28, 13, 235));
+  background-image: linear-gradient(top,  rgb(11, 201, 248), rgb(28, 13, 235)) !important;
   margin: 0;
-  padding: 0;
+  padding: 10px;
+  margin-bottom: 45px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-}
 
 @mixin noselecttext {
   -webkit-touch-callout: none;
