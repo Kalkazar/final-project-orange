@@ -91,17 +91,21 @@ export const FileCard = ({
   moveFile
 }) => (
   <Card>
-    <div className={styles.cardTitle}>
-      {fileName}{' '}
-      <div className={styles.titleIconHolder}>
-        <FileIcon onClick={() => {}} />
+    <div className={styles.cardHeader}>
+      <div className={styles.cardTitle}>
+        {fileName}{' '}
+        <div className={styles.titleIconHolder}>
+          <FileIcon onClick={() => {}} />
+        </div>
       </div>
     </div>
+    {/* <div className={styles.cardFooter}> */}
     <div className={styles.fileCardBody}>
       <TrashIcon onClick={() => trashFile(fileId)} />
       <MoveIcon onClick={() => moveFile(fileId)} />
       <DownloadIcon onClick={() => downloadFile(fileId)} />
     </div>
+    {/* </div> */}
   </Card>
 )
 
