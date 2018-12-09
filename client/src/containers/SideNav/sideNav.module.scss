@@ -4,11 +4,14 @@
   align-items: center;
   justify-content: space-evenly;
   border: 2px solid black;
-  background-color: whitesmoke;
+  border-radius: 5px;
+  // background-color: rgb(63, 59, 59);
+  background-image: linear-gradient(top, rgb(63, 59, 59), rgb(119, 117, 113));
   margin: 20px;
   padding: 10px;
   height: 88%;
   margin-right: 0px;
+  box-shadow: 5px 5px;
 }
 
 .navDiv > * {
