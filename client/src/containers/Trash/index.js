@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styles from './trash.module.scss'
@@ -9,8 +9,16 @@ import {
   TrashCard,
   FolderFunctionsCard
 } from '../../components/Card'
-import { changeView } from '../../ducks/ui.duck'
-import { restoreFile, deleteFile } from '../../ducks/library.duck'
+import Pagination from '../../components/Pagination'
+import { Trash as TrashDuck } from '../../ducks'
+
+const { restoreFile, deleteFile, setPage } = TrashDuck
+
+// import { changeView } from '../../ducks/ui.duck'
+// import { restoreFile, deleteFile } from '../../ducks/library.duck'
+
+// const { changeView } = UIDuck
+// const { restoreFile, deleteFile } = LibraryDuck.
 
 export class Trash extends Component {
   componentDidMount () {
@@ -20,41 +28,55 @@ export class Trash extends Component {
 
   render () {
     return (
-      <div className={styles.trashDiv}>
-        {/* If props.activePage exists, render cards for items */}
-        {this.props.activePage ? this.props.activePage.map((e, i) =>
-          (<TrashCard
-            key={i}
-            name={e.name}
-            id={e.uid}
-            deleteForever={() => this.props.deleteFile(e.uid)}
-            restore={() => this.props.restoreFile(e.uid)}
-            fileType='file'
-          />)
-        ) : null}
-      </div>
+      <Fragment>
+        <div className={styles.trashDiv}>
+          {/* If props.activePage exists, render cards for items */}
+          {this.props.activePage ? this.props.activePage.map((e, i) =>
+            (<TrashCard
+              key={i}
+              name={e.name}
+              id={e.uid}
+              deleteForever={() => this.props.deleteFile(e.uid)}
+              restore={() => this.props.restoreFile(e.uid)}
+              fileType='file'
+            />)
+          ) : null}
+        </div>
+        <Pagination
+          currentPage={this.props.currentPage + 1}
+          totalPages={this.props.totalPages}
+          setPage={this.props.setPage}
+        />
+      </Fragment>
     )
   }
 }
 
 Trash.propTypes = {
-  changeView: PropTypes.func,
+  // changeView: PropTypes.func,
+  activePage: PropTypes.array,
   restoreFile: PropTypes.func,
   // restoreFolder: PropTypes.func,
-  deleteFile: PropTypes.func
+  deleteFile: PropTypes.func,
   // deleteFolder: PropTypes.func,
   // restoreAll: PropTypes.func,
   // deleteAll: PropTypes.func
+  currentPage: PropTypes.number,
+  totalPages: PropTypes.number,
+  setPage: PropTypes.func
 }
 
 const mapStateToProps = state => ({
-  activePage: state.library.activePage
+  activePage: state.trash.currentList,
+  currentPage: state.trash.currentPage,
+  totalPages: state.trash.totalPages
 })
 
 const mapDispatchToProps = dispatch => ({
   // Hook up appropriate Redux methods
-  changeView: isTrash => dispatch(changeView(isTrash)),
+  // changeView: isTrash => dispatch(changeView(isTrash)),
   restoreFile: uid => dispatch(restoreFile(uid)),
+  setPage: index => dispatch(setPage(index)),
   // restoreFolder: folder => dispatch(restoreFolder(folder)),
   deleteFile: uid => dispatch(deleteFile(uid))
   // deleteFolder: folder => dispatch(deleteFolder(folder)),

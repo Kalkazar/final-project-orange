@@ -3,20 +3,16 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styles from './library.module.scss'
 import {
-  FileCard,
-  FolderCard,
-  UploadCard,
-  TrashCard,
-  FolderFunctionsCard
+  FileCard
+  // FolderCard,
+  // UploadCard,
+  // TrashCard,
+  // FolderFunctionsCard
 } from '../../components/Card'
 import { LiveEndpoints } from '../../api'
-import { trashBinFile } from '../../ducks/library.duck'
+import { Library as LibraryDuck } from '../../ducks'
 
 export class Library extends Component {
-  componentDidMount () {
-    // console.log('Get All Files and Folders') Unnecessary
-  }
-
   render () {
     return (
       <div className={styles.libDiv}>
@@ -44,12 +40,12 @@ Library.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  activePage: state.library.activePage
+  activePage: state.library.currentList
 })
 
 const mapDispatchToProps = dispatch => ({
   // Hook up appropriate Redux methods
-  trashBinFile: uid => dispatch(trashBinFile(uid))
+  trashBinFile: uid => dispatch(LibraryDuck.trashFile(uid))
   // uploadFolder: folder => dispatch(uploadFolder(folder)),
   // uploadFile: file => dispatch(uploadFile(file))
 })

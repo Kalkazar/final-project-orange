@@ -2,13 +2,17 @@ import React, { Component } from 'react'
 import styles from './app.module.scss'
 import Library from '../Library'
 import SideNav from '../SideNav/SideNav'
-import { NavButton } from '../../components/NavButton'
+// import { NavButton } from '../../components/NavButton'
 import Trash from '../Trash'
-import { Route } from 'react-router-dom'
-import Pagination from '../../components/Pagination'
+import { Route, Switch, Redirect } from 'react-router-dom'
+// import Pagination from '../../components/Pagination'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { setPage, getFiles } from '../../ducks/library.duck'
+// import { UI as UIDuck, Library as LibraryDuck } from '../../ducks'
+
+// import { setPage, getFiles } from '../../ducks/library.duck'
+
+// const { setPage, getFiles } = LibraryDuck
 
 class App extends Component {
   render () {
@@ -20,13 +24,16 @@ class App extends Component {
             <SideNav />
           </div>
           <div className=' col-sm-12 col-md-9 col-lg-8 col-xl-7'>
-            <Route path='/library' component={Library} />
-            <Route path='/trash' component={Trash} />
-            <Pagination
-              currentPage={this.props.currentPage + 1}
-              totalPages={this.props.totalPages}
-              setPage={this.props.setPage}
-            />
+            <Switch>
+              <Route exact path='/library' component={Library} />
+              <Route exact path='/trash' component={Trash} />
+              <Route path='/*' render={() => (<Redirect to={'/library'} />)} />
+            </Switch>
+            {/* <Pagination
+              currentPage={2}
+              totalPages={12}
+              setPage={() => console.log('setPage called!')}
+            /> */}
           </div>
         </div>
       </div>
@@ -35,20 +42,20 @@ class App extends Component {
 }
 
 App.propTypes = {
-  totalPages: PropTypes.number,
-  currentPage: PropTypes.number,
-  setPage: PropTypes.func,
-  getFiles: PropTypes.func
+  // totalPages: PropTypes.number,
+  // currentPage: PropTypes.number,
+  // setPage: PropTypes.func,
+  // getFiles: PropTypes.func
 }
 
 const mapStateToProps = state => ({
-  totalPages: state.library.totalPages,
-  currentPage: state.library.currentPage
+  // totalPages: state.library.totalPages,
+  // currentPage: state.library.currentPage
 })
 
 const mapDispatchToProps = dispatch => ({
-  setPage: page => dispatch(setPage(page)),
-  getFiles: () => dispatch(getFiles())
+  // setPage: page => dispatch(setPage(page)),
+  // getFiles: () => dispatch(getFiles())
 })
 
 export default connect(
