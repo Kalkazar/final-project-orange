@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "jquery": "^3.3.1",
     "node-sass": "^4.10.0",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
@@ -13,6 +14,7 @@
     "react-router-dom": "^4.4.0-beta.6",
     "react-router-redux": "^5.0.0-alpha.9",
     "react-scripts": "2.1.1",
+    "reactstrap": "^6.5.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "standard": "^12.0.1"
