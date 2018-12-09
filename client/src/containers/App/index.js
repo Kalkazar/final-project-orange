@@ -2,17 +2,11 @@ import React, { Component } from 'react'
 import styles from './app.module.scss'
 import Library from '../Library'
 import SideNav from '../SideNav/SideNav'
-// import { NavButton } from '../../components/NavButton'
 import Trash from '../Trash'
 import { Route, Switch, Redirect } from 'react-router-dom'
 // import Pagination from '../../components/Pagination'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-// import { UI as UIDuck, Library as LibraryDuck } from '../../ducks'
-
-// import { setPage, getFiles } from '../../ducks/library.duck'
-
-// const { setPage, getFiles } = LibraryDuck
 
 class App extends Component {
   render () {
