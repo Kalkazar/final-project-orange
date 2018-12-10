@@ -238,3 +238,21 @@ export const toggleEditFile = () => (dispatch, getState) => {
 
   show ? dispatch(hideEditFileAction()) : dispatch(showEditFileAction())
 }
+
+/**
+ * Opens a folder in the openFolder modal
+ * @param {FolderResponse} folder Folder to open
+ */
+export const openFolder = folder => (dispatch, getState) => {
+  dispatch(setOpeningFolderAction(folder))
+  dispatch(showOpenFolderAction())
+}
+
+/**
+ * Opens a file in the editFile modal
+ * @param {FileResponse} file file to open
+ */
+export const editFile = file => (dispatch, getState) => {
+  dispatch(setEditingFileAction(file))
+  dispatch(showEditFileAction())
+}

@@ -15,9 +15,9 @@ import { Trash } from './'
 export const ADD_FILE = 'drivestorage/library/ADD_FILE'
 
 /**
- * Rename a file in state
+ * Edit file in state
  */
-export const RENAME_FILE = 'drivestorage/library/RENAME_FILE'
+export const EDIT_FILE = 'drivestorage/library/EDIT_FILE'
 
 /**
  * Remove file from state
@@ -92,6 +92,11 @@ export default function config (state = initialState, action) {
         ...state,
         fileList: [...state.fileList, ({ ...action.payload, isFolder: false })]
       }
+    case EDIT_FILE:
+      return {
+        ...state,
+        fileList: state.fileList.map(e => e.uid === action.payload.uid ? action.payload : e)
+      }
     case ADD_FOLDER:
       return {
         ...state,
@@ -147,6 +152,16 @@ export default function config (state = initialState, action) {
  */
 export const addFileAction = file => ({
   type: ADD_FILE,
+  payload: file
+})
+
+/**
+ * Applies changes to a file in fileList
+ * @param {FileResponse} file Updated file
+ * @returns {ReduxAction}
+ */
+export const editFileAction = file => ({
+  type: EDIT_FILE,
   payload: file
 })
 
@@ -287,6 +302,16 @@ export const removeFolder = folder => dispatch => {
 }
 
 /**
+ * Updates an individual file
+ * @param {FileResponse} file Updated file
+ */
+export const editFile = file => dispatch => {
+  dispatch(editFileAction(file))
+  dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
+}
+
+/**
  * Set currently displayed page of results
  * @param {Number} index Index of results page to show
  */
@@ -380,3 +405,26 @@ export const createNewFolder = folderName => (dispatch, getState) =>
     .then(({ data }) => {
       dispatch(addFolder(data))
     })
+
+/**
+ * Renames a file
+ * @param {Number} uid UID of file to rename
+ * @param {String} newName New name to assign to file
+ */
+export const renameFile = (uid, newName) => (dispatch, getState) =>
+  LiveEndpoints.File.renameFile(uid, newName)
+    .then(({ data }) => {
+      dispatch(editFile(data))
+    })
+
+/**
+ * Moves a file into a new directory
+ * @param {Number} uid UID of file to rename
+ * @param {Number} folderUid New name to assign to file
+ */
+export const moveFile = (uid, folderUid) => (dispatch, getState) => {
+  LiveEndpoints.File.moveFile(uid, folderUid)
+    .then(({ data }) => {
+      dispatch(editFile(data))
+    })
+}
