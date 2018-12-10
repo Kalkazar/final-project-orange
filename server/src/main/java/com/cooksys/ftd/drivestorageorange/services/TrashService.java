@@ -31,24 +31,30 @@ public class TrashService {
 	 * 
 	 * @param uid to permanently delete
 	 */
-	public void deleteFile(Long uid) {
+	public FileDTO deleteFile(Long uid) {
 		FileEntity deleteTarget = this.fileRepository.getOneTrashed(uid);
+		FileDTO deleted = null;
 
 		if (deleteTarget != null) {
+			deleted = this.fileMapper.toDto(deleteTarget);
 			this.fileRepository.delete(deleteTarget);
 		} else {
 			System.out.println("No matching target for deletion!");
 		}
+		
+		return deleted;
 	}
 
 	/**
 	 * Permanently deletes folder by UID Folder must be inTrash to do so
 	 * 
 	 * @param uid to permanently delete
+	 * @return 
 	 */
-	public void deleteFolder(Long uid) {
+	public FolderDTO deleteFolder(Long uid) {
 		FolderEntity deleteTarget = this.folderRepository.getOneTrashed(uid);
 		List<FileEntity> deleteContained = this.fileRepository.getAllInContainer(uid);
+		FolderDTO deleted = null;
 
 		if (deleteTarget != null) {
 			if(deleteTarget.isInTrash() == true && deleteContained != null) {
@@ -56,10 +62,12 @@ public class TrashService {
 					this.fileRepository.delete(file);
 				}
 			}
+			deleted = this.folderMapper.toDto(deleteTarget);
 			this.folderRepository.delete(deleteTarget);
 		} else {
 			System.out.println("No matching target for deletion!");
 		}
+		return deleted;
 	}
 
 	/**
