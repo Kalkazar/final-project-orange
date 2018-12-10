@@ -152,19 +152,21 @@ public class TrashService {
 
 		if (restoreTrashedFiles != null) {
 			for (FileEntity file : restoreTrashedFiles) {
-				FileEntity restoreTarget = this.fileRepository.getOneTrashed(file.getUid());
-				if (restoreTarget != null) {
-					restoreTarget.setInTrash(false);
+				if (file != null) {
+					file.setInTrash(false);
+					restoredFiles.add(this.fileMapper.toDto(this.fileRepository.save(file)));
 				}
-				restoredFiles.add(this.fileMapper.toDto(this.fileRepository.save(restoreTarget)));
 			}
 		} else {
 			System.out.println("No files for restoration!");
 		}
 
 		if (restoreTrashedFolders != null) {
-			for (FolderEntity folder : restoreTrashedFolders) {
-				restoredFolders.add(this.restoreFolder(folder.getUid()));
+			for(FolderEntity folder: restoreTrashedFolders) {
+				if (folder != null) {
+					folder.setInTrash(false);
+				}
+				restoredFolders.add(this.folderMapper.toDto(this.folderRepository.save(folder)));
 			}
 		} else {
 			System.out.println("No folders for restoration!");
