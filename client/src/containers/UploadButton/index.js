@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Dropzone from 'react-dropzone'
 import styles from './uploadButton.module.scss'
 import { fromEvent } from 'file-selector'
+import JSZip from 'jszip'
 
 import { addFile } from '../../ducks/library.duck'
 
@@ -22,11 +23,18 @@ class UploadButton extends Component {
   handleUpload (files) {
     // Need to update to handle folders. Back-end will need to be updated as well.
     // Likely the best way is to create a zip in the api and send that.
+    // let zip = new JSZip();
     // files.forEach(file => {
     //   const filePath = file.path.split('/').slice(1)
-    //   console.log(filePath)
+    //   if (filePath.length === 1) {
+    //     zip.file(file.name, file)
+    //   } else {
+    //     filePath.slice(0, filePath.length - 1)
+    //   }
+    //   console.log(zip)
     // })
-    addFile(files[0])
+    // addFile(files[0])
+    this.props.addFile(files[0])
   }
 
   render () {
