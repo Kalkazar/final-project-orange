@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Dropzone from 'react-dropzone'
 import styles from './uploadButton.module.scss'
+import { fromEvent } from 'file-selector'
 
 import { addFile } from '../../ducks/library.duck'
 
@@ -18,14 +19,19 @@ class UploadButton extends Component {
     this.handleUpload = this.handleUpload.bind(this)
   }
 
-  handleUpload ([file]) {
-    this.props.addFile(file)
+  handleUpload (files) {
+    // files.forEach(file => {
+    //   const filePath = file.path.split('/').slice(1)
+    //   console.log(filePath)
+    // })
+    addFile(files[0])
   }
 
   render () {
     return (
       <div className={`${styles.uploadButtonClass}`}>
         <Dropzone
+          getDataTransferItems={evt => fromEvent(evt)}
           onDrop={this.handleUpload}
         >
           <div className={`${styles.buttonContent}`}>
@@ -42,7 +48,7 @@ UploadButton.propTypes = {
   addFile: PropTypes.func.isRequired
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = () => ({})
 
 const mapDispatchToProps = dispatch => ({
   addFile: file => dispatch(addFile(file))

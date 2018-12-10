@@ -8,7 +8,7 @@
 import Axios from 'axios'
 
 /**
- * [PARTIALLY IMPLEMENTED] Upload a new file
+ * Upload a new file
  * @param {Any} file File data to upload
  * @returns {AxiosPromise<FileResponse>}
  */

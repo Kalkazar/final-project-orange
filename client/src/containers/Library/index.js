@@ -66,8 +66,6 @@ const mapDispatchToProps = dispatch => ({
   toggleOpenFolder: () => dispatch(toggleOpenFolder()),
   openFolder: folder => dispatch(openFolder(folder)),
   editFile: file => dispatch(editFile(file))
-  // uploadFolder: folder => dispatch(uploadFolder(folder)),
-  // uploadFile: file => dispatch(uploadFile(file))
 })
 
 export default connect(
