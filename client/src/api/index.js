@@ -64,10 +64,11 @@ const getAllFiles = () =>
 /**
  * Renames the given file by uid
  * @param {Number} uid UID of file to rename
+ * @param {String} newName New name to assign to file
  * @returns {AxiosPromise<FileResponse>}
  */
-const renameFile = uid =>
-  Axios.patch(`file/${uid}/download`)
+const renameFile = (uid, newName) =>
+  Axios.patch(`file/${uid}/rename/${newName}`)
 
 /**
  * Moves a file into a folder by UID
@@ -77,9 +78,9 @@ const renameFile = uid =>
  */
 const moveFile = (fileUid, folderUid) =>
   Axios.patch(
-    folderUid
-      ? `file/move/${fileUid}/${folderUid}`
-      : `file/move/${fileUid}`
+    folderUid > -1
+      ? `file/${fileUid}/move/${folderUid}`
+      : `file/${fileUid}/move`
   )
 
 /**
