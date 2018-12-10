@@ -7,6 +7,7 @@ import {
   FolderCard
 } from '../../components/Card'
 import { Library as LibraryDuck, Modals as ModalsDuck } from '../../ducks'
+import { LiveEndpoints } from '../../api'
 
 const { trashFile, trashFolder } = LibraryDuck
 const { toggleOpenFolder, openFolder, editFile } = ModalsDuck
@@ -20,7 +21,7 @@ class Library extends Component {
         {console.log('Library props', this.props)}
 
         {/* If props.activePage exists, render cards for items */}
-        { this.props.activePage ? this.props.activePage.map((e, i) => {
+        {this.props.activePage ? this.props.activePage.map((e, i) => {
           return e.isFolder
             ? (<FolderCard
               key={i}
@@ -36,10 +37,10 @@ class Library extends Component {
               fileId={e.uid}
               moveFile={() => this.props.editFile(e)}
               trashFile={() => this.props.trashFile(e.uid)}
-              downloadFile={() => console.log('pls implement downloadFile')}
+              downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
             />)
         }
-        ) : null }
+        ) : null}
       </div>
     )
   }
@@ -51,7 +52,8 @@ Library.propTypes = {
   trashFolder: PropTypes.func,
   toggleOpenFolder: PropTypes.func,
   openFolder: PropTypes.func,
-  editFile: PropTypes.func
+  editFile: PropTypes.func,
+  downloadFile: PropTypes.func
 }
 
 const mapStateToProps = state => ({
