@@ -185,13 +185,13 @@ const deleteFile = uid =>
  * @param {Number} uid UID of folder to permanently delete
  */
 const deleteFolder = uid =>
-  Axios.patch(`trash/folder/${uid}/delete`)
+  Axios.delete(`trash/folder/${uid}/delete`)
 
 /**
  * Permanently deletes all files and folders in trash
  */
 const deleteAll = () =>
-  Axios.patch(`trash/delete`)
+  Axios.delete(`trash/delete`)
 
 export const LiveEndpoints = {
   File: {
