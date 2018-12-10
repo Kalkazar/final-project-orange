@@ -263,7 +263,7 @@ export const loadFolders = folders => dispatch => {
  */
 export const addFile = file => dispatch => {
   LiveEndpoints.File.uploadFile(file).then(({ data }) => {
-    dispatch(addFileAction(file))
+    dispatch(addFileAction(data))
     dispatch(updateCurrentListAction())
     dispatch(updateTotalPagesAction())
   }).catch(err => {
