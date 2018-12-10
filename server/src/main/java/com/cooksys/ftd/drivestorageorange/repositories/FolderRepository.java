@@ -14,6 +14,14 @@ public interface FolderRepository extends JpaRepository<FolderEntity, Long> {
 	 * @param uid to return from trashbin
 	 * @return
 	 */
+	@Query(value = "SELECT f FROM FolderEntity f WHERE f.name = ?1 ORDER BY f.id DESC")
+	List<FolderEntity> getByName(String name);
+	
+	/**
+	 * Gets an entity from trashbin via UID, if it exists
+	 * @param uid to return from trashbin
+	 * @return
+	 */
 	@Query(value = "SELECT f FROM FolderEntity f WHERE f.inTrash = true AND f.uid = ?1")
 	FolderEntity getOneTrashed(Long uid);
 	

@@ -1,11 +1,19 @@
 package com.cooksys.ftd.drivestorageorange.services;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
@@ -50,24 +58,86 @@ public class FolderService {
 	 * @see FolderDTO
 	 * @see MultipartFile
 	 */
-	public FolderDTO uploadFolder(String name, Map<String, MultipartFile> uploadFolder) {
-		FolderEntity uploadedFolder = new FolderEntity();
-		uploadedFolder.setName(name);
+	public FolderDTO uploadFolder(MultipartFile uploadFolder) {
+		try(ZipInputStream zipInputStream = new ZipInputStream(uploadFolder.getInputStream());){
+//			File convFile = null;
+//			ZipFile zip = null;
 
-		try {
-			for(String fileName : uploadFolder.keySet()) {
-				FileEntity uploadedFile = new FileEntity();
-				uploadedFile.setData(uploadFolder.get(fileName).getBytes());
+			System.out.println("\n");
+
+			FolderEntity container = null;
+			ZipEntry entry;
+			while((entry = zipInputStream.getNextEntry()) != null) {
+				String[] path = entry.getName().split("/");
+				String entryName = path[path.length - 1];
 				
-				if(uploadedFile.getData() != null) {
-					this.fileRepository.save(uploadedFile);
+				if(entry.isDirectory()) {
+					System.out.println("Creating folder:");
+					System.out.println(entryName);
+					
+					createFolder(entryName);
+					
+					if(container == null) {
+						container = this.folderRepository.getByName(entryName).get(0);
+					}
+//					if(convFile == null) {
+//						convFile = new File(entry.getName() + ".zip");
+//					    uploadFolder.transferTo(convFile);
+//					    zip = new ZipFile(convFile);
+//					}
+				} else {
+					System.out.println("Uploading File:");
+					System.out.println(entryName);
+					FileEntity file = new FileEntity();
+
+					file.setName(entryName);
+					if(container != null) {
+						file.setContainer(container);
+					}
+					ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+					byte[] data = new byte[(int) entry.getSize()];
+					int nRead;
+
+					while ((nRead = entry.read(data, 0, data.length)) != -1) {
+					  buffer.write(data, 0, nRead);
+					}
+
+					return buffer.toByteArray();
+//					if(zip != null) {
+//						ZipEntry entryZip = zip.getEntry(entry.getName());
+//						InputStream inputStream = zip.getInputStream(entryZip);
+//						byte[] bytes = new byte[(int) entryZip.getSize()];
+//						DataInputStream dis = new DataInputStream(inputStream);
+//						dis.readFully(bytes);
+//						file.setData(bytes);
+//					}
+					
+					this.fileRepository.save(file);
 				}
 			}
 			
-			return toDto(saveFolder(uploadedFolder));
+			return toDto(container);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+//		System.out.println(folderZip);
+//		FolderEntity uploadedFolder = new FolderEntity();
+//		uploadedFolder.setName(name);
+//
+//		try {
+//			for(String fileName : uploadFolder.keySet()) {
+//				FileEntity uploadedFile = new FileEntity();
+//				uploadedFile.setData(uploadFolder.get(fileName).getBytes());
+//				
+//				if(uploadedFile.getData() != null) {
+//					this.fileRepository.save(uploadedFile);
+//				}
+//			}
+//			
+//			return toDto(saveFolder(uploadedFolder));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 
 		return null;
 	}

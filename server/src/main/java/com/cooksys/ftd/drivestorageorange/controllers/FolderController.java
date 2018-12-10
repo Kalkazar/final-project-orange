@@ -3,7 +3,6 @@ package com.cooksys.ftd.drivestorageorange.controllers;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -49,8 +48,8 @@ public class FolderController {
 	 * @return FolderDTO of newly uploaded folder
 	 */
 	@PostMapping("")
-	public FolderDTO uploadFolder(@RequestParam("name") String name, @RequestParam("file") Map<String, MultipartFile> uploadFolder) {
-		FolderDTO newUpload = this.folderService.uploadFolder(name, uploadFolder);
+	public FolderDTO uploadFolder(@RequestParam("folder") MultipartFile uploadFolder) {
+		FolderDTO newUpload = this.folderService.uploadFolder(uploadFolder);
 
 		if (newUpload != null) {
 			return newUpload;
