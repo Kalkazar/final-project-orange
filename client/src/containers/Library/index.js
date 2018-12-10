@@ -10,15 +10,23 @@ import { LiveEndpoints } from '../../api'
 const { trashFile, trashFolder, setPage } = LibraryDuck
 const { toggleOpenFolder, openFolder, editFile } = ModalsDuck
 
+/**
+ * Paginator connected to library store.
+ * Why won't this work by passing props????!?
+ */
+const LibraryPaginator = connect(state => ({
+  currentPage: state.library.currentPage,
+  totalPages: state.library.totalPages
+}), dispatch => ({
+  setPage: index => dispatch(setPage(index))
+}))(Pagination)
+
 class Library extends Component {
   render () {
     return (
       <Fragment>
         <div className={styles.libDiv}>
           <span className={styles.pathSpan}>this/is/the/path/span</span>
-          {/* Checking props manually for testing */}
-          {console.log('Library props', this.props)}
-
           {this.props.activePage ? this.props.activePage.map((e, i) => {
             return e.isFolder
               ? (<FolderCard
@@ -40,15 +48,18 @@ class Library extends Component {
           }
           ) : null}
         </div>
-        <Pagination
-          currentPage={this.props.currentPage + 1}
-          totalPages={this.props.totalPages}
-          setPage={this.props.setPage}
-        />
+        <LibraryPaginator />
       </Fragment>
     )
   }
 }
+
+// connect(state => ({
+//   currentPage: state.trash.currentPage,
+//   totalPages: state.trash.totalPages
+// }), dispatch => ({
+//   setPage: index => dispatch(setPage(index))
+// }))(Pagination)
 
 Library.propTypes = {
   activePage: PropTypes.array,
@@ -73,12 +84,8 @@ const mapDispatchToProps = dispatch => ({
   trashFolder: uid => dispatch(trashFolder(uid)),
   toggleOpenFolder: () => dispatch(toggleOpenFolder()),
   openFolder: folder => dispatch(openFolder(folder)),
-<<<<<<< HEAD
   editFile: file => dispatch(editFile(file)),
   setPage: index => dispatch(setPage(index))
-=======
-  editFile: file => dispatch(editFile(file))
->>>>>>> 079ef47eda67499f1d865cbfc7650a1497aee280
 })
 
 export default connect(
