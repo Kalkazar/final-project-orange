@@ -5,14 +5,14 @@ import styles from './library.module.scss'
 import {
   FileCard,
   FolderCard
-  // UploadCard,
-  // TrashCard,
-  // FolderFunctionsCard
 } from '../../components/Card'
+import { Library as LibraryDuck, Modals as ModalsDuck } from '../../ducks'
 import { LiveEndpoints } from '../../api'
-import { Library as LibraryDuck } from '../../ducks'
 
-export class Library extends Component {
+const { trashFile, trashFolder } = LibraryDuck
+const { toggleOpenFolder, openFolder, editFile } = ModalsDuck
+
+class Library extends Component {
   render () {
     return (
       <div className={styles.libDiv}>
@@ -21,26 +21,39 @@ export class Library extends Component {
         {console.log('Library props', this.props)}
 
         {/* If props.activePage exists, render cards for items */}
-        { this.props.activePage ? this.props.activePage.map((e, i) => {
-          const CardType = e.isFolder ? FolderCard : FileCard
-
-          return (<CardType
-            key={i}
-            fileName={e.name}
-            fileId={e.uid}
-            trashFile={() => this.props.trashBinFile(e.uid)}
-            downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
-          />)
+        {this.props.activePage ? this.props.activePage.map((e, i) => {
+          return e.isFolder
+            ? (<FolderCard
+              key={i}
+              folderName={e.name}
+              folderId={e.uid}
+              openFolder={() => this.props.openFolder(e)}
+              trashFolder={() => this.props.trashFolder(e.uid)}
+              downloadFolder={() => console.log('pls implement downloadFolder')}
+            />)
+            : (<FileCard
+              key={i}
+              fileName={e.name}
+              fileId={e.uid}
+              moveFile={() => this.props.editFile(e)}
+              trashFile={() => this.props.trashFile(e.uid)}
+              downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
+            />)
         }
-          
-        ) : null }
+        ) : null}
       </div>
     )
   }
 }
 
 Library.propTypes = {
-  activePage: PropTypes.array
+  activePage: PropTypes.array,
+  trashFile: PropTypes.func,
+  trashFolder: PropTypes.func,
+  toggleOpenFolder: PropTypes.func,
+  openFolder: PropTypes.func,
+  editFile: PropTypes.func,
+  downloadFile: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -49,7 +62,11 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   // Hook up appropriate Redux methods
-  trashBinFile: uid => dispatch(LibraryDuck.trashFile(uid))
+  trashFile: uid => dispatch(trashFile(uid)),
+  trashFolder: uid => dispatch(trashFolder(uid)),
+  toggleOpenFolder: () => dispatch(toggleOpenFolder()),
+  openFolder: folder => dispatch(openFolder(folder)),
+  editFile: file => dispatch(editFile(file))
   // uploadFolder: folder => dispatch(uploadFolder(folder)),
   // uploadFile: file => dispatch(uploadFile(file))
 })

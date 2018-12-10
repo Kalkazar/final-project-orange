@@ -12,8 +12,12 @@ import Axios from 'axios'
  * @param {Any} file File data to upload
  * @returns {AxiosPromise<FileResponse>}
  */
-const uploadFile = file =>
-  Axios.post('file', file)
+const uploadFile = file => {
+  const formData = new FormData()
+  formData.append('name', file.name)
+  formData.append('file', file)
+  return Axios.post('file', formData)
+}
 
 /**
  * Returns a file via UID if it exists
@@ -60,10 +64,11 @@ const getAllFiles = () =>
 /**
  * Renames the given file by uid
  * @param {Number} uid UID of file to rename
+ * @param {String} newName New name to assign to file
  * @returns {AxiosPromise<FileResponse>}
  */
-const renameFile = uid =>
-  Axios.patch(`file/${uid}/download`)
+const renameFile = (uid, newName) =>
+  Axios.patch(`file/${uid}/rename/${newName}`)
 
 /**
  * Moves a file into a folder by UID
@@ -73,9 +78,9 @@ const renameFile = uid =>
  */
 const moveFile = (fileUid, folderUid) =>
   Axios.patch(
-    folderUid
-      ? `file/move/${fileUid}/${folderUid}`
-      : `file/move/${fileUid}`
+    folderUid > -1
+      ? `file/${fileUid}/move/${folderUid}`
+      : `file/${fileUid}/move`
   )
 
 /**
@@ -181,13 +186,13 @@ const deleteFile = uid =>
  * @param {Number} uid UID of folder to permanently delete
  */
 const deleteFolder = uid =>
-  Axios.patch(`trash/folder/${uid}/delete`)
+  Axios.delete(`trash/folder/${uid}/delete`)
 
 /**
  * Permanently deletes all files and folders in trash
  */
 const deleteAll = () =>
-  Axios.patch(`trash/delete`)
+  Axios.delete(`trash/delete`)
 
 export const LiveEndpoints = {
   File: {

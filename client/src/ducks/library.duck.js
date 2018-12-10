@@ -15,9 +15,9 @@ import { Trash } from './'
 export const ADD_FILE = 'drivestorage/library/ADD_FILE'
 
 /**
- * Rename a file in state
+ * Edit file in state
  */
-export const RENAME_FILE = 'drivestorage/library/RENAME_FILE'
+export const EDIT_FILE = 'drivestorage/library/EDIT_FILE'
 
 /**
  * Remove file from state
@@ -35,9 +35,9 @@ export const ADD_FOLDER = 'drivestorage/library/ADD_FOLDER'
 export const RENAME_FOLDER = 'drivestorage/library/RENAME_FOLDER'
 
 /**
- * Remove file from state
+ * Remove folder from state
  */
-export const REMOVE_FOLDER = 'drivestorage/library/REMOVE_FILE'
+export const REMOVE_FOLDER = 'drivestorage/library/REMOVE_FOLDER'
 
 /**
  * Updates current list of results to be displayed
@@ -90,12 +90,17 @@ export default function config (state = initialState, action) {
     case ADD_FILE:
       return {
         ...state,
-        fileList: [...state.fileList, action.payload]
+        fileList: [...state.fileList, ({ ...action.payload, isFolder: false })]
+      }
+    case EDIT_FILE:
+      return {
+        ...state,
+        fileList: state.fileList.map(e => e.uid === action.payload.uid ? action.payload : e)
       }
     case ADD_FOLDER:
       return {
         ...state,
-        folderList: [...state.folderList, action.payload]
+        folderList: [...state.folderList, ({ ...action.payload, isFolder: true })]
       }
     case REMOVE_FILE:
       return {
@@ -128,12 +133,12 @@ export default function config (state = initialState, action) {
     case LOAD_FILES:
       return {
         ...state,
-        fileList: [ ...state.fileList, ...action.payload ]
+        fileList: [...state.fileList, ...action.payload]
       }
     case LOAD_FOLDERS:
       return {
         ...state,
-        folderList: [ ...state.folderList, ...action.payload ]
+        folderList: [...state.folderList, ...action.payload]
       }
     default:
       return state
@@ -147,6 +152,16 @@ export default function config (state = initialState, action) {
  */
 export const addFileAction = file => ({
   type: ADD_FILE,
+  payload: file
+})
+
+/**
+ * Applies changes to a file in fileList
+ * @param {FileResponse} file Updated file
+ * @returns {ReduxAction}
+ */
+export const editFileAction = file => ({
+  type: EDIT_FILE,
   payload: file
 })
 
@@ -247,9 +262,13 @@ export const loadFolders = folders => dispatch => {
  * @param {FileResponse} file File to add
  */
 export const addFile = file => dispatch => {
-  dispatch(addFileAction(file))
-  dispatch(updateCurrentListAction())
-  dispatch(updateTotalPagesAction())
+  LiveEndpoints.File.uploadFile(file).then(({ data }) => {
+    dispatch(addFileAction(file))
+    dispatch(updateCurrentListAction())
+    dispatch(updateTotalPagesAction())
+  }).catch(err => {
+    console.error(err)
+  })
 }
 
 /**
@@ -283,15 +302,25 @@ export const removeFolder = folder => dispatch => {
 }
 
 /**
+ * Updates an individual file
+ * @param {FileResponse} file Updated file
+ */
+export const editFile = file => dispatch => {
+  dispatch(editFileAction(file))
+  dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
+}
+
+/**
  * Set currently displayed page of results
  * @param {Number} index Index of results page to show
  */
 export const setPage = index => (dispatch, getState) => {
-//   /**
-//    * @type {TrashState}
-//    */
-//   const trash = {}
-//   const { totalPages } = trash
+  //   /**
+  //    * @type {TrashState}
+  //    */
+  //   const trash = {}
+  //   const { totalPages } = trash
 
   const { totalPages } = getState().library
 
@@ -320,6 +349,22 @@ const getFileByUID = (uid, getState) => {
 }
 
 /**
+ * Finds a folder by UID in folderList
+ * @param {Number} uid of folder to find
+ * @param {Function} getState redux-thunk getState method
+ * @returns {folderResponse}
+ */
+const getFolderByUID = (uid, getState) => {
+  const folder = getState().library.folderList.filter(e => e.uid === uid)[0]
+
+  if (typeof folder !== 'undefined') {
+    return folder
+  } else {
+    throw new Error('Invalid folder UID!')
+  }
+}
+
+/**
  * Move a file to trashbin
  * @param {Number} uid UID of file to trashbin
  */
@@ -335,38 +380,51 @@ export const trashFile = uid => (dispatch, getState) => {
   })
 }
 
-// /**
-//  * Permanently delete a file from trashbin
-//  * @param {Number} uid UID of file to delete
-//  */
-// export const moveFile = uid => dispatch =>
-//   LiveEndpoints.File.moveFile(uid).then(({ data }) => {
-//     dispatch(removeFile(data))
-//   })
-
-// /**
-//  * Permanently delete a file from trashbin
-//  * @param {Number} uid UID of file to delete
-//  */
-// export const renameFile = uid => dispatch =>
-//   LiveEndpoints.Trash.deleteFile(uid).then(({ data }) => {
-//     dispatch(removeFile(data))
-//   })
-
 /**
  * Move a folder to trashbin
  * @param {Number} uid UID of folder to trashbin
  */
-export const trashFolder = uid => dispatch =>
+export const trashFolder = uid => (dispatch, getState) => {
+  const folder = getFolderByUID(uid, getState)
+  dispatch(removeFolder(folder))
   LiveEndpoints.Folder.trashFolder(uid).then(({ data }) => {
-    dispatch(removeFolder(data))
+    // dispatch(removeFolder(data))
+    dispatch(Trash.addFolder(data))
+  }).catch(err => {
+    console.error(err)
+    dispatch(addFolder(folder))
   })
+}
 
-// /**
-//  * Permanently delete a folder from trashbin
-//  * @param {Number} uid UID of folder to permanently delete
-//  */
-// export const deleteFolder = uid => dispatch =>
-//   LiveEndpoints.Trash.deleteFolder(uid).then(({ data }) => {
-//     dispatch(removeFolder(data))
-//   })
+/**
+ * Create a new folder and add it to the UI
+ * @param {String} folderName Name for newly created folder
+ */
+export const createNewFolder = folderName => (dispatch, getState) =>
+  LiveEndpoints.Folder.createFolder(folderName)
+    .then(({ data }) => {
+      dispatch(addFolder(data))
+    })
+
+/**
+ * Renames a file
+ * @param {Number} uid UID of file to rename
+ * @param {String} newName New name to assign to file
+ */
+export const renameFile = (uid, newName) => (dispatch, getState) =>
+  LiveEndpoints.File.renameFile(uid, newName)
+    .then(({ data }) => {
+      dispatch(editFile(data))
+    })
+
+/**
+ * Moves a file into a new directory
+ * @param {Number} uid UID of file to rename
+ * @param {Number} folderUid New name to assign to file
+ */
+export const moveFile = (uid, folderUid) => (dispatch, getState) => {
+  LiveEndpoints.File.moveFile(uid, folderUid)
+    .then(({ data }) => {
+      dispatch(editFile(data))
+    })
+}

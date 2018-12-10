@@ -30,25 +30,32 @@ public class TrashService {
 	 * Permanently deletes file by UID File must be inTrash to do so
 	 * 
 	 * @param uid to permanently delete
+	 * @return dto of deleted file
 	 */
-	public void deleteFile(Long uid) {
+	public FileDTO deleteFile(Long uid) {
 		FileEntity deleteTarget = this.fileRepository.getOneTrashed(uid);
+		FileDTO deleted = null;
 
 		if (deleteTarget != null) {
+			deleted = this.fileMapper.toDto(deleteTarget);
 			this.fileRepository.delete(deleteTarget);
 		} else {
 			System.out.println("No matching target for deletion!");
 		}
+		
+		return deleted;
 	}
 
 	/**
 	 * Permanently deletes folder by UID Folder must be inTrash to do so
 	 * 
 	 * @param uid to permanently delete
+	 * @return dto of deleted folder
 	 */
-	public void deleteFolder(Long uid) {
+	public FolderDTO deleteFolder(Long uid) {
 		FolderEntity deleteTarget = this.folderRepository.getOneTrashed(uid);
 		List<FileEntity> deleteContained = this.fileRepository.getAllInContainer(uid);
+		FolderDTO deleted = null;
 
 		if (deleteTarget != null) {
 			if(deleteTarget.isInTrash() == true && deleteContained != null) {
@@ -56,10 +63,12 @@ public class TrashService {
 					this.fileRepository.delete(file);
 				}
 			}
+			deleted = this.folderMapper.toDto(deleteTarget);
 			this.folderRepository.delete(deleteTarget);
 		} else {
 			System.out.println("No matching target for deletion!");
 		}
+		return deleted;
 	}
 
 	/**
@@ -144,6 +153,8 @@ public class TrashService {
 
 	/**
 	 * Retrieves all files in trash
+	 * 
+	 * @return list of file dtos in trash
 	 */
 	public List<FileDTO> getTrashedFiles() {
 		List<FileEntity> trashedFiles = this.fileRepository.getAllTrashed();
@@ -152,6 +163,8 @@ public class TrashService {
 
 	/**
 	 * Retrieves all folders in trash
+	 * 
+	 * @return list of folder dtos in trash
 	 */
 	public List<FolderDTO> getTrashedFolders() {
 		List<FolderEntity> trashedFolders = this.folderRepository.getAllTrashed();
