@@ -15,7 +15,6 @@
   border-radius: 5pt;
 }
 
-//centered create an upload within the card
 .trashCardHolder {
   display: flex;
   justify-content: center;
@@ -26,25 +25,15 @@
   height: 80%;
   width: 100%;
 }
-// //changes to create/upload card
-// .createAndUploadCardHolder {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   flex-direction: column;
-//   align-content: space-between;
-//   padding: 5pt;
-// }
 
 .card.cardBody {
   display: flex;
 
 }
 
-// changes to card background color made here
 .cardHolder {
   display: flex;
-  width: 200pt;
+  width: 210pt;
   height: 150pt;
   flex-direction: column;
   box-shadow: 3px 3px;

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FileDTO;
+import com.cooksys.ftd.drivestorageorange.dtos.FilesAndFoldersDTO;
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
 import com.cooksys.ftd.drivestorageorange.services.FileService;
 import com.cooksys.ftd.drivestorageorange.services.FolderService;
@@ -93,18 +94,22 @@ public class TrashController {
 
 	/**
 	 * Permanently deletes all files and folders in trash
+	 * 
+	 * @return a dto containing a list of both file and folder dtos that have been permanently deleted
 	 */
 	@DeleteMapping("delete")
-	public void deleteAll() {
-		this.trashService.deleteAll();
+	public FilesAndFoldersDTO deleteAll() {
+		return this.trashService.deleteAll();
 	}
 
 	/**
 	 * Restores all files and folders in trash
+	 * 
+	 * @return a dto containing a list of both file and folder dtos that have been restored
 	 */
 	@PatchMapping("restore")
-	public void restoreAll() {
-		this.trashService.restoreAll();
+	public FilesAndFoldersDTO restoreAll() {
+		return this.trashService.restoreAll();
 	}
 
 }
