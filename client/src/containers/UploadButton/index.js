@@ -45,7 +45,7 @@ class UploadButton extends Component {
           onDrop={this.handleUpload}
         >
           <div className={`${styles.buttonContent}`}>
-            <span>{this.props.name}</span>
+            <span>Upload Files or Folders</span>
             <div className={`${styles.buttonIcon}`}>{this.props.icon}</div>
           </div>
         </Dropzone>
