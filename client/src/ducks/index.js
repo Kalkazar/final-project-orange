@@ -5,8 +5,9 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import uiReducer, * as UI from './ui.duck'
 import libraryReducer, * as Library from './library.duck'
 import trashReducer, * as Trash from './trash.duck'
+import modalReducer, * as Modals from './modals.duck'
 
-export { Library, UI, Trash }
+export { Library, UI, Trash, Modals }
 
 export function routes (state = { location: null }, action) {
   switch (action.type) {
@@ -24,7 +25,8 @@ function createReducer () {
   return combineReducers({
     library: libraryReducer,
     ui: uiReducer,
-    trash: trashReducer
+    trash: trashReducer,
+    modals: modalReducer
   })
 }
 

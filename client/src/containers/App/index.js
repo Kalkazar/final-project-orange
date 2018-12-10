@@ -54,6 +54,7 @@ const mapDispatchToProps = dispatch => ({
   // getFiles: () => dispatch(getFiles())
 })
 
+// Unnecessary???
 export default connect(
   mapStateToProps,
   mapDispatchToProps

@@ -370,3 +370,13 @@ export const trashFolder = uid => (dispatch, getState) => {
     dispatch(addFolder(folder))
   })
 }
+
+/**
+ * Create a new folder and add it to the UI
+ * @param {String} folderName Name for newly created folder
+ */
+export const createNewFolder = folderName => (dispatch, getState) =>
+  LiveEndpoints.Folder.createFolder(folderName)
+    .then(({ data }) => {
+      dispatch(addFolder(data))
+    })

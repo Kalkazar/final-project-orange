@@ -5,13 +5,11 @@ import { FolderFunctionsCard, UploadCard } from '../../components/Card'
 import NavButton from '../../components/NavButton'
 import PropTypes from 'prop-types'
 import { changeView } from '../../ducks/ui.duck'
-import $ from 'jquery'
+import { Modals as ModalsDuck } from '../../ducks'
+
+const { toggleCreateFolder } = ModalsDuck
 
 export class SideNav extends Component {
-  componentDidMount () {
-    this.createFolderModal = $('#createFolderModal')
-  }
-
   render () {
     return (
       <div className={styles.navDiv}>
@@ -26,22 +24,10 @@ export class SideNav extends Component {
           onClick={() => this.props.changeView(true)}
         />
         <FolderFunctionsCard
-          createFolder={
-            () => {
-              // document.getElementById('#createFolderModal').modal()
-              // document.getElementById('createFolderModal').classList.add('show')
-              console.log($('#createFolderModal'))
-              $('#createFolderModal')[0].modal()
-              // this.createFolderModal.modal()
-            }
-          }
+          createFolder={this.props.toggleCreateFolder}
           uploadFolder={
             // Placeholder - pls implement
-            () => {
-              // document.getElementById('createFolderModal').modal()
-              // document.getElementById('#createFolderModal').classList.add('show')
-            }
-            // data-toggle="modal" data-target="#exampleModal"
+            () => {}
           }
         />
         <UploadCard
@@ -59,14 +45,16 @@ export class SideNav extends Component {
 SideNav.propTypes = {
   changeView: PropTypes.func,
   uploadFolder: PropTypes.func,
-  uploadFile: PropTypes.func
+  uploadFile: PropTypes.func,
+  toggleCreateFolder: PropTypes.func
 }
 
 const mapStateToProps = state => ({})
 
 const mapDispatchToProps = dispatch => ({
   // Hook up appropriate Redux methods
-  changeView: view => dispatch(changeView(view))
+  changeView: view => dispatch(changeView(view)),
+  toggleCreateFolder: () => dispatch(toggleCreateFolder())
   // uploadFolder: folder => dispatch(uploadFolder(folder)),
   // uploadFile: file => dispatch(uploadFile(file))
 })
