@@ -35,8 +35,8 @@ public class TrashController {
 	 * @param uid of the file to permanently delete
 	 */
 	@DeleteMapping("/file/{file_uid}/delete")
-	public void deleteFile(@PathVariable("file_uid") Long uid) {
-		this.trashService.deleteFile(uid);
+	public FileDTO deleteFile(@PathVariable("file_uid") Long uid) {
+		return this.trashService.deleteFile(uid);
 	}
 
 	/**
@@ -75,8 +75,8 @@ public class TrashController {
 	 * @param uid of the fold to permanently delete
 	 */
 	@DeleteMapping("folder/{folder_uid}/delete")
-	public void deleteFolder(@PathVariable("folder_uid") Long uid) {
-		this.trashService.deleteFolder(uid);
+	public FolderDTO deleteFolder(@PathVariable("folder_uid") Long uid) {
+		return this.trashService.deleteFolder(uid);
 	}
 
 	/**
