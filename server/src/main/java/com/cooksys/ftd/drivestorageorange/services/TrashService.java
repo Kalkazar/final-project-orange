@@ -111,6 +111,8 @@ public class TrashService {
 
 	/**
 	 * Delete all by files and folders in trash
+	 * 
+	 * @return a dto containing a list of both file and folder dtos
 	 */
 	public FilesAndFoldersDTO deleteAll() {
 		List<FileEntity> deleteTrashedFiles = this.fileRepository.getAllTrashed();
@@ -139,6 +141,8 @@ public class TrashService {
 
 	/**
 	 * Restores all by files and folders in trash
+	 * 
+	 * @return a dto containing a list of both file and folder dtos
 	 */
 	public FilesAndFoldersDTO restoreAll() {
 		List<FileEntity> restoreTrashedFiles = this.fileRepository.getAllTrashed();
@@ -148,7 +152,11 @@ public class TrashService {
 
 		if (restoreTrashedFiles != null) {
 			for (FileEntity file : restoreTrashedFiles) {
-				restoredFiles.add(this.restoreFile(file.getUid()));
+				FileEntity restoreTarget = this.fileRepository.getOneTrashed(file.getUid());
+				if (restoreTarget != null) {
+					restoreTarget.setInTrash(false);
+				}
+				restoredFiles.add(this.fileMapper.toDto(this.fileRepository.save(restoreTarget)));
 			}
 		} else {
 			System.out.println("No files for restoration!");
