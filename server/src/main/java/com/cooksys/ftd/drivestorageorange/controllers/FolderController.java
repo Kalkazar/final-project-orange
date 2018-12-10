@@ -70,7 +70,7 @@ public class FolderController {
 	}
 	
 	/**
-	 * [NOT FULLY IMPLEMENTED] download a folder's data
+	 * download a folder's data
 	 * 
 	 * @param uid      of folder to download
 	 * @param response for interaction with client
@@ -78,8 +78,8 @@ public class FolderController {
 	 */
 	@GetMapping("{uid}/download")
 	public void downloadFolder(@PathVariable("uid") Long uid, HttpServletResponse response) {
-		
 		List<FileEntity> serveFiles = this.folderService.getFilesInFolder(uid);
+		System.out.println("\n");
 		response.setContentType("application/pdf");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + this.folderService.getFolder(uid).getName() + ".zip" + "\"");
 		

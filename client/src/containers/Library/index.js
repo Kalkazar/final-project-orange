@@ -29,7 +29,7 @@ class Library extends Component {
               folderId={e.uid}
               openFolder={() => this.props.openFolder(e)}
               trashFolder={() => this.props.trashFolder(e.uid)}
-              downloadFolder={() => console.log('pls implement downloadFolder')}
+              downloadFolder={() => LiveEndpoints.Folder.downloadFolder(e.uid)}
             />)
             : (<FileCard
               key={i}
@@ -52,8 +52,7 @@ Library.propTypes = {
   trashFolder: PropTypes.func,
   toggleOpenFolder: PropTypes.func,
   openFolder: PropTypes.func,
-  editFile: PropTypes.func,
-  downloadFile: PropTypes.func
+  editFile: PropTypes.func
 }
 
 const mapStateToProps = state => ({
