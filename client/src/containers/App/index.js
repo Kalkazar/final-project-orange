@@ -22,7 +22,7 @@ class App extends Component {
             <Switch>
               <Route exact path='/library' component={Library} />
               <Route exact path='/trash' component={Trash} />
-              <Route path='/*' render={() => (<Redirect to={'/library'} />)} />
+              <Route path='/*' render={() => <Redirect to={'/library'} />} />
             </Switch>
             {/* <Pagination
               currentPage={2}

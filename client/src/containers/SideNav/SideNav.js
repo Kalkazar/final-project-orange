@@ -26,15 +26,13 @@ export class SideNav extends Component {
           onClick={() => this.props.changeView(true)}
         />
         <FolderFunctionsCard
-          createFolder={
-            () => {
-              // document.getElementById('#createFolderModal').modal()
-              // document.getElementById('createFolderModal').classList.add('show')
-              console.log($('#createFolderModal'))
-              $('#createFolderModal')[0].modal()
-              // this.createFolderModal.modal()
-            }
-          }
+          createFolder={() => {
+            // document.getElementById('#createFolderModal').modal()
+            // document.getElementById('createFolderModal').classList.add('show')
+            console.log($('#createFolderModal'))
+            $('#createFolderModal')[0].modal()
+            // this.createFolderModal.modal()
+          }}
           uploadFolder={
             // Placeholder - pls implement
             () => {
