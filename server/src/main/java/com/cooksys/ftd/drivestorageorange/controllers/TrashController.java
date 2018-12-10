@@ -94,6 +94,8 @@ public class TrashController {
 
 	/**
 	 * Permanently deletes all files and folders in trash
+	 * 
+	 * @return a dto containing a list of both file and folder dtos that have been permanently deleted
 	 */
 	@DeleteMapping("delete")
 	public FilesAndFoldersDTO deleteAll() {
@@ -102,10 +104,12 @@ public class TrashController {
 
 	/**
 	 * Restores all files and folders in trash
+	 * 
+	 * @return a dto containing a list of both file and folder dtos that have been restored
 	 */
-//	@PatchMapping("restore")
-//	public FilesAndFoldersDTO restoreAll() {
-//		return this.trashService.restoreAll();
-//	}
+	@PatchMapping("restore")
+	public FilesAndFoldersDTO restoreAll() {
+		return this.trashService.restoreAll();
+	}
 
 }

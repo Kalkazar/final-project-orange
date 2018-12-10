@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styles from './sideNav.module.scss'
-import { FolderFunctionsCard, UploadCard } from '../../components/Card'
 import NavButton from '../../components/NavButton'
 import PropTypes from 'prop-types'
 import { changeView } from '../../ducks/ui.duck'
 import { Modals as ModalsDuck } from '../../ducks'
+import FolderNavButton from '../../components/FolderNavButton'
+import UploadButton from '../UploadButton'
 
 const { toggleCreateFolder } = ModalsDuck
 
@@ -23,14 +24,16 @@ export class SideNav extends Component {
           route='/trash'
           onClick={() => this.props.changeView(true)}
         />
-        <FolderFunctionsCard
+        <FolderNavButton
+          text='Create Folder'
           createFolder={this.props.toggleCreateFolder}
           uploadFolder={
             // Placeholder - pls implement
             () => {}
           }
         />
-        <UploadCard
+        <UploadButton
+          // text='Upload File/Folder'
           fileType='file'
           upload={
             // Placeholder - pls implement

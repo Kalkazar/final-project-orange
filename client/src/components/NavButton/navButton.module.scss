@@ -7,24 +7,35 @@
   text-align: center;
   font-size: 1.3em;
   color: $Light;
-  background: $Dark;
+  // background-image: linear-gradient(top ,rgb(29, 92, 95), rgb(19, 135, 141));
+  background-color: #d6b55f;
+  background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
   border-radius: 5pt;
   padding: 20pt 5pt;
-  border: 2pt solid white;
+  border: 2pt solid black;
   font-weight: bold;
+  color: rgb(78, 75, 75);
+  &:hover {
+    text-decoration: none;
+  background-color: rgb(100, 95, 95);
+  color: black;
+  }
+  &:active {    
+  border: 2pt solid rgb(197, 94, 10);
+  }
 }
 
-.activeNav {
-  border: 2pt solid $Highlight;
-}
+// .activeNav {
+//   border: 2pt solid rgb(197, 94, 10);
+// }
 
 .navButtonText {
   @include noselecttext;
   text-decoration: none;
 }
 
-.navButton:hover {
-  text-decoration: none;
-  background-color: $Highlight;
-  color: black;
-}
+// .navButton:hover {
+//   text-decoration: none;
+//   background-color: rgb(100, 95, 95);
+//   color: black;
+// }

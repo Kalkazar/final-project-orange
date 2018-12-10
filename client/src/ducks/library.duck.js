@@ -209,7 +209,7 @@ export const updateCurrentListAction = () => ({
  * @returns {ReduxAction}
  */
 export const updateCurrentPageAction = page => ({
-  type: UPDATE_CURRENT_LIST,
+  type: UPDATE_CURRENT_PAGE,
   payload: page
 })
 
@@ -246,6 +246,7 @@ export const loadFoldersAction = folders => ({
 export const loadFiles = files => dispatch => {
   dispatch(loadFilesAction(files.map(e => ({ ...e, isFolder: false }))))
   dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
 }
 
 /**
@@ -255,6 +256,7 @@ export const loadFiles = files => dispatch => {
 export const loadFolders = folders => dispatch => {
   dispatch(loadFoldersAction(folders.map(e => ({ ...e, isFolder: true }))))
   dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
 }
 
 /**
@@ -321,15 +323,10 @@ export const editFile = file => dispatch => {
  * @param {Number} index Index of results page to show
  */
 export const setPage = index => (dispatch, getState) => {
-  //   /**
-  //    * @type {TrashState}
-  //    */
-  //   const trash = {}
-  //   const { totalPages } = trash
-
   const { totalPages } = getState().library
 
   if (index >= 0 && index < totalPages) {
+    dispatch(updateCurrentPageAction(index))
     dispatch(updateCurrentPageAction(index))
     dispatch(updateCurrentListAction())
   } else {

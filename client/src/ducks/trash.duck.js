@@ -184,7 +184,7 @@ export const updateCurrentListAction = () => ({
  * @returns {ReduxAction}
  */
 export const updateCurrentPageAction = page => ({
-  type: UPDATE_CURRENT_LIST,
+  type: UPDATE_CURRENT_PAGE,
   payload: page
 })
 

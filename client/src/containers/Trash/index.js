@@ -8,6 +8,17 @@ import { Trash as TrashDuck } from '../../ducks'
 
 const { restoreFile, deleteFile, restoreFolder, deleteFolder, setPage } = TrashDuck
 
+/**
+ * Paginator connected to trash store.
+ * Why won't this work by passing props????!?
+ */
+const TrashPaginator = connect(state => ({
+  currentPage: state.trash.currentPage,
+  totalPages: state.trash.totalPages
+}), dispatch => ({
+  setPage: index => dispatch(setPage(index))
+}))(Pagination)
+
 export class Trash extends Component {
   render () {
     return (
@@ -33,11 +44,12 @@ export class Trash extends Component {
             />)
           ) : null}
         </div>
-        <Pagination
+        {/* <Pagination
           currentPage={this.props.currentPage + 1}
           totalPages={this.props.totalPages}
           setPage={this.props.setPage}
-        />
+        /> */}
+        <TrashPaginator />
       </Fragment>
     )
   }
