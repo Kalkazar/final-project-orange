@@ -24,7 +24,7 @@ class UploadButton extends Component {
     //   const filePath = file.path.split('/').slice(1)
     //   console.log(filePath)
     // })
-    addFile(files[0])
+    this.props.addFile(files[0])
   }
 
   render () {
