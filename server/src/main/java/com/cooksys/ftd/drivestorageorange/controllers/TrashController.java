@@ -33,6 +33,7 @@ public class TrashController {
 	 * Permanently deletes a file by uid
 	 * 
 	 * @param uid of the file to permanently delete
+	 * @return dto of deleted file
 	 */
 	@DeleteMapping("/file/{file_uid}/delete")
 	public FileDTO deleteFile(@PathVariable("file_uid") Long uid) {
@@ -73,6 +74,7 @@ public class TrashController {
 	 * Permanently deletes a folder by uid
 	 * 
 	 * @param uid of the fold to permanently delete
+	 * @return dto of deleted folder
 	 */
 	@DeleteMapping("folder/{folder_uid}/delete")
 	public FolderDTO deleteFolder(@PathVariable("folder_uid") Long uid) {
