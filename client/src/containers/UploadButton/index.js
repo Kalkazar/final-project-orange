@@ -56,4 +56,7 @@ const mapDispatchToProps = dispatch => ({
   addFile: file => dispatch(addFile(file))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UploadButton)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UploadButton)
