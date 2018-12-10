@@ -28,13 +28,14 @@ const getFile = uid =>
   Axios.get(`file/${uid}`)
 
 /**
- * [PARTIALLY IMPLEMENTED] Downloads a file’s data.
+ * Downloads a file’s data.
  * This should be called in-browser to initiate
  * file download by user
  * @param {Number} uid UID of file to download
  */
-const downloadFile = uid =>
-  Axios.get(`file/${uid}/download`)
+const downloadFile = uid => {
+  console.log('test')
+  return Axios.get(`file/${uid}/download`)
     .then(response => {
       getFile(uid).then(({ data }) => {
         const url = window.URL.createObjectURL(new Blob([response.data]))
@@ -53,6 +54,8 @@ const downloadFile = uid =>
       // link.click()
       // document.body.removeChild(link)
     })
+    .catch(err => (console.log(err)))
+}
 
 /**
  * Returns all files
@@ -121,6 +124,27 @@ const getAllFolders = () =>
  */
 const getFolder = uid =>
   Axios.get(`folder/${uid}`)
+
+/**
+* Downloads a folder's data.
+* This should be called in-browser to initiate
+* file download by user
+* @param {Number} uid UID of file to download
+*/
+const downloadFolder = uid => {
+  return Axios.get(`folder/${uid}/download`, { responseType: 'arraybuffer' })
+    .then(response => {
+      getFolder(uid).then(({ data }) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', data.name + '.zip')
+        document.body.appendChild(link)
+        link.click()
+      })
+    })
+    .catch(err => console.log(err))
+}
 
 /**
  * Renames a folder by UID
@@ -208,6 +232,7 @@ export const LiveEndpoints = {
     uploadFolder,
     createFolder,
     getFolder,
+    downloadFolder,
     getAllFolders,
     renameFolder,
     moveFolder,
