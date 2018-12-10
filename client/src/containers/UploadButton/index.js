@@ -20,6 +20,8 @@ class UploadButton extends Component {
   }
 
   handleUpload (files) {
+    // Need to update to handle folders. Back-end will need to be updated as well.
+    // Likely the best way is to create a zip in the api and send that.
     // files.forEach(file => {
     //   const filePath = file.path.split('/').slice(1)
     //   console.log(filePath)
