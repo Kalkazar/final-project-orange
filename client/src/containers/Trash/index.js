@@ -2,43 +2,34 @@ import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styles from './trash.module.scss'
-import {
-  FileCard,
-  FolderCard,
-  UploadCard,
-  TrashCard,
-  FolderFunctionsCard
-} from '../../components/Card'
+import { TrashCard } from '../../components/Card'
 import Pagination from '../../components/Pagination'
 import { Trash as TrashDuck } from '../../ducks'
 
-const { restoreFile, deleteFile, setPage } = TrashDuck
-
-// import { changeView } from '../../ducks/ui.duck'
-// import { restoreFile, deleteFile } from '../../ducks/library.duck'
-
-// const { changeView } = UIDuck
-// const { restoreFile, deleteFile } = LibraryDuck.
+const { restoreFile, deleteFile, restoreFolder, deleteFolder, setPage } = TrashDuck
 
 export class Trash extends Component {
-  componentDidMount () {
-    console.log('Get All TRASHED Files and Folders')
-    // this.props.changeView(true)
-  }
-
   render () {
     return (
       <Fragment>
         <div className={styles.trashDiv}>
           {/* If props.activePage exists, render cards for items */}
-          {this.props.activePage ? this.props.activePage.map((e, i) =>
-            (<TrashCard
+          {this.props.activePage ? this.props.activePage.map((e, i) => e.isFolder
+            ? (<TrashCard
+              key={i}
+              name={e.name}
+              id={e.uid}
+              deleteForever={() => this.props.deleteFolder(e.uid)}
+              restore={() => this.props.restoreFolder(e.uid)}
+              fileType={'folder'}
+            />)
+            : (<TrashCard
               key={i}
               name={e.name}
               id={e.uid}
               deleteForever={() => this.props.deleteFile(e.uid)}
               restore={() => this.props.restoreFile(e.uid)}
-              fileType='file'
+              fileType={'file'}
             />)
           ) : null}
         </div>
@@ -56,9 +47,9 @@ Trash.propTypes = {
   // changeView: PropTypes.func,
   activePage: PropTypes.array,
   restoreFile: PropTypes.func,
-  // restoreFolder: PropTypes.func,
   deleteFile: PropTypes.func,
-  // deleteFolder: PropTypes.func,
+  restoreFolder: PropTypes.func,
+  deleteFolder: PropTypes.func,
   // restoreAll: PropTypes.func,
   // deleteAll: PropTypes.func
   currentPage: PropTypes.number,
@@ -76,10 +67,10 @@ const mapDispatchToProps = dispatch => ({
   // Hook up appropriate Redux methods
   // changeView: isTrash => dispatch(changeView(isTrash)),
   restoreFile: uid => dispatch(restoreFile(uid)),
+  deleteFile: uid => dispatch(deleteFile(uid)),
   setPage: index => dispatch(setPage(index)),
-  // restoreFolder: folder => dispatch(restoreFolder(folder)),
-  deleteFile: uid => dispatch(deleteFile(uid))
-  // deleteFolder: folder => dispatch(deleteFolder(folder)),
+  restoreFolder: folder => dispatch(restoreFolder(folder)),
+  deleteFolder: folder => dispatch(deleteFolder(folder))
   // restoreAll: () => dispatch(restoreAll()),
   // deleteAll: () => dispatch(deleteAll())
 })

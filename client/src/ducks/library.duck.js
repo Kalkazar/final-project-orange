@@ -9,23 +9,6 @@ import { FILES_PER_PAGE } from './ui.duck'
 import { LiveEndpoints } from '../api'
 import { Trash } from './'
 
-// import ViewDuck from './baseview.duck'
-
-// const { reducer, actionCreators, types, thunks } = new ViewDuck('library')
-
-// export const rest = { ...actionCreators, ...types, ...thunks }
-
-// export default reducer
-
-// export const {
-//   ADD_FILE,
-//   ADD_FOLDER,
-//   LOAD_FILES,
-
-// } = others
-
-// export default Library.reducer
-
 /**
  * Add file to state
  */
@@ -52,9 +35,9 @@ export const ADD_FOLDER = 'drivestorage/library/ADD_FOLDER'
 export const RENAME_FOLDER = 'drivestorage/library/RENAME_FOLDER'
 
 /**
- * Remove file from state
+ * Remove folder from state
  */
-export const REMOVE_FOLDER = 'drivestorage/library/REMOVE_FILE'
+export const REMOVE_FOLDER = 'drivestorage/library/REMOVE_FOLDER'
 
 /**
  * Updates current list of results to be displayed
@@ -107,12 +90,12 @@ export default function config (state = initialState, action) {
     case ADD_FILE:
       return {
         ...state,
-        fileList: [...state.fileList, action.payload]
+        fileList: [...state.fileList, ({ ...action.payload, isFolder: false })]
       }
     case ADD_FOLDER:
       return {
         ...state,
-        folderList: [...state.folderList, action.payload]
+        folderList: [...state.folderList, ({ ...action.payload, isFolder: true })]
       }
     case REMOVE_FILE:
       return {
@@ -271,7 +254,6 @@ export const addFile = file => dispatch => {
   }).catch(err => {
     console.error(err)
   })
-
 }
 
 /**
@@ -342,6 +324,22 @@ const getFileByUID = (uid, getState) => {
 }
 
 /**
+ * Finds a folder by UID in folderList
+ * @param {Number} uid of folder to find
+ * @param {Function} getState redux-thunk getState method
+ * @returns {folderResponse}
+ */
+const getFolderByUID = (uid, getState) => {
+  const folder = getState().library.folderList.filter(e => e.uid === uid)[0]
+
+  if (typeof folder !== 'undefined') {
+    return folder
+  } else {
+    throw new Error('Invalid folder UID!')
+  }
+}
+
+/**
  * Move a file to trashbin
  * @param {Number} uid UID of file to trashbin
  */
@@ -357,38 +355,18 @@ export const trashFile = uid => (dispatch, getState) => {
   })
 }
 
-// /**
-//  * Permanently delete a file from trashbin
-//  * @param {Number} uid UID of file to delete
-//  */
-// export const moveFile = uid => dispatch =>
-//   LiveEndpoints.File.moveFile(uid).then(({ data }) => {
-//     dispatch(removeFile(data))
-//   })
-
-// /**
-//  * Permanently delete a file from trashbin
-//  * @param {Number} uid UID of file to delete
-//  */
-// export const renameFile = uid => dispatch =>
-//   LiveEndpoints.Trash.deleteFile(uid).then(({ data }) => {
-//     dispatch(removeFile(data))
-//   })
-
 /**
  * Move a folder to trashbin
  * @param {Number} uid UID of folder to trashbin
  */
-export const trashFolder = uid => dispatch =>
+export const trashFolder = uid => (dispatch, getState) => {
+  const folder = getFolderByUID(uid, getState)
+  dispatch(removeFolder(folder))
   LiveEndpoints.Folder.trashFolder(uid).then(({ data }) => {
-    dispatch(removeFolder(data))
+    // dispatch(removeFolder(data))
+    dispatch(Trash.addFolder(data))
+  }).catch(err => {
+    console.error(err)
+    dispatch(addFolder(folder))
   })
-
-// /**
-//  * Permanently delete a folder from trashbin
-//  * @param {Number} uid UID of folder to permanently delete
-//  */
-// export const deleteFolder = uid => dispatch =>
-//   LiveEndpoints.Trash.deleteFolder(uid).then(({ data }) => {
-//     dispatch(removeFolder(data))
-//   })
+}

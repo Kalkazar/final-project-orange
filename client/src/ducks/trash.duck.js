@@ -25,9 +25,9 @@ export const REMOVE_FILE = 'drivestorage/trash/REMOVE_FILE'
 export const ADD_FOLDER = 'drivestorage/trash/ADD_FOLDER'
 
 /**
- * Remove file from state
+ * Remove folder from state
  */
-export const REMOVE_FOLDER = 'drivestorage/trash/REMOVE_FILE'
+export const REMOVE_FOLDER = 'drivestorage/trash/REMOVE_FOLDER'
 
 /**
  * Updates current list of results to be displayed
@@ -80,12 +80,12 @@ export default function config (state = initialState, action) {
     case ADD_FILE:
       return {
         ...state,
-        fileList: [...state.fileList, action.payload]
+        fileList: [...state.fileList, ({ ...action.payload, isFolder: false })]
       }
     case ADD_FOLDER:
       return {
         ...state,
-        folderList: [...state.folderList, action.payload]
+        folderList: [...state.folderList, ({ ...action.payload, isFolder: true })]
       }
     case REMOVE_FILE:
       return {
@@ -304,6 +304,22 @@ const getFileByUID = (uid, getState) => {
 }
 
 /**
+ * Finds a folder by UID in folderList
+ * @param {Number} uid of folder to find
+ * @param {Function} getState redux-thunk getState method
+ * @returns {folderResponse}
+ */
+const getFolderByUID = (uid, getState) => {
+  const folder = getState().trash.folderList.filter(e => e.uid === uid)[0]
+
+  if (typeof folder !== 'undefined') {
+    return folder
+  } else {
+    throw new Error('Invalid folder UID!')
+  }
+}
+
+/**
  * Restore a file from trashbin
  * @param {Number} uid UID of file to restore
  */
@@ -323,25 +339,46 @@ export const restoreFile = uid => (dispatch, getState) => {
  * Permanently delete a file from trashbin
  * @param {Number} uid UID of file to delete
  */
-export const deleteFile = uid => dispatch =>
+export const deleteFile = uid => (dispatch, getState) => {
+  const file = getFileByUID(uid, getState)
+  dispatch(removeFile(file))
   LiveEndpoints.Trash.deleteFile(uid).then(({ data }) => {
-    dispatch(removeFile(data))
+    // dispatch(removeFile(data))
+    // dispatch(Library.addFile(data))
+  }).catch(err => {
+    console.error(err)
+    dispatch(addFile(file))
   })
+}
 
 /**
  * Restore a folder from trashbin
  * @param {Number} uid UID of folder to restore
  */
-export const restoreFolder = uid => dispatch =>
+export const restoreFolder = uid => (dispatch, getState) => {
+  const folder = getFolderByUID(uid, getState)
+  dispatch(removeFolder(folder))
   LiveEndpoints.Trash.restoreFolder(uid).then(({ data }) => {
-    dispatch(removeFolder(data))
+    // dispatch(removefolder(data))
+    dispatch(Library.addFolder(data))
+  }).catch(err => {
+    console.error(err)
+    dispatch(addFolder(folder))
   })
+}
 
 /**
  * Permanently delete a folder from trashbin
  * @param {Number} uid UID of folder to permanently delete
  */
-export const deleteFolder = uid => dispatch =>
+export const deleteFolder = uid => (dispatch, getState) => {
+  const folder = getFolderByUID(uid, getState)
+  dispatch(removeFolder(folder))
   LiveEndpoints.Trash.deleteFolder(uid).then(({ data }) => {
-    dispatch(removeFolder(data))
+    // dispatch(removefolder(data))
+    // dispatch(Library.addFolder(data))
+  }).catch(err => {
+    console.error(err)
+    dispatch(addFolder(folder))
   })
+}
