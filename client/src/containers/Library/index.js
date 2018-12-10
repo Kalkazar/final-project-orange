@@ -73,8 +73,12 @@ const mapDispatchToProps = dispatch => ({
   trashFolder: uid => dispatch(trashFolder(uid)),
   toggleOpenFolder: () => dispatch(toggleOpenFolder()),
   openFolder: folder => dispatch(openFolder(folder)),
+<<<<<<< HEAD
   editFile: file => dispatch(editFile(file)),
   setPage: index => dispatch(setPage(index))
+=======
+  editFile: file => dispatch(editFile(file))
+>>>>>>> 079ef47eda67499f1d865cbfc7650a1497aee280
 })
 
 export default connect(

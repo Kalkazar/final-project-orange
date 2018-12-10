@@ -24,7 +24,7 @@ const Card = ({ children }) => (
 export const UploadCard = ({ fileType, upload, uploadFolder }) => (
   <div>
     <UploadButton
-      name='Upload File'
+      name='Upload File or Folder'
       onClick={uploadFolder}
       icon={<UploadIcon onClick={() => { }} />}
     />
@@ -55,11 +55,6 @@ export const FolderFunctionsCard = ({ createFolder, uploadFolder }) => (
         name='Create Folder'
         onClick={createFolder}
         icon={<CreateFolderIcon onClick={() => { }} />}
-      />
-      <FolderNavButton
-        name='Upload Folder'
-        onClick={uploadFolder}
-        icon={<UploadIcon onClick={() => { }} />}
       />
     </div>
   </div>
