@@ -2,10 +2,9 @@
  * @typedef {import('../helpers/types').FileResponse} FileResponse
  * @typedef {import('../helpers/types').FolderResponse} FolderResponse
  * @typedef {import('../helpers/types').ViewState} LibraryState
- * @typedef {import('axios').AxiosPromise} AxiosPromise
  */
 
-import Axios from 'axios'
+import Axios, { AxiosPromise } from 'axios'
 
 /**
  * Upload a new file
@@ -223,6 +222,10 @@ export const LiveEndpoints = {
     uploadFile,
     getFile,
     downloadFile,
+    /**
+     * Returns all files
+     * @returns {AxiosPromise<FileResponse[]>}
+     */
     getAllFiles,
     renameFile,
     moveFile,
@@ -233,6 +236,10 @@ export const LiveEndpoints = {
     createFolder,
     getFolder,
     downloadFolder,
+    /**
+     * Gets all folders (dtos as List)
+     * @returns {AxiosPromise<FolderResponse[]>}
+     */
     getAllFolders,
     renameFolder,
     moveFolder,
