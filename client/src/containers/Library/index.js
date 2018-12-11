@@ -32,46 +32,65 @@ class Library extends Component {
     return (
       <Fragment>
         <div className={styles.libDiv}>
-          <HomeIcon onClick={() => this.props.setDisplayFolder()} />
-          <span className={styles.pathSpan}>
-            {' '}
-            Browsing: ./
-            {this.props.displayFolder
-              ? `${this.props.displayFolder.name}/`
-              : ` (root)`}
-          </span>
-          {this.props.activePage
-            ? <Container className={styles.containerFill} > {groupArray(this.props.activePage.map((e, i) => {
-              return e.isFolder ? (
-                <Col xl={'3'} lg={'3'} md={'3'} key={i} >
-                  <FolderCard
-                    key={i}
-                    folderName={e.name}
-                    folderId={e.uid}
-                    // openFolder={() => this.props.openFolder(e)}
-                    openFolder={() => this.props.openFolder(e.uid)}
-                    trashFolder={() => this.props.trashFolder(e.uid)}
-                    downloadFolder={() =>
-                      LiveEndpoints.Folder.downloadFolder(e.uid)
-                    }
-                  />
-                </Col>
-              ) : (
-                <Col xl={'3'} lg={'3'} md={'3'} key={i} >
-                  <FileCard
-                    key={i}
-                    fileName={e.name}
-                    fileId={e.uid}
-                    moveFile={() => this.props.editFile(e)}
-                    trashFile={() => this.props.trashFile(e.uid)}
-                    downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
-                  />
-                </Col>
-              )
-            }), 4).map((e, i) => (<Row key={i} >{e}</Row>))} </Container>
-            : null}
+          <div className={styles.pageHeaderClass}>
+            <HomeIcon onClick={() => this.props.setDisplayFolder()} />
+            <span className={styles.pathSpan}>
+              {' '}
+              Browsing: ./
+              {this.props.displayFolder
+                ? `${this.props.displayFolder.name}/`
+                : ` (root)`}
+            </span>
+          </div>
+          {this.props.activePage ? (
+            <Container className={styles.containerFill}>
+              {' '}
+              {groupArray(
+                this.props.activePage.map((e, i) => {
+                  return e.isFolder ? (
+                    <Col xl={'3'} lg={'3'} md={'3'} key={i}>
+                      <FolderCard
+                        key={i}
+                        folderName={e.name}
+                        folderId={e.uid}
+                        // openFolder={() => this.props.openFolder(e)}
+                        openFolder={() => this.props.openFolder(e.uid)}
+                        trashFolder={() => this.props.trashFolder(e.uid)}
+                        downloadFolder={() =>
+                          LiveEndpoints.Folder.downloadFolder(e.uid)
+                        }
+                      />
+                    </Col>
+                  ) : (
+                    <Col xl={'3'} lg={'3'} md={'3'} key={i}>
+                      <FileCard
+                        key={i}
+                        fileName={e.name}
+                        fileId={e.uid}
+                        moveFile={() => this.props.editFile(e)}
+                        trashFile={() => this.props.trashFile(e.uid)}
+                        downloadFile={() =>
+                          LiveEndpoints.File.downloadFile(e.uid)
+                        }
+                      />
+                    </Col>
+                  )
+                }),
+                4
+              ).map((e, i) => (
+                <Row key={i}>{e}</Row>
+              ))}{' '}
+            </Container>
+          ) : null}
         </div>
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center' }} >
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center'
+          }}
+        >
           <LibraryPaginator />
         </div>
       </Fragment>
