@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styles from './library.module.scss'
 import { FileCard, FolderCard } from '../../components/Card'
+import { HomeIcon } from '../../components/Icon'
 import Pagination from '../../components/Pagination'
 import { Library as LibraryDuck, Modals as ModalsDuck } from '../../ducks'
 import { LiveEndpoints } from '../../api'
@@ -29,7 +30,7 @@ class Library extends Component {
     return (
       <Fragment>
         <div className={styles.libDiv}>
-          <span className={styles.pathSpan}>Browsing: ./{
+          <span className={styles.pathSpan}><HomeIcon onClick={() => this.props.setDisplayFolder()} /> Browsing: ./{
             this.props.displayFolder ? `${this.props.displayFolder.name}/` : ` (root)`}</span>
           {this.props.activePage
             ? this.props.activePage.map((e, i) => {
@@ -81,7 +82,8 @@ Library.propTypes = {
   currentPage: PropTypes.number,
   totalPages: PropTypes.number,
   setPage: PropTypes.func,
-  displayFolder: PropTypes.object
+  displayFolder: PropTypes.object,
+  setDisplayFolder: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -97,6 +99,7 @@ const mapDispatchToProps = dispatch => ({
   toggleOpenFolder: () => dispatch(toggleOpenFolder()),
   // openFolder: folder => dispatch(openFolder(folder)),
   openFolder: folder => dispatch(setDisplayFolder(folder)),
+  setDisplayFolder: folder => dispatch(setDisplayFolder(folder)),
   editFile: file => dispatch(editFile(file)),
   setPage: index => dispatch(setPage(index))
 })
