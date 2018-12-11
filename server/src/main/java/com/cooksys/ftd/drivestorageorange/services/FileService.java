@@ -1,7 +1,12 @@
 package com.cooksys.ftd.drivestorageorange.services;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,22 +38,55 @@ public class FileService {
 	 * @see FileDTO
 	 * @see MultipartFile
 	 */
-	public FileDTO uploadFile(String name, MultipartFile uploadFile) {
-		FileEntity uploadedFile = new FileEntity();
+	public List<FileDTO> uploadFiles(InputStream inputStream) {
+		try (ZipInputStream zipInputStream = new ZipInputStream(inputStream);) {
+			List<FileDTO> uploadedFiles = new ArrayList<>();
+			ZipEntry entry;
+			byte[] buffer = new byte[2048];
+			while((entry = zipInputStream.getNextEntry()) != null) {
+				FileEntity fileToUpload = new FileEntity();
+				ByteArrayOutputStream output = null;
 
-		uploadedFile.setName(name);
-
-		try {
-			uploadedFile.setData(uploadFile.getBytes());
-		} catch (IOException e) {
+				fileToUpload.setName(entry.getName());
+				
+				try {
+					output = new ByteArrayOutputStream();
+					int len = 0;
+					
+					while((len = zipInputStream.read(buffer)) > 0) {
+						output.write(buffer, 0, len);
+					}
+				}
+				finally {
+					fileToUpload.setData(output.toByteArray());
+					
+					if(output != null) {
+						output.close();
+					}
+				}
+				uploadedFiles.add(this.fileMapper.toDto(this.fileRepository.save(fileToUpload)));
+			}
+			
+			return uploadedFiles;
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
-
-		if (uploadedFile.getData() != null) {
-			return this.fileMapper.toDto(this.fileRepository.save(uploadedFile));
-		} else {
-			return null;
-		}
+//		FileEntity uploadedFile = new FileEntity();
+//
+//		uploadedFile.setName(name);
+//
+//		try {
+//			uploadedFile.setData(uploadFile.getBytes());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//
+//		if (uploadedFile.getData() != null) {
+//			return this.fileMapper.toDto(this.fileRepository.save(uploadedFile));
+//		} else {
+//			return null;
+//		}
+		return null;
 	}
 
 	/**
