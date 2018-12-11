@@ -45,6 +45,10 @@
 
 .navBtnSpace {
   margin: 8px 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100vw;
 }
 
 .navBarUpper {

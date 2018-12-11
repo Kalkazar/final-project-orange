@@ -6,6 +6,7 @@ import FolderNavButton from '../../components/FolderNavButton'
 import { Modals as ModalsDuck } from '../../ducks'
 import UploadButton from '../UploadButton'
 import { Collapse, Navbar, NavbarToggler, Nav } from 'reactstrap'
+import { HomeIcon, MoveIcon } from '../../components/Icon'
 
 export default class topNavBar extends Component {
   constructor (props) {
@@ -35,6 +36,8 @@ export default class topNavBar extends Component {
         <Navbar color='faded' className={styles.navBarSmol} light>
           <div className={styles.navBtnSpace} >
             <NavbarToggler onClick={this.toggleNavbar} className={'mr-2 '} />
+            <HomeIcon />
+            <MoveIcon />
           </div>
           <Collapse isOpen={!this.state.collapsed} navbar>
             <Nav navbar className={styles.navExtend}>
