@@ -369,7 +369,7 @@ export const restoreFolder = uid => (dispatch, getState) => {
   dispatch(removeFolder(folder))
   LiveEndpoints.Trash.restoreFolder(uid).then(({ data }) => {
     // dispatch(removefolder(data))
-    dispatch(Library.addFolder(data))
+    dispatch(Library.addFolders([data]))
   }).catch(err => {
     console.error(err)
     dispatch(addFolder(folder))
@@ -399,9 +399,8 @@ export const restoreAll = () => (dispatch, getState) => {
   LiveEndpoints.Trash.restoreAll()
     .then(({ data: { files, folders } }) => {
       dispatch(removeAll())
-      // files.forEach(e => dispatch(Library.addFile(e)))
       dispatch(Library.addFiles(files))
-      folders.forEach(e => dispatch(Library.addFolder(e)))
+      dispatch(Library.addFolders(folders))
     })
 }
 

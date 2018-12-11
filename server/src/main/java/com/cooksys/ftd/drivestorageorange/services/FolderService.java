@@ -10,7 +10,6 @@ import java.util.zip.ZipInputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
@@ -44,161 +43,57 @@ public class FolderService {
 	 * @see FolderDTO
 	 */
 	public FolderDTO createFolder(String name) {
-		FolderEntity uploadedFolder = new FolderEntity();
-		uploadedFolder.setName(name);
+		FolderEntity folder = new FolderEntity();
+		folder.setName(name);
 		
-		return toDto(saveFolder(uploadedFolder));
+		return toDto(saveFolder(folder));
 	}
 
 	/**
-	 * [NOT FULLY IMPLEMENTED] Uploads a folder and all files contained within,
-	 * and returns DTO of newly uploaded folder
-	 * @param name to assign uploaded folder
-	 * @param uploadFolder folder data uploaded
-	 * @return FolderDTO
-	 * @see FolderDTO
-	 * @see MultipartFile
+	 * Uploads a file and returns DTO of newly uploaded file
+	 * @param inputStream file data uploaded as a zip
+	 * @return List<FileDTO>
+	 * @see List<FileDTO>
+	 * @see InputStream
 	 */
-	public FolderDTO uploadFolder(MultipartFile uploadFolder) {
-		try(ZipInputStream zipInputStream = new ZipInputStream(uploadFolder.getInputStream());){
-//			File convFile = null;
-//			ZipFile zip = null;
-
-			System.out.println("\n");
-
-			FolderEntity container = null;
+	public FolderDTO uploadFolders(String folderName, InputStream inputStream) {
+		FolderEntity newFolder = new FolderEntity();
+		newFolder.setName(folderName);
+		saveFolder(newFolder);
+		newFolder = this.folderRepository.getByName(folderName).get(0);
+		
+		try (ZipInputStream zipInputStream = new ZipInputStream(inputStream);) {
 			ZipEntry entry;
+			byte[] buffer = new byte[2048];
 			while((entry = zipInputStream.getNextEntry()) != null) {
-				String[] path = entry.getName().split("/");
-				String entryName = path[path.length - 1];
-				
-				if(entry.isDirectory()) {
-					System.out.println("Creating folder:");
-					System.out.println(entryName);
-					
-					createFolder(entryName);
-					
-					if(container == null) {
-						container = this.folderRepository.getByName(entryName).get(0);
-					}
-//					if(convFile == null) {
-//						convFile = new File(entry.getName() + ".zip");
-//					    uploadFolder.transferTo(convFile);
-//					    zip = new ZipFile(convFile);
-//					}
-				} else {
-					System.out.println("Uploading File:");
-					System.out.println(entryName);
-					FileEntity file = new FileEntity();
-
-					file.setName(entryName);
-					if(container != null) {
-						file.setContainer(container);
-					}
-					ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-					byte[] data = new byte[(int) entry.getSize()];
-					int nRead;
-
-//					HALP PLS FIX
-//					while ((nRead = entry.read(data, 0, data.length)) != -1) {
-//					  buffer.write(data, 0, nRead);
-//					}
-//
-//					return buffer.toByteArray();
-					
-					return null;
-					
-//					if(zip != null) {
-//						ZipEntry entryZip = zip.getEntry(entry.getName());
-//						InputStream inputStream = zip.getInputStream(entryZip);
-//						byte[] bytes = new byte[(int) entryZip.getSize()];
-//						DataInputStream dis = new DataInputStream(inputStream);
-//						dis.readFully(bytes);
-//						file.setData(bytes);
-//					}
-					
-//					this.fileRepository.save(file);
-				}
-			}
-			
-			return toDto(container);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-//		System.out.println(folderZip);
-//		FolderEntity uploadedFolder = new FolderEntity();
-//		uploadedFolder.setName(name);
-//
-//		try {
-//			for(String fileName : uploadFolder.keySet()) {
-//				FileEntity uploadedFile = new FileEntity();
-//				uploadedFile.setData(uploadFolder.get(fileName).getBytes());
-//				
-//				if(uploadedFile.getData() != null) {
-//					this.fileRepository.save(uploadedFile);
-//				}
-//			}
-//			
-//			return toDto(saveFolder(uploadedFolder));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-
-		return null;
-	}
-	
-	/**
-	 * [CURRENTLY ONLY ONE LEVEL DEEP]
-	 * Accepts a zip file and creates a folder and contents from it
-	 * @param inputStream zip file
-	 * @return FolderDTO
-	 */
-	public FolderDTO uploadFolder(InputStream inputStream) {
-		FolderEntity uploadedFolder = new FolderEntity();
-		ZipInputStream zipInput = new ZipInputStream(inputStream);
-		byte[] buffer = new byte[2048];
-
-		try {
-			ZipEntry entry;
-			
-			// Depends on first entry being the "folder"
-			String uploadFolderName = zipInput.getNextEntry().getName().replaceAll("/", "");
-			
-			System.out.println(uploadFolderName);
-			
-			uploadedFolder.setName(uploadFolderName);
-			uploadedFolder = this.folderRepository.save(uploadedFolder);
-			
-			while((entry = zipInput.getNextEntry()) != null) {
-				
-				FileEntity uploadedFile = new FileEntity();
-				uploadedFile.setName(entry.getName().replaceAll(uploadFolderName + "/", ""));
-				uploadedFile.setContainer(uploadedFolder);
-				
+				FileEntity fileToUpload = new FileEntity();
 				ByteArrayOutputStream output = null;
+
+				fileToUpload.setName(entry.getName());
+				fileToUpload.setContainer(newFolder);
+				
 				try {
 					output = new ByteArrayOutputStream();
 					int len = 0;
-					while((len = zipInput.read(buffer)) > 0) {
+					
+					while((len = zipInputStream.read(buffer)) > 0) {
 						output.write(buffer, 0, len);
 					}
 				}
 				finally {
-					
-					uploadedFile.setData(output.toByteArray());
-					
-					this.fileRepository.save(uploadedFile);
+					fileToUpload.setData(output.toByteArray());
 					
 					if(output != null) {
 						output.close();
 					}
 				}
+				this.fileRepository.save(fileToUpload);
 			}
-			zipInput.close();
-			return this.getFolderWithContents(this.folderMapper.toDto(this.folderRepository.getOne(uploadedFolder.getUid())));
-		} catch(Exception e) {
-				System.out.println(e.getMessage());
-			}
+			
+			return toDto(newFolder);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
