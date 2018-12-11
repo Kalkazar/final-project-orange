@@ -54,11 +54,10 @@ export class SideNav extends Component {
 }
 
 SideNav.propTypes = {
-  changeView: PropTypes.func,
   uploadFolder: PropTypes.func,
   uploadFile: PropTypes.func,
-  verifyMethod: PropTypes.func,
-  toggleCreateFolder: PropTypes.func
+  verifyMethod: PropTypes.func.isRequired,
+  toggleCreateFolder: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({})

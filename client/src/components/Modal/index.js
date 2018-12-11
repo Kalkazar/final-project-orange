@@ -15,7 +15,11 @@ import {
   ListGroupItem
 } from 'reactstrap'
 import VerifyModal from './VerifyModal'
-import { Modals as ModalsDuck, Library as LibraryDuck } from '../../ducks'
+import {
+  Modals as ModalsDuck,
+  Library as LibraryDuck,
+  Trash as TrashDuck
+} from '../../ducks'
 
 const { 
   hideCreateFolderAction, 
@@ -27,6 +31,8 @@ const {
 } = ModalsDuck
 
 const { createNewFolder, renameFile, moveFile } = LibraryDuck
+
+const { restoreAll, deleteAll } = TrashDuck
 
 class Modals extends Component {
     componentDidUpdate(prevProps, prevState){
@@ -159,8 +165,20 @@ class Modals extends Component {
             confirmMethod={
               (() => {
                 switch (this.props.verifyMethod) {
-                  case VVM.RESTORE_ALL: return () => console.log('Fired restoreAll confirmMethod!')
-                  case VVM.DELETE_ALL: return () => console.log('Fired deleteAll confirmMethod!')
+                  case VVM.RESTORE_ALL: return () => {
+                    console.log('Fired restoreAll confirmMethod!')
+                    this.props.restoreAll()
+                    this.props.toggleVerify()
+                  }
+                  case VVM.DELETE_ALL: return () => {
+                    console.log('Fired deleteAll confirmMethod!')
+                    console.warn('deleteAll functions as intended, but is disabled for DB seed safety')
+
+                    // Disabled for DB seed safety
+                    // console.error('DISABLE THIS AFTER TESTING')
+                    // this.props.deleteAll()
+                    this.props.toggleVerify()
+                  }
                   default: return () => console.log('Fired default confirmMethod!')
                 }
               })()
@@ -180,25 +198,28 @@ class Modals extends Component {
 }
 
 Modals.propTypes = {
-  showCreateFolder: PropTypes.bool,
-  showOpenFolder: PropTypes.bool,
-  showEditFile: PropTypes.bool,
-  showVerify: PropTypes.bool,
+  showCreateFolder: PropTypes.bool.isRequired,
+  showOpenFolder: PropTypes.bool.isRequired,
+  showEditFile: PropTypes.bool.isRequired,
+  showVerify: PropTypes.bool.isRequired,
 
   hideCreateFolder: PropTypes.func,
 
-  toggleCreateFolder: PropTypes.func,
-  toggleEditFile: PropTypes.func,
-  toggleOpenFolder: PropTypes.func,
-  toggleVerify: PropTypes.func,
+  toggleCreateFolder: PropTypes.func.isRequired,
+  toggleEditFile: PropTypes.func.isRequired,
+  toggleOpenFolder: PropTypes.func.isRequired,
+  toggleVerify: PropTypes.func.isRequired,
+
+  restoreAll: PropTypes.func.isRequired,
+  deleteAll: PropTypes.func.isRequired,
   
   verifyMethod: PropTypes.string,
   createNewFolder: PropTypes.func,
   targetFolder: PropTypes.object,
   targetFile: PropTypes.object,
   folderList: PropTypes.array,
-  renameFile: PropTypes.func,
-  moveFile: PropTypes.func
+  renameFile: PropTypes.func.isRequired,
+  moveFile: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -220,6 +241,9 @@ const mapDispatchToProps = dispatch => ({
   toggleEditFile: () => dispatch(toggleEditFile()),
   toggleOpenFolder: () => dispatch(toggleOpenFolder()),
   toggleVerify: () => dispatch(toggleVerify()),
+
+  restoreAll: () => dispatch(restoreAll()),
+  deleteAll: () => dispatch(deleteAll()),
 
   createNewFolder: folderName => dispatch(createNewFolder(folderName)),
   renameFile: (uid, newName) => dispatch(renameFile(uid, newName)),
