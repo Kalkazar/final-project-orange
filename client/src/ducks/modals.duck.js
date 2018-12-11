@@ -44,6 +44,31 @@ export const HIDE_OPEN_FOLDER = 'drivestorage/modals/HIDE_OPEN_FOLDER'
 export const HIDE_EDIT_FILE = 'drivestorage/modals/HIDE_EDIT_FILE'
 
 /**
+ * Show the "Are you sure?" modal
+ */
+export const SHOW_VERIFICATION = 'drivestorage/modals/SHOW_VERIFICATION'
+
+/**
+ * Hide the "Are you sure?" modal
+ */
+export const HIDE_VERIFICATION = 'drivestorage/modals/HIDE_VERIFICATION'
+
+// /**
+//  * Show the file editing modal <- Unnecessary??!?
+//  */
+// export const SHOW_ALL = 'drivestorage/modals/SHOW_EDIT_FILE'
+
+/**
+ * Hides all modals
+ */
+export const HIDE_ALL = 'drivestorage/modals/HIDE_ALL'
+
+/**
+ * Sets the type of action that the verify modal is verifying
+ */
+export const SET_VERIFYING_METHOD = 'drivestorage/modals/SET_VERIFYING_METHOD'
+
+/**
  * Sets the folder to explore
  */
 export const SET_OPENING_FOLDER = 'drivestorage/modals/SET_OPENING_FOLDER'
@@ -52,6 +77,15 @@ export const SET_OPENING_FOLDER = 'drivestorage/modals/SET_OPENING_FOLDER'
  * Sets the file to edit
  */
 export const SET_EDITING_FILE = 'drivestorage/modals/SET_EDITING_FILE'
+
+/**
+ * All valid methods for verification operations
+ */
+export const validVerificationMethods = {
+  DELETE_ALL: 'DELETE_ALL',
+  RESTORE_ALL: 'RESTORE_ALL',
+  DEFAULT: 'DEFAULT'
+}
 
 /**
  * @type {ModalState}
@@ -67,6 +101,10 @@ const initialState = {
   openFolder: {
     show: false,
     targetFolder: null
+  },
+  verify: {
+    show: false,
+    method: ''
   }
 }
 
@@ -80,6 +118,9 @@ const initialState = {
  * @property {Object} openFolder
  * @property {Boolean} openFolder.show
  * @property {FolderResponse} openFolder.targetFolder
+ * @property {Object} verify
+ * @property {Boolean} verify.show
+ * @property {String} verify.method
  */
 
 /**
@@ -105,6 +146,16 @@ export default function config (state = initialState, action) {
       newState.editFile.show = true
       return newState
     }
+    case SHOW_VERIFICATION: {
+      const newState = ({ ...state })
+      newState.verify.show = true
+      return newState
+    }
+    case HIDE_VERIFICATION: {
+      const newState = ({ ...state })
+      newState.verify.show = false
+      return newState
+    }
     case HIDE_CREATE_FOLDER: {
       const newState = ({ ...state })
       newState.createFolder.show = false
@@ -120,6 +171,11 @@ export default function config (state = initialState, action) {
       newState.openFolder.show = false
       return newState
     }
+    case HIDE_ALL: {
+      const newState = Object.keys(state)
+        .reduce((acc, curr) => ({ ...acc, [curr]: { ...state[curr], show: false } }), ({ ...state }))
+      return newState
+    }
     case SET_EDITING_FILE: {
       const newState = ({ ...state })
       newState.editFile.targetFile = action.payload
@@ -128,6 +184,11 @@ export default function config (state = initialState, action) {
     case SET_OPENING_FOLDER: {
       const newState = ({ ...state })
       newState.openFolder.targetFolder = action.payload
+      return newState
+    }
+    case SET_VERIFYING_METHOD: {
+      const newState = ({ ...state })
+      newState.verify.method = action.payload
       return newState
     }
     default:
@@ -184,6 +245,14 @@ export const hideEditFileAction = () => ({
 })
 
 /**
+ * Hides all modals
+ * @returns {ReduxAction}
+ */
+export const hideAllAction = () => ({
+  type: HIDE_ALL
+})
+
+/**
  * Sets the file to edit with the edit file modal
  * @param {FileResponse} file
  * @returns {ReduxAction}
@@ -204,13 +273,43 @@ export const setOpeningFolderAction = folder => ({
 })
 
 /**
+ * Shows the verification modal
+ * @returns {ReduxAction}
+ */
+export const showVerifyAction = () => ({
+  type: SHOW_VERIFICATION
+})
+
+/**
+ * Hides the verification modal
+ * @returns {ReduxAction}
+ */
+export const hideVerifyAction = () => ({
+  type: HIDE_VERIFICATION
+})
+
+/**
+ * Sets the type/method of operation that the verification modal is verifying
+ * @param {String} method
+ * @returns {ReduxAction}
+ */
+export const setVerifyingMethodAction = method => ({
+  type: SET_VERIFYING_METHOD,
+  payload: method
+})
+
+/**
+ * Hides all modals
+ */
+export const hideAll = () => dispatch => dispatch(hideAllAction())
+
+/**
  * Toggles createFolder modal and closes other modals
  */
 export const toggleCreateFolder = () => (dispatch, getState) => {
   const { createFolder: { show } } = getState().modals
 
-  dispatch(hideEditFileAction())
-  dispatch(hideOpenFolderAction())
+  dispatch(hideAll())
 
   show ? dispatch(hideCreateFolderAction()) : dispatch(showCreateFolderAction())
 }
@@ -221,8 +320,7 @@ export const toggleCreateFolder = () => (dispatch, getState) => {
 export const toggleOpenFolder = () => (dispatch, getState) => {
   const { openFolder: { show } } = getState().modals
 
-  dispatch(hideEditFileAction())
-  dispatch(hideCreateFolderAction())
+  dispatch(hideAll())
 
   show ? dispatch(hideOpenFolderAction()) : dispatch(showOpenFolderAction())
 }
@@ -233,10 +331,20 @@ export const toggleOpenFolder = () => (dispatch, getState) => {
 export const toggleEditFile = () => (dispatch, getState) => {
   const { editFile: { show } } = getState().modals
 
-  dispatch(hideCreateFolderAction())
-  dispatch(hideOpenFolderAction())
+  dispatch(hideAll())
 
   show ? dispatch(hideEditFileAction()) : dispatch(showEditFileAction())
+}
+
+/**
+ * Toggles editFile modal and closes other modals
+ */
+export const toggleVerify = () => (dispatch, getState) => {
+  const { verify: { show } } = getState().modals
+
+  dispatch(hideAll())
+
+  show ? dispatch(hideVerifyAction()) : dispatch(showVerifyAction())
 }
 
 /**
@@ -255,4 +363,27 @@ export const openFolder = folder => (dispatch, getState) => {
 export const editFile = file => (dispatch, getState) => {
   dispatch(setEditingFileAction(file))
   dispatch(showEditFileAction())
+}
+
+/**
+ * Sets method for verification modal
+ * @param {String} method Method to set for verification operation
+ */
+export const setVerificationMethod = (method = validVerificationMethods.DEFAULT) => dispatch => {
+  if (Object.keys(validVerificationMethods).includes(method)) {
+    dispatch(setVerifyingMethodAction(method))
+  } else {
+    console.error(`Unable to set invalid verification type: ${method}`)
+    dispatch(setVerifyingMethodAction(validVerificationMethods.DEFAULT))
+  }
+}
+
+/**
+ * Sets the verification method, and then opens the verification modal
+ * @param {String} [method] Method of action to verify
+ */
+export const verifyMethod = (method = '') => dispatch => {
+  dispatch(setVerificationMethod(method))
+  dispatch(hideAllAction())
+  dispatch(showVerifyAction())
 }

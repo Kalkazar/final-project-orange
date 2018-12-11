@@ -253,7 +253,7 @@ export const addFolder = folder => dispatch => {
 }
 
 /**
- * Removes a file
+ * Removes a file from state
  * @param {FileResponse} file File to remove
  */
 export const removeFile = file => dispatch => {
@@ -263,13 +263,22 @@ export const removeFile = file => dispatch => {
 }
 
 /**
- * Removes a folder
+ * Removes a folder from state
  * @param {FolderResponse} folder Folder to remove
  */
 export const removeFolder = folder => dispatch => {
   dispatch(removeFolderAction(folder))
   dispatch(updateCurrentListAction())
   dispatch(updateTotalPagesAction())
+}
+
+/**
+ * Removes all files and folders from state
+ */
+export const removeAll = () => (dispatch, getState) => {
+  const { fileList: files, folderList: folders } = getState().trash
+  files.forEach(e => dispatch(removeFile(e)))
+  folders.forEach(e => dispatch(removeFolder(e)))
 }
 
 /**
@@ -381,4 +390,24 @@ export const deleteFolder = uid => (dispatch, getState) => {
     console.error(err)
     dispatch(addFolder(folder))
   })
+}
+
+/**
+ * Restores all trashbinned items back to the library
+ */
+export const restoreAll = () => (dispatch, getState) => {
+  LiveEndpoints.Trash.restoreAll()
+    .then(({ data: { files, folders } }) => {
+      dispatch(removeAll())
+      files.forEach(e => dispatch(Library.addFile(e)))
+      folders.forEach(e => dispatch(Library.addFolder(e)))
+    })
+}
+
+/**
+ * PERMANENTLY DELETES all trashbinned items
+ */
+export const deleteAll = () => (dispatch, getState) => {
+  LiveEndpoints.Trash.deleteAll()
+    .then(({ data }) => dispatch(removeAll()))
 }
