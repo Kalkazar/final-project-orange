@@ -89,8 +89,8 @@
 //file and folder card body
 .cardHolder {
   display: flex;
-  width: 210pt;
-  height: 150pt;
+  width: 200pt;
+  height: 140pt;
   flex-direction: column;
   box-shadow: 3px 3px;
   border-radius: 5px;
@@ -102,6 +102,7 @@
   // background-image: linear-gradient(top ,rgb(29, 92, 95), rgb(19, 135, 141));
   // background-color: #296C70;
   // color: rgb(194, 188, 188);
+  // margin-top: 20px;
 
 }
 
