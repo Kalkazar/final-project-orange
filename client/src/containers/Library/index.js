@@ -33,8 +33,8 @@ class Library extends Component {
     return (
       <Fragment>
         <div className={styles.libDiv}>
-          <HomeIcon className={'d-none d-lg-block'} onClick={() => this.props.openFolder()} />
-          <span className={styles.pathSpan + ' d-none d-lg-block'}>
+          <HomeIcon className={'d-none d-sm-block'} onClick={() => this.props.openFolder()} />
+          <span className={styles.pathSpan + ' d-none d-sm-block'}>
             {' '}
             Browsing: ./
             {this.props.displayFolder
