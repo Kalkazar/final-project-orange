@@ -126,37 +126,40 @@ export const changeView = view => (dispatch, getState) =>
  */
 export const initData = () => dispatch => {
   // New implementation
-  LiveEndpoints.File.getAllFiles().then(({ data: allFiles }) => {
-    allFiles = allFiles.map(e => e.hasOwnProperty('containerId') ? e : ({ ...e, containerId: null }))
-    LiveEndpoints.Folder.getAllFolders().then(({ data: allFolders }) => {
-      const populatedFolders = allFolders.map(folder => ({
-        ...folder,
-        filesContained: allFiles.filter(file => file.containerId === folder.uid)
-          .map(e => ({ ...e, inTrash: folder.inTrash }))
-      }))
+  // LiveEndpoints.File.getAllFiles().then(({ data: allFiles }) => {
+  //   allFiles = allFiles.map(e => e.hasOwnProperty('containerId') ? e : ({ ...e, containerId: null }))
+  //   LiveEndpoints.Folder.getAllFolders().then(({ data: allFolders }) => {
 
-      dispatch(Library.loadFolders(populatedFolders.filter(e => (!e.inTrash))))
-      dispatch(Trash.loadFolders(populatedFolders.filter(e => (e.inTrash))))
+  //     console.log(allFolders)
 
-      dispatch(Library.loadFiles(allFiles.filter(e => (!e.inTrash && !e.containerId))))
-      dispatch(Trash.loadFiles(allFiles.filter(e => (e.inTrash && !e.containerId))))
-    })
-  })
-  
+  //     const populatedFolders = allFolders.map(folder => ({
+  //       ...folder,
+  //       filesContained: allFiles.filter(file => file.containerId === folder.uid)
+  //         .map(e => ({ ...e, inTrash: folder.inTrash }))
+  //     }))
+
+  //     dispatch(Library.loadFolders(populatedFolders.filter(e => (!e.inTrash))))
+  //     dispatch(Trash.loadFolders(populatedFolders.filter(e => (e.inTrash))))
+
+  //     dispatch(Library.loadFiles(allFiles.filter(e => (!e.inTrash && !e.containerId))))
+  //     dispatch(Trash.loadFiles(allFiles.filter(e => (e.inTrash && !e.containerId))))
+  //   })
+  // })
+
   // Old Implementation - Trying to account for FolderResponse structural changes
-  // LiveEndpoints.File.getAllFiles().then(({ data }) => {
-  //   const libFiles = data.filter(e => e.inTrash === false)
-  //   const trashFiles = data.filter(e => e.inTrash === true)
+  LiveEndpoints.File.getAllFiles().then(({ data }) => {
+    const libFiles = data.filter(e => e.inTrash === false && !e.containerId)
+    const trashFiles = data.filter(e => e.inTrash === true && !e.containerId)
 
-  //   dispatch(Library.loadFiles(libFiles))
-  //   dispatch(Trash.loadFiles(trashFiles))
-  // })
+    dispatch(Library.loadFiles(libFiles))
+    dispatch(Trash.loadFiles(trashFiles))
+  })
 
-  // LiveEndpoints.Folder.getAllFolders().then(({ data }) => {
-  //   const libFolders = data.filter(e => e.inTrash === false)
-  //   const trashFolders = data.filter(e => e.inTrash === true)
+  LiveEndpoints.Folder.getAllFolders().then(({ data }) => {
+    const libFolders = data.filter(e => e.inTrash === false)
+    const trashFolders = data.filter(e => e.inTrash === true)
 
-  //   dispatch(Library.loadFolders(libFolders))
-  //   dispatch(Trash.loadFolders(trashFolders))
-  // })
+    dispatch(Library.loadFolders(libFolders))
+    dispatch(Trash.loadFolders(trashFolders))
+  })
 }
