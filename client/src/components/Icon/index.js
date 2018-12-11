@@ -79,4 +79,12 @@ export const MoveIcon = props => (
   />
 )
 
+export const HomeIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-home'}
+    wrapper={styles.cardIcon}
+  />
+)
+
 export default Icon
