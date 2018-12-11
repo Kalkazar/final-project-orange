@@ -12,7 +12,7 @@ import { Library, Trash } from './'
 /**
  * Max number of file cards to display per page
  */
-export const FILES_PER_PAGE = 9
+export const FILES_PER_PAGE = 12
 
 /**
  * Changes the current page
