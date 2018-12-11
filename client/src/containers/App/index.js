@@ -9,15 +9,20 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Modal from '../../components/Modal'
 import TopNavBar from '../TopNavBar'
+import SplashPage from '../SplashPage'
 
 class App extends Component {
   render () {
     return (
       <div className={styles['container-fluid']}>
-        <SideNav />
         <TopNavBar />
+        <Switch>
+          <Route exact path='/library' component={SideNav} />
+          <Route exact path='/trash' component={SideNav} />
+        </Switch>
         <div className={styles['content-box']}>
           <Switch>
+            <Route exact path='/' component={SplashPage} />
             <Route exact path='/library' component={Library} />
             <Route exact path='/trash' component={Trash} />
             <Route path='/*' render={() => <Redirect to={'/library'} />} />
