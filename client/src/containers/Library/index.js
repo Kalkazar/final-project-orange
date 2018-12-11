@@ -7,6 +7,8 @@ import { HomeIcon } from '../../components/Icon'
 import Pagination from '../../components/Pagination'
 import { Library as LibraryDuck, Modals as ModalsDuck } from '../../ducks'
 import { LiveEndpoints } from '../../api'
+import { groupArray } from '../../helpers/util'
+import { Container, Row, Col } from 'reactstrap'
 
 const { trashFile, trashFolder, setPage, setDisplayFolder } = LibraryDuck
 const { toggleOpenFolder, openFolder, editFile } = ModalsDuck
@@ -39,30 +41,34 @@ class Library extends Component {
               : ` (root)`}
           </span>
           {this.props.activePage
-            ? this.props.activePage.map((e, i) => {
+            ? <Container> {groupArray(this.props.activePage.map((e, i) => {
               return e.isFolder ? (
-                <FolderCard
-                  key={i}
-                  folderName={e.name}
-                  folderId={e.uid}
-                  // openFolder={() => this.props.openFolder(e)}
-                  openFolder={() => this.props.openFolder(e.uid)}
-                  trashFolder={() => this.props.trashFolder(e.uid)}
-                  downloadFolder={() =>
-                    LiveEndpoints.Folder.downloadFolder(e.uid)
-                  }
-                />
+                <Col xl={'3'} lg={'3'} md={'3'} >
+                  <FolderCard
+                    key={i}
+                    folderName={e.name}
+                    folderId={e.uid}
+                    // openFolder={() => this.props.openFolder(e)}
+                    openFolder={() => this.props.openFolder(e.uid)}
+                    trashFolder={() => this.props.trashFolder(e.uid)}
+                    downloadFolder={() =>
+                      LiveEndpoints.Folder.downloadFolder(e.uid)
+                    }
+                  />
+                </Col>
               ) : (
-                <FileCard
-                  key={i}
-                  fileName={e.name}
-                  fileId={e.uid}
-                  moveFile={() => this.props.editFile(e)}
-                  trashFile={() => this.props.trashFile(e.uid)}
-                  downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
-                />
+                <Col xl={'3'} lg={'3'} md={'3'} >
+                  <FileCard
+                    key={i}
+                    fileName={e.name}
+                    fileId={e.uid}
+                    moveFile={() => this.props.editFile(e)}
+                    trashFile={() => this.props.trashFile(e.uid)}
+                    downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
+                  />
+                </Col>
               )
-            })
+            }), 4).map(e => (<Row>{e}</Row>))} </Container>
             : null}
         </div>
         <LibraryPaginator />
