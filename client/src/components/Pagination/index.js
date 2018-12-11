@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
+import styles from './pagination.module.scss'
 
 class Pagination extends Component {
   render () {
     return (
-      <Fragment>
+      <div className={styles.paginatorContainer} >
         <nav>
           <ul className='pagination'>
             {new Array(this.props.totalPages).fill(0).map((e, i) => i + 1).map((page, index) => {
@@ -27,7 +28,7 @@ class Pagination extends Component {
             })}
           </ul>
         </nav>
-      </Fragment>
+      </div>
     )
   }
 }

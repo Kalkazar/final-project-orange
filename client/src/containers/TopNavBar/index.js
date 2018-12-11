@@ -32,8 +32,10 @@ export default class topNavBar extends Component {
 
     return (
       <div className={styles.topNav}>
-        <Navbar color='faded' light>
-          <NavbarToggler onClick={this.toggleNavbar} className='mr-2' />
+        <Navbar color='faded' className={styles.navBarSmol} light>
+          <div className={styles.navBtnSpace} >
+            <NavbarToggler onClick={this.toggleNavbar} className={'mr-2 '} />
+          </div>
           <Collapse isOpen={!this.state.collapsed} navbar>
             <Nav navbar className={styles.navExtend}>
               <NavButton text='Library' route='/library' />
