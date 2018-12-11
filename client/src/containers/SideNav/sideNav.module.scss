@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  border-right: 3px solid black;
+  border-right: 2px solid black;
   // background-color: rgb(63, 59, 59);
   // background-image: linear-gradient(top, rgb(63, 59, 59), rgb(119, 117, 113));
   background-color: transparent;
@@ -15,3 +15,32 @@
 .navDiv > * {
   margin: 5px 0px;
 }
+
+// .menuIcon {
+//   display: none;
+// }
+
+@media (max-width: 790px) {
+  .navDiv {
+    display: none;
+  }
+}
+//   .menuIcon {
+//     display: flex;
+//     flex: start;
+//     margin: 5px;
+//   }
+//   .active {
+//     .navDiv {
+//       display: flex;
+//       flex-direction: column;
+//       align-items: center;
+//       justify-content: space-evenly;
+//       border-right: 2px solid rgb(30, 68, 104);
+//       background-color: rgb(30, 68, 104);
+//       padding: 5px;
+//       height: 100%;
+//       width: 50%;
+//     }
+//   }
+// }
