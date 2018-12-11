@@ -142,7 +142,9 @@ export default function config (state = initialState, action) {
     case UPDATE_TOTAL_PAGES:
       return {
         ...state,
-        totalPages: Math.ceil((state.folderList.length + state.fileList.length) / FILES_PER_PAGE)
+        totalPages: state.displayFolder === null
+          ? Math.ceil((state.folderList.length + state.fileList.length) / FILES_PER_PAGE)
+          : Math.ceil((0.0001 + state.displayFolder.filesContained.length) / FILES_PER_PAGE)
       }
     case UPDATE_DISPLAY_FOLDER:
       return {
@@ -223,7 +225,7 @@ export const updateCurrentListAction = () => ({
 })
 
 /**
- * Removes a folder from folderList
+ * Sets page of results to display
  * @param {Number} page Index of results to show
  * @returns {ReduxAction}
  */
@@ -233,7 +235,7 @@ export const updateCurrentPageAction = page => ({
 })
 
 /**
-* Removes a folder from folderList
+* Updates number of total pages of results
 * @returns {ReduxAction}
 */
 export const updateTotalPagesAction = () => ({
@@ -289,28 +291,48 @@ export const loadFolders = folders => dispatch => {
 }
 
 /**
- * Adds a file
+ * Adds a file to state
  * @param {FileResponse} file File to add
  */
 export const addFile = file => dispatch => {
+  dispatch(addFileAction(file))
+  dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
+}
+
+/**
+ * Adds a folder to state
+ * @param {FolderResponse} folder Folder to add
+ */
+export const addFolder = folder => dispatch => {
+  dispatch(addFolderAction(folder))
+  dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
+}
+
+/**
+ * Uploads a file
+ * @param {FileResponse} file File to add
+ */
+export const uploadFile = file => dispatch => {
   LiveEndpoints.File.uploadFile(file).then(({ data }) => {
-    dispatch(addFileAction(data))
-    dispatch(updateCurrentListAction())
-    dispatch(updateTotalPagesAction())
+    dispatch(addFile(data))
+    // dispatch(updateCurrentListAction())
+    // dispatch(updateTotalPagesAction())
   }).catch(err => {
     console.error(err)
   })
 }
 
 /**
- * Adds a folder
+ * Uploads a folder
  * @param {FolderResponse} folder Folder to add
  */
-export const addFolder = folder => dispatch => {
+export const uploadFolder = folder => dispatch => {
   LiveEndpoints.Folder.uploadFolder(folder).then(({ data }) => {
-    dispatch(addFolderAction(data))
-    dispatch(updateCurrentListAction())
-    dispatch(updateTotalPagesAction())
+    dispatch(addFolder(data))
+    // dispatch(updateCurrentListAction())
+    // dispatch(updateTotalPagesAction())
     console.log(data)
   }).catch(err => {
     console.error(err)
@@ -325,6 +347,7 @@ export const removeFile = file => dispatch => {
   dispatch(removeFileAction(file))
   dispatch(updateCurrentListAction())
   dispatch(updateTotalPagesAction())
+  dispatch(checkBackPage())
 }
 
 /**
@@ -335,6 +358,7 @@ export const removeFolder = folder => dispatch => {
   dispatch(removeFolderAction(folder))
   dispatch(updateCurrentListAction())
   dispatch(updateTotalPagesAction())
+  dispatch(checkBackPage())
 }
 
 /**
@@ -355,7 +379,6 @@ export const setPage = index => (dispatch, getState) => {
   const { totalPages } = getState().library
 
   if (index >= 0 && index < totalPages) {
-    dispatch(updateCurrentPageAction(index))
     dispatch(updateCurrentPageAction(index))
     dispatch(updateCurrentListAction())
   } else {
@@ -476,5 +499,18 @@ export const setDisplayFolder = (folderUid = null) => (dispatch, getState) => {
     dispatch(updateDisplayFolderAction())
     dispatch(updateCurrentListAction())
     dispatch(updateTotalPagesAction())
+  }
+}
+
+/**
+ * Navigates to the previous page of results, when a page is empty, if appropriate
+ */
+export const checkBackPage = () => (dispatch, getState) => {
+  const { currentList, currentPage, displayFolder } = getState().library
+
+  if (currentList.length === 0 && currentPage > 0) {
+    dispatch(setPage(currentPage - 1))
+  } else if (currentList.length === 0 && currentPage === 0 && displayFolder) {
+    dispatch(setDisplayFolder())
   }
 }
