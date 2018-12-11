@@ -12,7 +12,7 @@ import { Trash, Modals } from './'
 /**
  * Add file to state
  */
-export const ADD_FILE = 'drivestorage/library/ADD_FILE'
+export const ADD_FILES = 'drivestorage/library/ADD_FILE'
 
 /**
  * Edit file in state
@@ -93,10 +93,11 @@ const initialState = {
  */
 export default function config (state = initialState, action) {
   switch (action.type) {
-    case ADD_FILE:
+    case ADD_FILES:
+    case LOAD_FILES:
       return {
         ...state,
-        fileList: [...state.fileList, ({ ...action.payload, isFolder: false })]
+        fileList: [...state.fileList, ...action.payload]
       }
     case EDIT_FILE:
       return {
@@ -151,11 +152,6 @@ export default function config (state = initialState, action) {
         ...state,
         displayFolder: action.payload
       }
-    case LOAD_FILES:
-      return {
-        ...state,
-        fileList: [...state.fileList, ...action.payload]
-      }
     case LOAD_FOLDERS:
       return {
         ...state,
@@ -167,13 +163,13 @@ export default function config (state = initialState, action) {
 }
 
 /**
- * Adds a file to fileList
- * @param {FileResponse} file File to add
+ * Adds one or more files to fileList
+ * @param {FileResponse} files Files to add
  * @returns {ReduxAction}
  */
-export const addFileAction = file => ({
-  type: ADD_FILE,
-  payload: file
+export const addFilesAction = files => ({
+  type: ADD_FILES,
+  payload: files
 })
 
 /**
@@ -253,7 +249,7 @@ export const updateDisplayFolderAction = (folder = null) => ({
 })
 
 /**
-* Adds files into fileList
+* Initializes fileList with loaded files
 * @returns {ReduxAction}
 */
 export const loadFilesAction = files => ({
@@ -291,11 +287,11 @@ export const loadFolders = folders => dispatch => {
 }
 
 /**
- * Adds a file to state
+ * Adds one or more files to state
  * @param {FileResponse} file File to add
  */
-export const addFile = file => dispatch => {
-  dispatch(addFileAction(file))
+export const addFiles = files => dispatch => {
+  dispatch(addFilesAction(files.map(e => ({ ...e, isFolder: false }))))
   dispatch(updateCurrentListAction())
   dispatch(updateTotalPagesAction())
 }
@@ -311,17 +307,16 @@ export const addFolder = folder => dispatch => {
 }
 
 /**
- * Uploads a file
- * @param {FileResponse} file File to add
+ * Uploads one or more files
+ * @param {FileResponse} files Files to add
  */
-export const uploadFile = file => dispatch => {
-  LiveEndpoints.File.uploadFile(file).then(({ data }) => {
-    dispatch(addFile(data))
-    // dispatch(updateCurrentListAction())
-    // dispatch(updateTotalPagesAction())
-  }).catch(err => {
-    console.error(err)
-  })
+export const uploadFiles = files => dispatch => {
+  LiveEndpoints.File.uploadFiles(files)
+    .then(({ data }) => {
+      dispatch(addFiles(data))
+    }).catch(err => {
+      console.error(err)
+    })
 }
 
 /**
@@ -447,7 +442,7 @@ export const trashFile = uid => (dispatch, getState) => {
     dispatch(Trash.addFile(data))
   }).catch(err => {
     console.error(err)
-    dispatch(addFile(file))
+    dispatch(addFiles([file]))
   })
 }
 

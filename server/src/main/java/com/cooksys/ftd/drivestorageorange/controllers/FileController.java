@@ -1,6 +1,7 @@
 package com.cooksys.ftd.drivestorageorange.controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -11,11 +12,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FileDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
@@ -33,12 +32,12 @@ public class FileController {
 	 * 
 	 * @return uid of newly uploaded file
 	 */
-	@PostMapping("")
-	public FileDTO uploadFile(@RequestParam("name") String name, @RequestParam("file") MultipartFile uploadFile) {
-		FileDTO newUpload = this.fileService.uploadFile(name, uploadFile);
+	@RequestMapping(value = "", method = RequestMethod.POST, consumes = "application/zip")
+	public List<FileDTO> uploadFiles(InputStream inputStream) {
+		List<FileDTO> uploadedFiles = this.fileService.uploadFiles(inputStream);
 
-		if (newUpload != null) {
-			return newUpload;
+		if (uploadedFiles.size() >= 1) {
+			return uploadedFiles;
 		}
 		return null;
 	}

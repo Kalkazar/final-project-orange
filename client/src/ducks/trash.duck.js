@@ -118,12 +118,12 @@ export default function config (state = initialState, action) {
     case LOAD_FILES:
       return {
         ...state,
-        fileList: [ ...state.fileList, ...action.payload ]
+        fileList: [...state.fileList, ...action.payload]
       }
     case LOAD_FOLDERS:
       return {
         ...state,
-        folderList: [ ...state.folderList, ...action.payload ]
+        folderList: [...state.folderList, ...action.payload]
       }
     default:
       return state
@@ -337,7 +337,7 @@ export const restoreFile = uid => (dispatch, getState) => {
   dispatch(removeFile(file))
   LiveEndpoints.Trash.restoreFile(uid).then(({ data }) => {
     // dispatch(removeFile(data))
-    dispatch(Library.addFile(data))
+    dispatch(Library.addFiles([data]))
   }).catch(err => {
     console.error(err)
     dispatch(addFile(file))
@@ -399,7 +399,8 @@ export const restoreAll = () => (dispatch, getState) => {
   LiveEndpoints.Trash.restoreAll()
     .then(({ data: { files, folders } }) => {
       dispatch(removeAll())
-      files.forEach(e => dispatch(Library.addFile(e)))
+      // files.forEach(e => dispatch(Library.addFile(e)))
+      dispatch(Library.addFiles(files))
       folders.forEach(e => dispatch(Library.addFolder(e)))
     })
 }
