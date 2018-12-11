@@ -6,7 +6,7 @@ import styles from './uploadButton.module.scss'
 import { fromEvent } from 'file-selector'
 import JSZip from 'jszip'
 
-import { addFile } from '../../ducks/library.duck'
+import { addFile, addFolder } from '../../ducks/library.duck'
 
 /**
  *
@@ -25,15 +25,33 @@ class UploadButton extends Component {
     // Likely the best way is to create a zip in the api and send that.
     // let zip = new JSZip();
     // files.forEach(file => {
-    //   const filePath = file.path.split('/').slice(1)
-    //   if (filePath.length === 1) {
-    //     zip.file(file.name, file)
+    // const filePath = file.path.split('/').slice(1)
+    // if (filePath.length === 1) {
+    //   zip.file(file.name, file)
+    // }
+    // else {
+    // const nestedPath = filePath.slice(1, filePath.length - 1)
+    // let bottomFolder
+    // nestedPath.forEach((folder, index) => {
+    //   if (index === 0) {
+    //     bottomFolder = zip.folder(folder)
     //   } else {
-    //     filePath.slice(0, filePath.length - 1)
+    //     bottomFolder = bottomFolder.folder(nestedPath[index - 1])
     //   }
-    //   console.log(zip)
     // })
-    // addFile(files[0])
+
+    // bottomFolder.file(file.name, file)
+    // const [folderName] = filePath
+    // console.log(folderName)
+    // console.log(file)
+    // zip.folder(folderName).file(file.name, file)
+    // }
+    //   zip.file(file.path, file)
+    // })
+    // zip.generateAsync({ type: "blob" })
+    //   .then(folder => {
+    //     this.props.addFolder(folder)
+    //   })
     this.props.addFile(files[0])
   }
 
@@ -55,13 +73,15 @@ class UploadButton extends Component {
 }
 
 UploadButton.propTypes = {
-  addFile: PropTypes.func.isRequired
+  addFile: PropTypes.func.isRequired,
+  addFolder: PropTypes.func.isRequired
 }
 
 const mapStateToProps = () => ({})
 
 const mapDispatchToProps = dispatch => ({
-  addFile: file => dispatch(addFile(file))
+  addFile: file => dispatch(addFile(file)),
+  addFolder: folder => dispatch(addFolder(folder))
 })
 
 export default connect(

@@ -17,6 +17,18 @@
  */
 
 /**
+ * @typedef LibraryState
+ * @property {FileResponse[]} fileList List of all files in trash (outside of folders?)
+ * @property {FolderResponse[]} folderList List of all folders in trash
+ * @property {Array<FileResponse|FolderResponse>} currentList List of items to be displayed
+ * @property {Array<FileResponse|FolderResponse>} displayItems List of items to be displayed
+ * @property {Number} currentPage Page of results to display
+ * @property {Number} totalPages Total number of pages of results
+ * @property {Boolean} foldersLoaded
+ * @property {FolderResponse} displayFolder Folder contents currently being viewed
+ */
+
+/**
  * @typedef ReduxAction
  * @property {String} type
  * @property {Any} payload

@@ -2,10 +2,9 @@
  * @typedef {import('../helpers/types').FileResponse} FileResponse
  * @typedef {import('../helpers/types').FolderResponse} FolderResponse
  * @typedef {import('../helpers/types').ViewState} LibraryState
- * @typedef {import('axios').AxiosPromise} AxiosPromise
  */
 
-import Axios from 'axios'
+import Axios, { AxiosPromise } from 'axios'
 
 /**
  * Upload a new file
@@ -79,7 +78,7 @@ const renameFile = (uid, newName) =>
  * @param {Number} [folderUid] UID of destination folder.  Moves the file to root if undefined
  * @returns {AxiosPromise<FileResponse>}
  */
-const moveFile = (fileUid, folderUid) =>
+const moveFile = (fileUid, folderUid = -1) =>
   Axios.patch(
     folderUid > -1
       ? `file/${fileUid}/move/${folderUid}`
@@ -95,12 +94,16 @@ const trashFile = uid =>
   Axios.delete(`file/${uid}`)
 
 /**
- * [PARTIALLY IMPLEMENTED] Upload a new folder
- * @param {Any} folder Folder to upload
+ * Upload a new file
+ * @param {Any} folder Folder data to upload
  * @returns {AxiosPromise<FolderResponse>}
  */
-const uploadFolder = folder =>
-  Axios.post('folder', folder)
+const uploadFolder = folder => {
+  console.log(folder)
+  const formData = new FormData()
+  formData.append('folder', folder)
+  return Axios.post('folder', formData)
+}
 
 /**
  * Creates a new empty folder

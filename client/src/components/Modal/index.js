@@ -1,10 +1,3 @@
-/**
- * @typedef {import('../helpers/types').ReduxAction} ReduxAction
- * @typedef {import('../helpers/types').FileResponse} FileResponse
- * @typedef {import('../helpers/types').FolderResponse} FolderResponse
- * @typedef {import('../helpers/types').ViewState} LibraryState
- */
-
 import React, { Component, Fragment } from 'react'
 import styles from './modal.module.scss'
 import { connect } from 'react-redux'
@@ -97,16 +90,15 @@ class Modals extends Component {
           <ModalBody>
             <ListGroup>
               {
-                this.props.targetFolder
-                ? this.props.targetFolder.filesContained
+                this.props.targetFolder && this.props.targetFolder.filesContained
                 ? this.props.targetFolder.filesContained.map((e, i) => (<ListGroupItem key={i} >{e.name}</ListGroupItem>))
-                : null : null
+                : null
               }
             </ListGroup>
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" onClick={this.props.toggleOpenFolder}>Cancel</Button>{' '}
-            <Button color="primary" onClick={this.openFolderHandleClick}>Click Action</Button>
+            <Button color="secondary" onClick={this.props.toggleOpenFolder}>Close</Button>{' '}
+            {/* <Button color="primary" onClick={this.openFolderHandleClick}>Click Action</Button> */}
           </ModalFooter>
         </Modal>
 
