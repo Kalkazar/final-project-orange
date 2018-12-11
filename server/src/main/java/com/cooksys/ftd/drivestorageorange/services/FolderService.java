@@ -1,16 +1,13 @@
 package com.cooksys.ftd.drivestorageorange.services;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -250,7 +247,7 @@ public class FolderService {
 	}
 	
 	/**
-	 * Populates a folder's contained files
+	 * Populates a list of folders with their contained files
 	 * @param folder
 	 * @return FolderDTO
 	 */
