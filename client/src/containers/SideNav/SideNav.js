@@ -4,7 +4,6 @@ import { Switch, Route } from 'react-router-dom'
 import styles from './sideNav.module.scss'
 import NavButton from '../../components/NavButton'
 import PropTypes from 'prop-types'
-// import { changeView } from '../../ducks/ui.duck'
 import { Modals as ModalsDuck } from '../../ducks'
 import FolderNavButton from '../../components/FolderNavButton'
 import UploadButton from '../UploadButton'
@@ -18,23 +17,16 @@ export class SideNav extends Component {
         <NavButton
           text='Library'
           route='/library'
-          // onClick={() => this.props.changeView(false)}
         />
         <NavButton
           text='Trash'
           route='/trash'
-          // onClick={() => this.props.changeView(true)}
         />
         <Switch>
           <Route exact path={'/library'} >
             <FolderNavButton
               text='Create Folder'
-              // createFolder={this.props.toggleCreateFolder}
               onClick={this.props.toggleCreateFolder}
-              uploadFolder={
-                // Placeholder - pls implement
-                () => {}
-              }
             />
             <UploadButton
               // text='Upload File/Folder'
@@ -71,11 +63,7 @@ SideNav.propTypes = {
 const mapStateToProps = state => ({})
 
 const mapDispatchToProps = dispatch => ({
-  // Hook up appropriate Redux methods
-  // changeView: view => dispatch(changeView(view)),
   toggleCreateFolder: () => dispatch(toggleCreateFolder())
-  // uploadFolder: folder => dispatch(uploadFolder(folder)),
-  // uploadFile: file => dispatch(uploadFile(file))
 })
 
 export default connect(
