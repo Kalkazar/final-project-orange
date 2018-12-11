@@ -12,6 +12,16 @@
   height: 100vh;
   display: flex;
 }
+
+@media (max-width: 790px) {
+  .container-fluid{
+    height: 100hv;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+
 .navAndLib {
   padding: 0px;
 }
