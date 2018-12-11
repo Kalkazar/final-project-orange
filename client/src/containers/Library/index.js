@@ -43,7 +43,7 @@ class Library extends Component {
           {this.props.activePage
             ? <Container className={styles.containerFill} > {groupArray(this.props.activePage.map((e, i) => {
               return e.isFolder ? (
-                <Col xl={'3'} lg={'3'} md={'3'} >
+                <Col xl={'3'} lg={'3'} md={'3'} key={i} >
                   <FolderCard
                     key={i}
                     folderName={e.name}
@@ -57,7 +57,7 @@ class Library extends Component {
                   />
                 </Col>
               ) : (
-                <Col xl={'3'} lg={'3'} md={'3'} >
+                <Col xl={'3'} lg={'3'} md={'3'} key={i} >
                   <FileCard
                     key={i}
                     fileName={e.name}
