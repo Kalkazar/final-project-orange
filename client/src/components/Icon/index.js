@@ -2,9 +2,9 @@ import React from 'react'
 import styles from './icon.module.scss'
 
 const Icon = props => (
-  <div className={`${styles.iconClass} ${props.wrapper}`}>
+  <span className={`${styles.iconClass} ${props.wrapper}`}>
     <i className={`${props.iconClass} fa-2x`} onClick={props.onClick} />
-  </div>
+  </span>
 )
 
 export const DownloadIcon = props => (
@@ -83,7 +83,7 @@ export const HomeIcon = props => (
   <Icon
     onClick={props.onClick}
     iconClass={'fas fa-home'}
-    wrapper={styles.cardIcon}
+    wrapper={styles.cardIcon + props.className}
   />
 )
 
