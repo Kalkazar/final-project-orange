@@ -16,7 +16,7 @@ public class FolderDTO {
 	private Long containerId;
 	
 	// John addition
-	private List<FileDTO> containedFiles;
+	private List<FileDTO> filesContained;
 
 	private boolean inTrash;
 
@@ -71,12 +71,12 @@ public class FolderDTO {
 		this.inTrash = inTrash;
 	}
 
-	public List<FileDTO> getContainedFiles() {
-		return containedFiles;
+	public List<FileDTO> getFilesContained() {
+		return filesContained;
 	}
 
-	public void setContainedFiles(List<FileDTO> containedFiles) {
-		this.containedFiles = containedFiles;
+	public void setFilesContained(List<FileDTO> filesContained) {
+		this.filesContained = filesContained;
 	}
 	
 }

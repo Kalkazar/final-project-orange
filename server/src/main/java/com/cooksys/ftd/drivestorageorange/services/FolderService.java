@@ -173,7 +173,7 @@ public class FolderService {
 		
 		for (FolderEntity entity : folderEntities) {
 			FolderDTO folderToAdd = this.folderMapper.toDto(entity);
-			folderToAdd.setContainedFiles(this.fileMapper.toDto(this.fileRepository.getAllInContainer(entity.getUid())));
+			folderToAdd.setFilesContained(this.fileMapper.toDto(this.fileRepository.getAllInContainer(entity.getUid())));
 			folderDTOs.add(folderToAdd);
 		}
 		
