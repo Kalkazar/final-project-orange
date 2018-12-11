@@ -8,7 +8,7 @@ import { Modals as ModalsDuck } from '../../ducks'
 import FolderNavButton from '../../components/FolderNavButton'
 import UploadButton from '../UploadButton'
 
-const { toggleCreateFolder } = ModalsDuck
+const { toggleCreateFolder, verifyMethod, validVerificationMethods: VVM } = ModalsDuck
 
 export class SideNav extends Component {
   render () {
@@ -40,11 +40,11 @@ export class SideNav extends Component {
           <Route exact path={'/trash'} >
             <FolderNavButton
               text='Restore All'
-              onClick={() => console.log('Fire RestoreAll')}
+              onClick={() => this.props.verifyMethod(VVM.RESTORE_ALL)}
             />
             <FolderNavButton
               text='Delete All'
-              onClick={() => console.log('Fire DeleteAll')}
+              onClick={() => this.props.verifyMethod(VVM.DELETE_ALL)}
             />
           </Route>
         </Switch>
@@ -57,13 +57,15 @@ SideNav.propTypes = {
   changeView: PropTypes.func,
   uploadFolder: PropTypes.func,
   uploadFile: PropTypes.func,
+  verifyMethod: PropTypes.func,
   toggleCreateFolder: PropTypes.func
 }
 
 const mapStateToProps = state => ({})
 
 const mapDispatchToProps = dispatch => ({
-  toggleCreateFolder: () => dispatch(toggleCreateFolder())
+  toggleCreateFolder: () => dispatch(toggleCreateFolder()),
+  verifyMethod: method => dispatch(verifyMethod(method))
 })
 
 export default connect(
