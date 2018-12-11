@@ -10,7 +10,6 @@ import java.util.zip.ZipInputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FileDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
@@ -32,11 +31,10 @@ public class FileService {
 
 	/**
 	 * Uploads a file and returns DTO of newly uploaded file
-	 * @param name to assign uploaded file
-	 * @param uploadFile file data uploaded
-	 * @return FileDTO
-	 * @see FileDTO
-	 * @see MultipartFile
+	 * @param inputStream file data uploaded as a zip
+	 * @return List<FileDTO>
+	 * @see List<FileDTO>
+	 * @see InputStream
 	 */
 	public List<FileDTO> uploadFiles(InputStream inputStream) {
 		try (ZipInputStream zipInputStream = new ZipInputStream(inputStream);) {
@@ -71,21 +69,6 @@ public class FileService {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-//		FileEntity uploadedFile = new FileEntity();
-//
-//		uploadedFile.setName(name);
-//
-//		try {
-//			uploadedFile.setData(uploadFile.getBytes());
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
-//		if (uploadedFile.getData() != null) {
-//			return this.fileMapper.toDto(this.fileRepository.save(uploadedFile));
-//		} else {
-//			return null;
-//		}
 		return null;
 	}
 
@@ -155,17 +138,6 @@ public class FileService {
 		editingFile.setContainer(this.folderRepository.getOne(folderUid));
 		return this.fileMapper.toDto(this.fileRepository.save(editingFile));
 	}
-
-	/**
-	 * [NOT IMPLEMENTED] Returns all stored files via pagination
-	 * 
-	 * @param sortBy Method to sort files
-	 * @param page   Page of sorted files to return
-	 * @param limit  Number of files to return
-	 */
-//	public void getFiles(String sortBy, Long page, Long limit) {
-////		this.fileRepository.findAll(sort)
-//	}
 
 	/**
 	 * Returns a file entity via UID
