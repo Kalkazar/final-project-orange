@@ -30,8 +30,14 @@ class Library extends Component {
     return (
       <Fragment>
         <div className={styles.libDiv}>
-          <span className={styles.pathSpan}><HomeIcon onClick={() => this.props.setDisplayFolder()} /> Browsing: ./{
-            this.props.displayFolder ? `${this.props.displayFolder.name}/` : ` (root)`}</span>
+          <HomeIcon onClick={() => this.props.setDisplayFolder()} />
+          <span className={styles.pathSpan}>
+            {' '}
+            Browsing: ./
+            {this.props.displayFolder
+              ? `${this.props.displayFolder.name}/`
+              : ` (root)`}
+          </span>
           {this.props.activePage
             ? this.props.activePage.map((e, i) => {
               return e.isFolder ? (
