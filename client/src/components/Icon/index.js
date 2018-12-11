@@ -87,4 +87,12 @@ export const HomeIcon = props => (
   />
 )
 
+export const MenuIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-bars'}
+    wrapper={styles.cardIcon}
+  />
+)
+
 export default Icon

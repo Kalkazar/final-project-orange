@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Fragment, Component } from 'react'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import styles from './sideNav.module.scss'
@@ -7,48 +7,52 @@ import PropTypes from 'prop-types'
 import { Modals as ModalsDuck } from '../../ducks'
 import FolderNavButton from '../../components/FolderNavButton'
 import UploadButton from '../UploadButton'
+import { MenuIcon } from '../../components/Icon'
 
-const { toggleCreateFolder, verifyMethod, validVerificationMethods: VVM } = ModalsDuck
+const {
+  toggleCreateFolder,
+  verifyMethod,
+  validVerificationMethods: VVM
+} = ModalsDuck
 
 export class SideNav extends Component {
   render () {
     return (
-      <div className={styles.navDiv}>
-        <NavButton
-          text='Library'
-          route='/library'
-        />
-        <NavButton
-          text='Trash'
-          route='/trash'
-        />
-        <Switch>
-          <Route exact path={'/library'} >
-            <FolderNavButton
-              text='Create Folder'
-              onClick={this.props.toggleCreateFolder}
-            />
-            <UploadButton
-              // text='Upload File/Folder'
-              fileType='file'
-              upload={
-                // Placeholder - pls implement
-                () => console.log('UPLOADING FILE')
-              }
-            />
-          </Route>
-          <Route exact path={'/trash'} >
-            <FolderNavButton
-              text='Restore All'
-              onClick={() => this.props.verifyMethod(VVM.RESTORE_ALL)}
-            />
-            <FolderNavButton
-              text='Delete All'
-              onClick={() => this.props.verifyMethod(VVM.DELETE_ALL)}
-            />
-          </Route>
-        </Switch>
-      </div>
+      <Fragment>
+        {/* <div className={styles.menuIcon}>
+          <MenuIcon onClick={}/>
+        </div> */}
+        <div className={styles.navDiv}>
+          <NavButton text='Library' route='/library' />
+          <NavButton text='Trash' route='/trash' />
+          <Switch>
+            <Route exact path={'/library'}>
+              <FolderNavButton
+                text='Create Folder'
+                onClick={this.props.toggleCreateFolder}
+              />
+              <UploadButton
+                // text='Upload File/Folder'
+                fileType='file'
+                upload={
+                  // Placeholder - pls implement
+                  () => console.log('UPLOADING FILE')
+                }
+              />
+            </Route>
+            <Route exact path={'/trash'}>
+              <FolderNavButton
+                text='Restore All'
+                onClick={() => this.props.verifyMethod(VVM.RESTORE_ALL)}
+              />
+              <FolderNavButton
+                text='Delete All'
+                onClick={() => this.props.verifyMethod(VVM.DELETE_ALL)}
+              />
+            </Route>
+          </Switch>
+        </div>
+      </Fragment>
     )
   }
 }
