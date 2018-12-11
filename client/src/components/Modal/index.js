@@ -1,10 +1,3 @@
-/**
- * @typedef {import('../helpers/types').ReduxAction} ReduxAction
- * @typedef {import('../helpers/types').FileResponse} FileResponse
- * @typedef {import('../helpers/types').FolderResponse} FolderResponse
- * @typedef {import('../helpers/types').ViewState} LibraryState
- */
-
 import React, { Component, Fragment } from 'react'
 import styles from './modal.module.scss'
 import { connect } from 'react-redux'
