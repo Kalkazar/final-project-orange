@@ -14,12 +14,15 @@ const { toggleOpenFolder, openFolder, editFile } = ModalsDuck
  * Paginator connected to library store.
  * Why won't this work by passing props????!?
  */
-const LibraryPaginator = connect(state => ({
-  currentPage: state.library.currentPage,
-  totalPages: state.library.totalPages
-}), dispatch => ({
-  setPage: index => dispatch(setPage(index))
-}))(Pagination)
+const LibraryPaginator = connect(
+  state => ({
+    currentPage: state.library.currentPage,
+    totalPages: state.library.totalPages
+  }),
+  dispatch => ({
+    setPage: index => dispatch(setPage(index))
+  })
+)(Pagination)
 
 class Library extends Component {
   render () {
@@ -27,26 +30,31 @@ class Library extends Component {
       <Fragment>
         <div className={styles.libDiv}>
           <span className={styles.pathSpan}>this/is/the/path/span</span>
-          {this.props.activePage ? this.props.activePage.map((e, i) => {
-            return e.isFolder
-              ? (<FolderCard
-                key={i}
-                folderName={e.name}
-                folderId={e.uid}
-                openFolder={() => this.props.openFolder(e)}
-                trashFolder={() => this.props.trashFolder(e.uid)}
-                downloadFolder={() => LiveEndpoints.Folder.downloadFolder(e.uid)}
-              />)
-              : (<FileCard
-                key={i}
-                fileName={e.name}
-                fileId={e.uid}
-                moveFile={() => this.props.editFile(e)}
-                trashFile={() => this.props.trashFile(e.uid)}
-                downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
-              />)
-          }
-          ) : null}
+          {this.props.activePage
+            ? this.props.activePage.map((e, i) => {
+              return e.isFolder ? (
+                <FolderCard
+                  key={i}
+                  folderName={e.name}
+                  folderId={e.uid}
+                  openFolder={() => this.props.openFolder(e)}
+                  trashFolder={() => this.props.trashFolder(e.uid)}
+                  downloadFolder={() =>
+                    LiveEndpoints.Folder.downloadFolder(e.uid)
+                  }
+                />
+              ) : (
+                <FileCard
+                  key={i}
+                  fileName={e.name}
+                  fileId={e.uid}
+                  moveFile={() => this.props.editFile(e)}
+                  trashFile={() => this.props.trashFile(e.uid)}
+                  downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
+                />
+              )
+            })
+            : null}
         </div>
         <LibraryPaginator />
       </Fragment>

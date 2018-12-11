@@ -94,12 +94,16 @@ const trashFile = uid =>
   Axios.delete(`file/${uid}`)
 
 /**
- * [PARTIALLY IMPLEMENTED] Upload a new folder
- * @param {Any} folder Folder to upload
+ * Upload a new file
+ * @param {Any} folder Folder data to upload
  * @returns {AxiosPromise<FolderResponse>}
  */
-const uploadFolder = folder =>
-  Axios.post('folder', folder)
+const uploadFolder = folder => {
+  console.log(folder)
+  const formData = new FormData()
+  formData.append('folder', folder)
+  return Axios.post('folder', formData)
+}
 
 /**
  * Creates a new empty folder

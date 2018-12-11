@@ -278,9 +278,14 @@ export const addFile = file => dispatch => {
  * @param {FolderResponse} folder Folder to add
  */
 export const addFolder = folder => dispatch => {
-  dispatch(addFolderAction(folder))
-  dispatch(updateCurrentListAction())
-  dispatch(updateTotalPagesAction())
+  LiveEndpoints.Folder.uploadFolder(folder).then(({ data }) => {
+    dispatch(addFolderAction(data))
+    dispatch(updateCurrentListAction())
+    dispatch(updateTotalPagesAction())
+    console.log(data)
+  }).catch(err => {
+    console.error(err)
+  })
 }
 
 /**

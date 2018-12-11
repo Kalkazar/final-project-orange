@@ -6,43 +6,58 @@ import { TrashCard } from '../../components/Card'
 import Pagination from '../../components/Pagination'
 import { Trash as TrashDuck } from '../../ducks'
 
-const { restoreFile, deleteFile, restoreFolder, deleteFolder, setPage } = TrashDuck
+const {
+  restoreFile,
+  deleteFile,
+  restoreFolder,
+  deleteFolder,
+  setPage
+} = TrashDuck
 
 /**
  * Paginator connected to trash store.
  * Why won't this work by passing props????!?
  */
-const TrashPaginator = connect(state => ({
-  currentPage: state.trash.currentPage,
-  totalPages: state.trash.totalPages
-}), dispatch => ({
-  setPage: index => dispatch(setPage(index))
-}))(Pagination)
+const TrashPaginator = connect(
+  state => ({
+    currentPage: state.trash.currentPage,
+    totalPages: state.trash.totalPages
+  }),
+  dispatch => ({
+    setPage: index => dispatch(setPage(index))
+  })
+)(Pagination)
 
 export class Trash extends Component {
   render () {
     return (
       <Fragment>
         <div className={styles.trashDiv}>
+          <span className={styles.pathSpan}>this/is/the/path/span</span>
           {/* If props.activePage exists, render cards for items */}
-          {this.props.activePage ? this.props.activePage.map((e, i) => e.isFolder
-            ? (<TrashCard
-              key={i}
-              name={e.name}
-              id={e.uid}
-              deleteForever={() => this.props.deleteFolder(e.uid)}
-              restore={() => this.props.restoreFolder(e.uid)}
-              fileType={'folder'}
-            />)
-            : (<TrashCard
-              key={i}
-              name={e.name}
-              id={e.uid}
-              deleteForever={() => this.props.deleteFile(e.uid)}
-              restore={() => this.props.restoreFile(e.uid)}
-              fileType={'file'}
-            />)
-          ) : null}
+          {this.props.activePage
+            ? this.props.activePage.map((e, i) =>
+              e.isFolder ? (
+                <TrashCard
+                  key={i}
+                  name={e.name}
+                  id={e.uid}
+                  deleteForever={() => this.props.deleteFolder(e.uid)}
+                  restore={() => this.props.restoreFolder(e.uid)}
+                  fileType={'folder'}
+                />
+              ) : (
+                <TrashCard
+                  key={i}
+                  name={e.name}
+                  id={e.uid}
+                  deleteForever={() => this.props.deleteFile(e.uid)}
+                  restore={() => this.props.restoreFile(e.uid)}
+                  fileType={'file'}
+                />
+              )
+            )
+            : null}
         </div>
         {/* <Pagination
           currentPage={this.props.currentPage + 1}
