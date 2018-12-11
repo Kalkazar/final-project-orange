@@ -1,12 +1,16 @@
 package com.cooksys.ftd.drivestorageorange.services;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -147,6 +151,61 @@ public class FolderService {
 	}
 	
 	/**
+	 * [CURRENTLY ONLY ONE LEVEL DEEP]
+	 * Accepts a zip file and creates a folder and contents from it
+	 * @param inputStream zip file
+	 * @return FolderDTO
+	 */
+	public FolderDTO uploadFolder(InputStream inputStream) {
+		FolderEntity uploadedFolder = new FolderEntity();
+		ZipInputStream zipInput = new ZipInputStream(inputStream);
+		byte[] buffer = new byte[2048];
+
+		try {
+			ZipEntry entry;
+			
+			// Depends on first entry being the "folder"
+			String uploadFolderName = zipInput.getNextEntry().getName().replaceAll("/", "");
+			
+			System.out.println(uploadFolderName);
+			
+			uploadedFolder.setName(uploadFolderName);
+			uploadedFolder = this.folderRepository.save(uploadedFolder);
+			
+			while((entry = zipInput.getNextEntry()) != null) {
+				
+				FileEntity uploadedFile = new FileEntity();
+				uploadedFile.setName(entry.getName().replaceAll(uploadFolderName + "/", ""));
+				uploadedFile.setContainer(uploadedFolder);
+				
+				ByteArrayOutputStream output = null;
+				try {
+					output = new ByteArrayOutputStream();
+					int len = 0;
+					while((len = zipInput.read(buffer)) > 0) {
+						output.write(buffer, 0, len);
+					}
+				}
+				finally {
+					
+					uploadedFile.setData(output.toByteArray());
+					
+					this.fileRepository.save(uploadedFile);
+					
+					if(output != null) {
+						output.close();
+					}
+				}
+			}
+			zipInput.close();
+			return this.getFolderWithContents(this.folderMapper.toDto(this.folderRepository.getOne(uploadedFolder.getUid())));
+		} catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+		return null;
+	}
+	
+	/**
 	 * Returns a folder without data by uid
 	 * 
 	 * @param uid to search for
@@ -178,6 +237,30 @@ public class FolderService {
 		}
 		
 		return folderDTOs;
+	}
+	
+	/**
+	 * Populates a folder's contained files
+	 * @param folder
+	 * @return FolderDTO
+	 */
+	private FolderDTO getFolderWithContents(FolderDTO folder) {
+		folder.setFilesContained(this.fileMapper.toDto(this.fileRepository.getAllInContainer(folder.getUid())));
+		return folder;
+	}
+	
+	/**
+	 * Populates a folder's contained files
+	 * @param folder
+	 * @return FolderDTO
+	 */
+	private List<FolderDTO> getFolderWithContents(List<FolderDTO> folders) {
+		List<FolderDTO> populatedFolders = new ArrayList<>();
+		
+		for (FolderDTO folder : folders) {
+			populatedFolders.add(this.getFolderWithContents(folder));
+		}
+		return populatedFolders;
 	}
 
 	/**
@@ -275,4 +358,6 @@ public class FolderService {
 	private FolderDTO toDto(FolderEntity folderEntity) {
 		return this.folderMapper.toDto(folderEntity);
 	}
+
+	
 }

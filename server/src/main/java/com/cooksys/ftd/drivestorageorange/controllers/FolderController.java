@@ -1,6 +1,7 @@
 package com.cooksys.ftd.drivestorageorange.controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +52,21 @@ public class FolderController {
 	@PostMapping("")
 	public FolderDTO uploadFolder(@RequestParam("folder") MultipartFile uploadFolder) {
 		FolderDTO newUpload = this.folderService.uploadFolder(uploadFolder);
+
+		if (newUpload != null) {
+			return newUpload;
+		}
+		return null;
+	}
+	
+	/**
+	 * [NOT FULLY IMPLEMENTED]Upload a new folder
+	 * 
+	 * @return FolderDTO of newly uploaded folder
+	 */
+	@RequestMapping(value = "", method = RequestMethod.POST, consumes = "application/zip")
+	public FolderDTO uploadFolder(InputStream inputStream) {
+		FolderDTO newUpload = this.folderService.uploadFolder(inputStream);
 
 		if (newUpload != null) {
 			return newUpload;
