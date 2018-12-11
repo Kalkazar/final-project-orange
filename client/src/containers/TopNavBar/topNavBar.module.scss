@@ -8,18 +8,42 @@
     display: block;
     position: absolute;
     left: 0;
-    right: 0;
+    // right: 0;
     margin: 0;
+    padding: 0;
     width: 100%;
     max-width: 500px;
     z-index: 10;
-    max-width: 500px;
+    // max-width: 500px;
   }
 }
 
 .navExtend {
   background-color: rgb(7, 161, 226);
-  box-shadow: 3px 3px;
-  border-radius: 5%;
+  // box-shadow: 3px 3px;
+  // border-radius: 5%;
+  width: 100vw;
 }
 
+.fitWidth {
+  width: 100vw;
+}
+
+.noPadding {
+  padding: 0px;
+}
+
+.navBarSmol {
+  @extend .fitWidth;
+  @extend .noPadding;
+  background-color: #07a1e2;
+}
+
+.navBtnSpace {
+  margin: 8px 16px;
+}
+
+.navBarUpper {
+  position: fixed;
+  top: 0;
+}

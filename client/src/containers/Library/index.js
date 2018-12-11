@@ -12,7 +12,7 @@ import { groupArray } from '../../helpers/util'
 import { Container, Row, Col } from 'reactstrap'
 
 const { trashFile, trashFolder, setPage, setDisplayFolder } = LibraryDuck
-const { toggleOpenFolder, openFolder, editFile } = ModalsDuck
+const { toggleOpenFolder, editFile } = ModalsDuck
 
 /**
  * Paginator connected to library store.
@@ -33,8 +33,8 @@ class Library extends Component {
     return (
       <Fragment>
         <div className={styles.libDiv}>
-          <HomeIcon onClick={() => this.props.setDisplayFolder()} />
-          <span className={styles.pathSpan}>
+          <HomeIcon className={'d-none d-lg-block'} onClick={() => this.props.openFolder()} />
+          <span className={styles.pathSpan + ' d-none d-lg-block'}>
             {' '}
             Browsing: ./
             {this.props.displayFolder
@@ -49,7 +49,6 @@ class Library extends Component {
                     key={i}
                     folderName={e.name}
                     folderId={e.uid}
-                    // openFolder={() => this.props.openFolder(e)}
                     openFolder={() => this.props.openFolder(e.uid)}
                     trashFolder={() => this.props.trashFolder(e.uid)}
                     downloadFolder={() =>
@@ -72,33 +71,23 @@ class Library extends Component {
             }), 4).map((e, i) => (<Row key={i} >{e}</Row>))} </Container>
             : null}
         </div>
-        <div className={styles.paginatorContainer} >
-          <LibraryPaginator />
-        </div>
+        <LibraryPaginator />
       </Fragment>
     )
   }
 }
 
-// connect(state => ({
-//   currentPage: state.trash.currentPage,
-//   totalPages: state.trash.totalPages
-// }), dispatch => ({
-//   setPage: index => dispatch(setPage(index))
-// }))(Pagination)
-
 Library.propTypes = {
-  activePage: PropTypes.array,
-  trashFile: PropTypes.func,
-  trashFolder: PropTypes.func,
-  toggleOpenFolder: PropTypes.func,
-  openFolder: PropTypes.func,
-  editFile: PropTypes.func,
-  currentPage: PropTypes.number,
-  totalPages: PropTypes.number,
-  setPage: PropTypes.func,
-  displayFolder: PropTypes.object,
-  setDisplayFolder: PropTypes.func
+  activePage: PropTypes.array.isRequired,
+  trashFile: PropTypes.func.isRequired,
+  trashFolder: PropTypes.func.isRequired,
+  toggleOpenFolder: PropTypes.func.isRequired,
+  openFolder: PropTypes.func.isRequired,
+  editFile: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
+  displayFolder: PropTypes.object
 }
 
 const mapStateToProps = state => ({
@@ -112,9 +101,7 @@ const mapDispatchToProps = dispatch => ({
   trashFile: uid => dispatch(trashFile(uid)),
   trashFolder: uid => dispatch(trashFolder(uid)),
   toggleOpenFolder: () => dispatch(toggleOpenFolder()),
-  // openFolder: folder => dispatch(openFolder(folder)),
   openFolder: folder => dispatch(setDisplayFolder(folder)),
-  setDisplayFolder: folder => dispatch(setDisplayFolder(folder)),
   editFile: file => dispatch(editFile(file)),
   setPage: index => dispatch(setPage(index))
 })
