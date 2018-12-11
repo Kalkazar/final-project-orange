@@ -26,7 +26,8 @@ export class SideNav extends Component {
         />
         <FolderNavButton
           text='Create Folder'
-          createFolder={this.props.toggleCreateFolder}
+          // createFolder={this.props.toggleCreateFolder}
+          onClick={this.props.toggleCreateFolder}
           uploadFolder={
             // Placeholder - pls implement
             () => {}
