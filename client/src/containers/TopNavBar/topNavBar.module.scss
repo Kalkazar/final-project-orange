@@ -9,8 +9,9 @@
     position: absolute;
     left: 0;
     right: 0;
-    margin: 0px;
+    margin: 0;
     width: 100%;
+    max-width: 500px;
     z-index: 10;
     max-width: 500px;
   }
@@ -18,5 +19,7 @@
 
 .navExtend {
   background-color: rgb(7, 161, 226);
+  box-shadow: 3px 3px;
+  border-radius: 5%;
 }
 

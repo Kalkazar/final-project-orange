@@ -33,7 +33,6 @@ export class Trash extends Component {
     return (
       <Fragment>
         <div className={styles.trashDiv}>
-          <span className={styles.pathSpan}>this/is/the/path/span</span>
           {/* If props.activePage exists, render cards for items */}
           {this.props.activePage
             ? this.props.activePage.map((e, i) =>
