@@ -109,7 +109,8 @@ export const FolderCard = ({
   folderId,
   trashFolder,
   downloadFolder,
-  openFolder
+  openFolder,
+  editFolder
 }) => (
   <Card>
     <div className={styles.cardTitle}>
@@ -120,13 +121,15 @@ export const FolderCard = ({
     </div>
     <div className={styles.folderText}>Open Folder</div>
 
-    <div className={styles.folderCardBody} onClick={() => openFolder(folderId)}>
+    <div className={styles.folderCardBody} onClick={() => openFolder(folderId)} />
+    <div className={styles.folderCardControls} >
       <TrashIcon
         onClick={e => {
           e.stopPropagation()
           trashFolder(folderId)
         }}
       />
+      <MoveIcon onClick={() => editFolder()} />
       <DownloadIcon
         onClick={e => {
           e.stopPropagation()
@@ -134,5 +137,6 @@ export const FolderCard = ({
         }}
       />
     </div>
+    {/* </div> */}
   </Card>
 )
