@@ -7,7 +7,7 @@ import Pagination from '../../components/Pagination'
 import { Library as LibraryDuck, Modals as ModalsDuck } from '../../ducks'
 import { LiveEndpoints } from '../../api'
 
-const { trashFile, trashFolder, setPage } = LibraryDuck
+const { trashFile, trashFolder, setPage, setDisplayFolder } = LibraryDuck
 const { toggleOpenFolder, openFolder, editFile } = ModalsDuck
 
 /**
@@ -29,7 +29,8 @@ class Library extends Component {
     return (
       <Fragment>
         <div className={styles.libDiv}>
-          <span className={styles.pathSpan}>this/is/the/path/span</span>
+          <span className={styles.pathSpan}>Browsing: ./{
+            this.props.displayFolder ? `${this.props.displayFolder.name}/` : ` (root)`}</span>
           {this.props.activePage
             ? this.props.activePage.map((e, i) => {
               return e.isFolder ? (
@@ -37,7 +38,8 @@ class Library extends Component {
                   key={i}
                   folderName={e.name}
                   folderId={e.uid}
-                  openFolder={() => this.props.openFolder(e)}
+                  // openFolder={() => this.props.openFolder(e)}
+                  openFolder={() => this.props.openFolder(e.uid)}
                   trashFolder={() => this.props.trashFolder(e.uid)}
                   downloadFolder={() =>
                     LiveEndpoints.Folder.downloadFolder(e.uid)
@@ -78,20 +80,23 @@ Library.propTypes = {
   editFile: PropTypes.func,
   currentPage: PropTypes.number,
   totalPages: PropTypes.number,
-  setPage: PropTypes.func
+  setPage: PropTypes.func,
+  displayFolder: PropTypes.object
 }
 
 const mapStateToProps = state => ({
   activePage: state.library.currentList,
-  currentPage: state.trash.currentPage,
-  totalPages: state.trash.totalPages
+  currentPage: state.library.currentPage,
+  totalPages: state.library.totalPages,
+  displayFolder: state.library.displayFolder
 })
 
 const mapDispatchToProps = dispatch => ({
   trashFile: uid => dispatch(trashFile(uid)),
   trashFolder: uid => dispatch(trashFolder(uid)),
   toggleOpenFolder: () => dispatch(toggleOpenFolder()),
-  openFolder: folder => dispatch(openFolder(folder)),
+  // openFolder: folder => dispatch(openFolder(folder)),
+  openFolder: folder => dispatch(setDisplayFolder(folder)),
   editFile: file => dispatch(editFile(file)),
   setPage: index => dispatch(setPage(index))
 })

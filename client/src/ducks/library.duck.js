@@ -2,7 +2,7 @@
  * @typedef {import('../helpers/types').ReduxAction} ReduxAction
  * @typedef {import('../helpers/types').FileResponse} FileResponse
  * @typedef {import('../helpers/types').FolderResponse} FolderResponse
- * @typedef {import('../helpers/types').ViewState} LibraryState
+ * @typedef {import('../helpers/types').LibraryState} LibraryState
  */
 
 import { FILES_PER_PAGE } from './ui.duck'
@@ -55,6 +55,11 @@ export const UPDATE_CURRENT_PAGE = 'drivestorage/library/UPDATE_CURRENT_PAGE'
 export const UPDATE_TOTAL_PAGES = 'drivestorage/library/UPDATE_TOTAL_PAGES'
 
 /**
+ * Updates currently displayed folder contents
+ */
+export const UPDATE_DISPLAY_FOLDER = 'drivestorage/library/UPDATE_DISPLAY_FOLDER'
+
+/**
  * Loads initial set of files
  */
 export const LOAD_FILES = 'drivestorage/library/LOAD_FILES'
@@ -76,7 +81,8 @@ const initialState = {
   currentPage: 0,
   totalPages: 1,
   displayItems: [],
-  foldersLoaded: false
+  foldersLoaded: false,
+  displayFolder: null
 }
 
 /**
@@ -113,13 +119,21 @@ export default function config (state = initialState, action) {
         folderList: state.folderList.filter(e => e.uid !== action.payload.uid)
       }
     case UPDATE_CURRENT_LIST:
-      return {
-        ...state,
-        currentList: [...state.folderList, ...state.fileList].slice(
-          state.currentPage * FILES_PER_PAGE,
-          state.currentPage * FILES_PER_PAGE + FILES_PER_PAGE
-        )
-      }
+      return state.displayFolder
+        ? {
+          ...state,
+          currentList: state.displayFolder.filesContained.slice(
+            state.currentPage * FILES_PER_PAGE,
+            state.currentPage * FILES_PER_PAGE + FILES_PER_PAGE
+          )
+        }
+        : {
+          ...state,
+          currentList: [...state.folderList, ...state.fileList].slice(
+            state.currentPage * FILES_PER_PAGE,
+            state.currentPage * FILES_PER_PAGE + FILES_PER_PAGE
+          )
+        }
     case UPDATE_CURRENT_PAGE:
       return {
         ...state,
@@ -129,6 +143,11 @@ export default function config (state = initialState, action) {
       return {
         ...state,
         totalPages: Math.ceil((state.folderList.length + state.fileList.length) / FILES_PER_PAGE)
+      }
+    case UPDATE_DISPLAY_FOLDER:
+      return {
+        ...state,
+        displayFolder: action.payload
       }
     case LOAD_FILES:
       return {
@@ -219,6 +238,16 @@ export const updateCurrentPageAction = page => ({
 */
 export const updateTotalPagesAction = () => ({
   type: UPDATE_TOTAL_PAGES
+})
+
+/**
+ * Sets folder to display contents
+ * @param {FolderResponse} [folder] Folder to display, defaults to null which is root
+ * @returns {ReduxAction}
+ */
+export const updateDisplayFolderAction = (folder = null) => ({
+  type: UPDATE_DISPLAY_FOLDER,
+  payload: folder
 })
 
 /**
@@ -362,7 +391,9 @@ const getFolderByUID = (uid, getState) => {
   if (typeof folder !== 'undefined') {
     return folder
   } else {
-    throw new Error('Invalid folder UID!')
+    // throw new Error('Invalid folder UID!')
+    console.error('Invalid folder UID!')
+    return null
   }
 }
 
@@ -422,11 +453,28 @@ export const renameFile = (uid, newName) => (dispatch, getState) =>
 /**
  * Moves a file into a new directory
  * @param {Number} uid UID of file to rename
- * @param {Number} folderUid New name to assign to file
+ * @param {Number} folderUid Destination to move folder to
  */
 export const moveFile = (uid, folderUid) => (dispatch, getState) => {
   LiveEndpoints.File.moveFile(uid, folderUid)
     .then(({ data }) => {
       dispatch(editFile(data))
     })
+}
+
+/**
+ * Moves a file into a new directory
+ * @param {Number} folderUid New name to assign to file
+ */
+export const setDisplayFolder = (folderUid = null) => (dispatch, getState) => {
+  if (folderUid) {
+    const newDisplayFolder = getFolderByUID(folderUid, getState)
+    dispatch(updateDisplayFolderAction(newDisplayFolder))
+    dispatch(updateCurrentListAction())
+    dispatch(updateTotalPagesAction())
+  } else {
+    dispatch(updateDisplayFolderAction())
+    dispatch(updateCurrentListAction())
+    dispatch(updateTotalPagesAction())
+  }
 }
