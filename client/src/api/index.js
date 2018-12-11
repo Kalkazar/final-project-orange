@@ -94,7 +94,7 @@ const trashFile = uid =>
   Axios.delete(`file/${uid}`)
 
 /**
- * Upload a new file
+ * Upload a new folder
  * @param {Any} folder Folder data to upload
  * @returns {AxiosPromise<FolderResponse>}
  */
@@ -103,6 +103,23 @@ const uploadFolder = folder => {
   const formData = new FormData()
   formData.append('folder', folder)
   return Axios.post('folder', formData)
+}
+
+/**
+ * Upload a new folder as a zip file
+ * @param {String} folderName Name to assign this newly created folder
+ * @param {Blob} folder Folder data to upload
+ * @returns {AxiosPromise<FolderResponse>}
+ */
+const uploadFolderZip = (folder) => {
+  console.log(folder)
+  // const formData = new FormData()
+  // formData.append('folder', folder)
+  return Axios.post(`folder`, folder, {
+    headers: {
+      'Content-Type': 'application/zip'
+    }
+  })
 }
 
 /**
@@ -233,6 +250,7 @@ export const LiveEndpoints = {
   },
   Folder: {
     uploadFolder,
+    uploadFolderZip,
     createFolder,
     getFolder,
     downloadFolder,

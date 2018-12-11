@@ -340,6 +340,21 @@ export const uploadFolder = folder => dispatch => {
 }
 
 /**
+ * Uploads a folder via zip method
+ * @param {Blob} folder Folder to add
+ */
+export const uploadFolderZip = (folder) => dispatch => {
+  LiveEndpoints.Folder.uploadFolderZip(folder).then(({ data }) => {
+    dispatch(addFolder(data))
+    // dispatch(updateCurrentListAction())
+    // dispatch(updateTotalPagesAction())
+    console.log(data)
+  }).catch(err => {
+    console.error(err)
+  })
+}
+
+/**
  * Removes a file
  * @param {FileResponse} file File to remove
  */
@@ -492,8 +507,8 @@ export const moveFile = (uid, folderUid) => (dispatch, getState) => {
 }
 
 /**
- * Moves a file into a new directory
- * @param {Number} folderUid New name to assign to file
+ * Sets the currently displayed folder
+ * @param {Number} folderUid Folder contents to display
  */
 export const setDisplayFolder = (folderUid = null) => (dispatch, getState) => {
   if (folderUid) {
@@ -506,6 +521,7 @@ export const setDisplayFolder = (folderUid = null) => (dispatch, getState) => {
     dispatch(updateCurrentListAction())
     dispatch(updateTotalPagesAction())
   }
+  dispatch(checkBackPage())
 }
 
 /**

@@ -159,6 +159,8 @@ export const initData = () => dispatch => {
     const libFolders = data.filter(e => e.inTrash === false)
     const trashFolders = data.filter(e => e.inTrash === true)
 
+    console.log(libFolders)
+
     dispatch(Library.loadFolders(libFolders))
     dispatch(Trash.loadFolders(trashFolders))
   })
