@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styles from './app.module.scss'
 import Library from '../Library'
 import SideNav from '../SideNav/SideNav'
+import Bubbles from '../../components/Bubbles'
 import Trash from '../Trash'
 import { Route, Switch, Redirect } from 'react-router-dom'
 // import Pagination from '../../components/Pagination'
@@ -32,6 +33,7 @@ class App extends Component {
           </div>
         </div>
         <Modal />
+        <Bubbles />
       </div>
     )
   }
