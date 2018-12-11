@@ -7,7 +7,7 @@
 
 import { FILES_PER_PAGE } from './ui.duck'
 import { LiveEndpoints } from '../api'
-import { Trash } from './'
+import { Trash, Modals } from './'
 
 /**
  * Add file to state
@@ -471,6 +471,7 @@ export const renameFile = (uid, newName) => (dispatch, getState) =>
   LiveEndpoints.File.renameFile(uid, newName)
     .then(({ data }) => {
       dispatch(editFile(data))
+      dispatch(Modals.setEditingFileAction(data))
     })
 
 /**
@@ -479,9 +480,14 @@ export const renameFile = (uid, newName) => (dispatch, getState) =>
  * @param {Number} folderUid Destination to move folder to
  */
 export const moveFile = (uid, folderUid) => (dispatch, getState) => {
+  const { displayFolder } = getState().library
   LiveEndpoints.File.moveFile(uid, folderUid)
     .then(({ data }) => {
       dispatch(editFile(data))
+      dispatch(removeFile(data))
+      // Need editFolder method here
+      // dispatch(setDisplayFolder(displayFolder))
+      dispatch(Modals.setEditingFileAction(data))
     })
 }
 
