@@ -41,7 +41,7 @@ class Library extends Component {
               : ` (root)`}
           </span>
           {this.props.activePage
-            ? <Container> {groupArray(this.props.activePage.map((e, i) => {
+            ? <Container className={styles.containerFill} > {groupArray(this.props.activePage.map((e, i) => {
               return e.isFolder ? (
                 <Col xl={'3'} lg={'3'} md={'3'} >
                   <FolderCard
@@ -68,10 +68,12 @@ class Library extends Component {
                   />
                 </Col>
               )
-            }), 4).map(e => (<Row>{e}</Row>))} </Container>
+            }), 4).map((e, i) => (<Row key={i} >{e}</Row>))} </Container>
             : null}
         </div>
-        <LibraryPaginator />
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center' }} >
+          <LibraryPaginator />
+        </div>
       </Fragment>
     )
   }
