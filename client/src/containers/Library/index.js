@@ -33,45 +33,67 @@ class Library extends Component {
     return (
       <Fragment>
         <div className={styles.libDiv}>
-          <HomeIcon className={'d-none d-sm-block'} onClick={() => this.props.openFolder()} />
-          <span className={styles.pathSpan + ' d-none d-sm-block'}>
-            {' '}
-            Browsing: ./
-            {this.props.displayFolder
-              ? `${this.props.displayFolder.name}/`
-              : ` (root)`}
-          </span>
-          {this.props.activePage
-            ? <Container className={styles.containerFill} > {groupArray(this.props.activePage.map((e, i) => {
-              return e.isFolder ? (
-                <Col xl={'3'} lg={'3'} md={'3'} key={i} >
-                  <FolderCard
-                    key={i}
-                    folderName={e.name}
-                    folderId={e.uid}
-                    openFolder={() => this.props.openFolder(e.uid)}
-                    trashFolder={() => this.props.trashFolder(e.uid)}
-                    downloadFolder={() =>
-                      LiveEndpoints.Folder.downloadFolder(e.uid)
-                    }
-                  />
-                </Col>
-              ) : (
-                <Col xl={'3'} lg={'3'} md={'3'} key={i} >
-                  <FileCard
-                    key={i}
-                    fileName={e.name}
-                    fileId={e.uid}
-                    moveFile={() => this.props.editFile(e)}
-                    trashFile={() => this.props.trashFile(e.uid)}
-                    downloadFile={() => LiveEndpoints.File.downloadFile(e.uid)}
-                  />
-                </Col>
-              )
-            }), 4).map((e, i) => (<Row key={i} >{e}</Row>))} </Container>
-            : null}
+          <div className={styles.libDivSmol} >
+            <HomeIcon
+              className={'d-none d-md-block'}
+              onClick={() => this.props.openFolder()}
+            />
+            <span className={styles.pathSpan + ' d-none d-md-block'}>
+              {' '}
+              Browsing: ./
+              {this.props.displayFolder
+                ? `${this.props.displayFolder.name}/`
+                : ` (root)`}
+            </span>
+          </div>
+
+          <div className={styles.libDivMain} >
+            {this.props.activePage ? (
+              <Container fluid className={styles.containerFill}>
+                {' '}
+                {groupArray(
+                  this.props.activePage.map((e, i) => {
+                    return e.isFolder ? (
+                      <Col xl={'3'} lg={'3'} md={'3'} key={i}>
+                        <FolderCard
+                          key={i}
+                          folderName={e.name}
+                          folderId={e.uid}
+                          openFolder={() => this.props.openFolder(e.uid)}
+                          trashFolder={() => this.props.trashFolder(e.uid)}
+                          downloadFolder={() =>
+                            LiveEndpoints.Folder.downloadFolder(e.uid)
+                          }
+                        />
+                      </Col>
+                    ) : (
+                      <Col xl={'3'} lg={'3'} md={'3'} key={i}>
+                        <FileCard
+                          key={i}
+                          fileName={e.name}
+                          fileId={e.uid}
+                          moveFile={() => this.props.editFile(e)}
+                          trashFile={() => this.props.trashFile(e.uid)}
+                          downloadFile={() =>
+                            LiveEndpoints.File.downloadFile(e.uid)
+                          }
+                        />
+                      </Col>
+                    )
+                  }),
+                  4
+                ).map((e, i) => (
+                  <Row key={i}>{e}</Row>
+                ))}{' '}
+              </Container>
+            ) : null}
+          </div>
+
+          <div className={styles.libDivSmol}>
+            <LibraryPaginator />
+          </div>
+
         </div>
-        <LibraryPaginator />
       </Fragment>
     )
   }

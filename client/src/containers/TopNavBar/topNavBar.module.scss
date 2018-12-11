@@ -2,7 +2,10 @@
 .topNav {
   display: none;
 }
-
+.navBar {
+  padding-left: 0px;
+  margin-left: 0px;
+}
 @media (max-width: 790px) {
   .topNav {
     display: block;
@@ -23,6 +26,7 @@
   // box-shadow: 3px 3px;
   // border-radius: 5%;
   width: 100vw;
+  padding-right: 25px;
 }
 
 .fitWidth {
