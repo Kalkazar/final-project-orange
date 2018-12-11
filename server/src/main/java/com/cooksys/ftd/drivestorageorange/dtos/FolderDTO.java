@@ -12,12 +12,11 @@ public class FolderDTO {
 	private Date created;
 
 	private Date lastModified;
-	
-	private List<FileDTO> filesContained;
-	
-	private List<FolderDTO> foldersContained;
 
 	private Long containerId;
+	
+	// John addition
+	private List<FileDTO> filesContained;
 
 	private boolean inTrash;
 
@@ -60,22 +59,6 @@ public class FolderDTO {
 		return containerId;
 	}
 
-	public List<FileDTO> getFilesContained() {
-		return filesContained;
-	}
-
-	public void setFilesContained(List<FileDTO> filesContained) {
-		this.filesContained = filesContained;
-	}
-
-	public List<FolderDTO> getFoldersContained() {
-		return foldersContained;
-	}
-
-	public void setFoldersContained(List<FolderDTO> foldersContained) {
-		this.foldersContained = foldersContained;
-	}
-
 	public void setContainerId(Long containerId) {
 		this.containerId = containerId;
 	}
@@ -88,4 +71,12 @@ public class FolderDTO {
 		this.inTrash = inTrash;
 	}
 
+	public List<FileDTO> getFilesContained() {
+		return filesContained;
+	}
+
+	public void setFilesContained(List<FileDTO> filesContained) {
+		this.filesContained = filesContained;
+	}
+	
 }

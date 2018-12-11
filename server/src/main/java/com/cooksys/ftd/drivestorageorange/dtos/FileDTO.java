@@ -2,6 +2,8 @@ package com.cooksys.ftd.drivestorageorange.dtos;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class FileDTO {
 
 	private Long uid;
@@ -12,6 +14,7 @@ public class FileDTO {
 
 	private Date lastModified;
 
+	@JsonInclude(JsonInclude.Include.ALWAYS)
 	private Long containerId;
 
 	private boolean inTrash;

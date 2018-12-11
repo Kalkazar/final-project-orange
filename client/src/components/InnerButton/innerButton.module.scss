@@ -4,7 +4,8 @@
   display: flex;
   flex-direction: row;
   align-items: space-around;
-  margin: 5px;
+  margin: 8px;
+  padding: 5px;
   align-content: center;
   width: 80%;
   height: auto;
@@ -12,6 +13,7 @@
   font-size: 12pt;
   color: white;
   border: 1px solid #212529;
+  border-radius: 5px;
   &:hover {
     border-color: gray;
     cursor: pointer;

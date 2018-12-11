@@ -1,367 +1,538 @@
-import { getFileList, getFolderList, LiveEndpoints } from '../api'
-import { groupArray } from '../helpers/util'
-
-import { FileResponse, FolderResponse } from '../helpers/mock-responses'
-
 /**
- * Load file objects into state
+ * @typedef {import('../helpers/types').ReduxAction} ReduxAction
+ * @typedef {import('../helpers/types').FileResponse} FileResponse
+ * @typedef {import('../helpers/types').FolderResponse} FolderResponse
+ * @typedef {import('../helpers/types').LibraryState} LibraryState
  */
-export const LOAD_FILES = 'LOAD_FILES'
+
+import { FILES_PER_PAGE } from './ui.duck'
+import { LiveEndpoints } from '../api'
+import { Trash, Modals } from './'
 
 /**
- * Load folder objects into state
+ * Add file to state
  */
-export const LOAD_FOLDERS = 'LOAD_FOLDERS'
+export const ADD_FILE = 'drivestorage/library/ADD_FILE'
 
 /**
- * Load current list of results to be displayed
+ * Edit file in state
  */
-export const LOAD_CURRENT_LIST = 'LOAD_CURRENT_LIST'
+export const EDIT_FILE = 'drivestorage/library/EDIT_FILE'
 
 /**
- * Called when a load fails
+ * Remove file from state
  */
-export const LOAD_ERROR = 'LOAD_ERROR'
+export const REMOVE_FILE = 'drivestorage/library/REMOVE_FILE'
 
 /**
- * Load pages of display results into state
+ * Add file to state
  */
-export const LOAD_PAGES = 'LOAD_PAGES'
+export const ADD_FOLDER = 'drivestorage/library/ADD_FOLDER'
 
 /**
- * Set index of current results page to display
+ * Rename a folder in state
  */
-export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
+export const RENAME_FOLDER = 'drivestorage/library/RENAME_FOLDER'
 
 /**
- * Update currently displayed results page based on state
+ * Remove folder from state
  */
-export const UPDATE_ACTIVE_PAGE = 'UPDATE_ACTIVE_PAGE'
+export const REMOVE_FOLDER = 'drivestorage/library/REMOVE_FOLDER'
 
 /**
- * Update total number of pages of results based on state
+ * Updates current list of results to be displayed
  */
-export const UPDATE_TOTAL_PAGES = 'UPDATE_TOTAL_PAGES'
+export const UPDATE_CURRENT_LIST = 'drivestorage/library/UPDATE_CURRENT_LIST'
 
 /**
- * Update total number of results elements based on state
+ * Updates current page of results to be displayed
  */
-export const UPDATE_TOTAL_DISPLAY_ELEMENTS = 'UPDATE_TOTAL_DISPLAY_ELEMENTS'
+export const UPDATE_CURRENT_PAGE = 'drivestorage/library/UPDATE_CURRENT_PAGE'
 
 /**
- * Move file to trash bin
+ * Updates total number of pages of results
  */
-export const TRASH_FILE = 'TRASH_FILE'
+export const UPDATE_TOTAL_PAGES = 'drivestorage/library/UPDATE_TOTAL_PAGES'
 
 /**
- * Max number of file cards to display per page
+ * Updates currently displayed folder contents
  */
-export const FILES_PER_PAGE = 9
+export const UPDATE_DISPLAY_FOLDER = 'drivestorage/library/UPDATE_DISPLAY_FOLDER'
 
 /**
- * Initial base-line library state
+ * Loads initial set of files
+ */
+export const LOAD_FILES = 'drivestorage/library/LOAD_FILES'
+
+/**
+ * Loads initial set of files
+ */
+export const LOAD_FOLDERS = 'drivestorage/library/LOAD_FOLDERS'
+
+/**
+ * Initial base-line trash view state
  * @type {LibraryState}
  */
-
 const initialState = {
   fileList: [],
   folderList: [],
   currentList: [],
   currentFolder: null,
   currentPage: 0,
-  foldersLoaded: false,
-  trashLoaded: false,
-  loadingError: null,
-  pages: [],
-  totalDisplayElements: 0,
   totalPages: 1,
-  activePage: []
+  displayItems: [],
+  foldersLoaded: false,
+  displayFolder: null
 }
 
 /**
- * Calls API for a list of all folders
- */
-export const getFolders = () => dispatch => {
-  getFolderList()
-    .then(folderList => {
-      dispatch(loadFolders(folderList))
-      dispatch(getCurrentList())
-    })
-    .catch(err => dispatch(loadError(err)))
-}
-
-/**
- * Calls API for a list of all files
- */
-export const getFiles = () => dispatch => {
-  // getFileList()
-  LiveEndpoints.File.getAllFiles()
-    .then(({ data }) => {
-      dispatch(loadFiles(data))
-      dispatch(getCurrentList())
-    })
-    .catch(err => dispatch(loadError(err)))
-}
-
-
-/**
- * Selects which page of results Cards to display via index, if valid index
- * @param {Number} pageIndex Index of Cards to display
- */
-export const setPage = pageIndex => (dispatch, getState) => {
-  const { totalPages } = getState().library
-
-  if (pageIndex > -1 && pageIndex < totalPages) {
-    dispatch(setCurrentPage(pageIndex))
-    dispatch(updateActivePage())
-  } else {
-    console.log('setPage failed in library.duck')
-  }
-}
-
-/**
- * Decides which list of results to display based on UI state
- * [INCOMPLETE DOCS]
- */
-export const getCurrentList = () => (dispatch, getState) => {
-  const { fileList, folderList } = getState().library
-  const { trashLoaded, currentPage, currentFolder } = getState().ui
-  const currentFileList = fileList.filter(
-    x =>
-      (trashLoaded ? x.inTrash : !x.inTrash) &&
-      (!currentFolder || x.folder === currentFolder.uid)
-  )
-  const currentFolderList = currentFolder ? [] : [...folderList]
-  const currentList = [...currentFolderList, ...currentFileList]
-  const pages = groupArray(currentList, FILES_PER_PAGE)
-  dispatch(loadPages(pages))
-  dispatch(updateTotalPages())
-  dispatch(setPage(0))
-  dispatch(updateActivePage())
-  dispatch(updateTotalDisplayElements())
-  dispatch(
-    loadCurrentList(
-      currentList.slice(
-        FILES_PER_PAGE * (currentPage - 1),
-        FILES_PER_PAGE * currentPage
-      )
-    )
-  )
-}
-
-/**
- * Send a file to trashbin by UID
- * @param {Number} uid of file to trash bin
- */
-export const trashBinFile = uid => (dispatch, getState) => {
-  LiveEndpoints.File.trashFile(uid)
-    .then(({ data }) => {
-      dispatch(getFiles())
-    })
-}
-
-/**
- * Restores a trashbinned file by UID
- * @param {Number} uid of file to restore
- */
-export const restoreFile = uid => (dispatch, getState) => {
-  LiveEndpoints.Trash.restoreFile(uid)
-    .then(({ data }) => {
-      dispatch(getFiles())
-    })
-}
-
-/**
- * Permanently deletes file by UID
- * @param {Number} uid of file to permanently delete
- */
-export const deleteFile = uid => (dispatch, getState) => {
-  LiveEndpoints.Trash.deleteFile(uid)
-    .then(({ data }) => {
-      dispatch(getFiles())
-    })
-}
-
-// /**
-//  * Updates total display elements
-//  * @param {Number} uid File to trash bin
-//  * @returns {ReduxAction}
-//  */
-// export const trashBinFile = uid => ({
-//   type: UPDATE_TOTAL_DISPLAY_ELEMENTS,
-//   payload: uid
-// })
-
-/**
- * Updates total display elements
- * @returns {ReduxAction}
- */
-export const updateTotalDisplayElements = () => ({
-  type: UPDATE_TOTAL_DISPLAY_ELEMENTS
-})
-
-/**
- * Updates active page based on state
- * @returns {ReduxAction}
- */
-export const updateActivePage = () => ({
-  type: UPDATE_ACTIVE_PAGE
-})
-
-/**
- * Sets the current page
- * @param {Number} currentPage Index of page to change to
- * @returns {ReduxAction}
- */
-export const setCurrentPage = currentPage => ({
-  type: SET_CURRENT_PAGE,
-  payload: currentPage
-})
-
-/**
- * Updates the total number of results pages, based on state.
- * For use with pagination components
- * @returns {ReduxAction}
- */
-export const updateTotalPages = () => ({
-  type: UPDATE_TOTAL_PAGES
-})
-
-/**
- * Sets current pages of results
- * @param {Object[][]} currentPages 2D array of results, each array is a page
- * @returns {ReduxAction}
- */
-export const loadPages = currentPages => ({
-  type: LOAD_PAGES,
-  payload: currentPages
-})
-
-/**
- * Sets current list of display results [INCOMPLETE DOCS]
- * @param {Any[]} currentList List of objects to display
- * @returns {ReduxAction}
- */
-export const loadCurrentList = currentList => ({
-  type: LOAD_CURRENT_LIST,
-  payload: currentList
-})
-
-/**
- * Sets loadError in state, if load has failed [INCOMPLETE DOCS]
- * @param {Any} loadError Reason for load failure
- * @returns {ReduxAction}
- */
-export const loadError = loadError => ({
-  type: LOAD_ERROR,
-  payload: loadError
-})
-
-/**
- * Sets list of all files [INCOMPLETE DOCS]
- * @param {Object[]} fileList List of files from API
- * @returns {ReduxAction}
- */
-export const loadFiles = fileList => ({
-  type: LOAD_FILES,
-  payload: fileList
-})
-
-/**
- * Sets list of all folders [INCOMPLETE DOCS]
- * @param {Object[]} folderList List of folders from API
- * @returns {ReduxAction}
- */
-export const loadFolders = folderList => ({
-  type: LOAD_FILES,
-  payload: folderList
-})
-
-/**
- * Library state reducer
- * @param {LibraryState} state Library state object
- * @param {ReduxAction} action Redux type/payload action
+ * Library reducer
+ * @param {LibraryState} state Current state
+ * @param {ReduxAction} action Action being performed
  * @returns {LibraryState}
  */
-function config (state = initialState, action) {
+export default function config (state = initialState, action) {
   switch (action.type) {
-    case LOAD_ERROR:
+    case ADD_FILE:
       return {
         ...state,
-        loadError: action.payload
+        fileList: [...state.fileList, ({ ...action.payload, isFolder: false })]
       }
-    case LOAD_FILES:
+    case EDIT_FILE:
       return {
         ...state,
-        fileList: action.payload
+        fileList: state.fileList.map(e => e.uid === action.payload.uid ? action.payload : e)
       }
-    case LOAD_FOLDERS:
+    case ADD_FOLDER:
       return {
         ...state,
-        folderList: action.payload
+        folderList: [...state.folderList, ({ ...action.payload, isFolder: true })]
       }
-    case LOAD_CURRENT_LIST:
+    case REMOVE_FILE:
       return {
         ...state,
-        currentList: action.payload
+        fileList: state.fileList.filter(e => e.uid !== action.payload.uid)
       }
-    case LOAD_PAGES:
+    case REMOVE_FOLDER:
       return {
         ...state,
-        pages: action.payload
+        folderList: state.folderList.filter(e => e.uid !== action.payload.uid)
       }
-    case UPDATE_TOTAL_PAGES:
-      return {
-        ...state,
-        totalPages: state.pages.length
-      }
-    case SET_CURRENT_PAGE:
+    case UPDATE_CURRENT_LIST:
+      return state.displayFolder
+        ? {
+          ...state,
+          currentList: state.displayFolder.filesContained.slice(
+            state.currentPage * FILES_PER_PAGE,
+            state.currentPage * FILES_PER_PAGE + FILES_PER_PAGE
+          )
+        }
+        : {
+          ...state,
+          currentList: [...state.folderList, ...state.fileList].slice(
+            state.currentPage * FILES_PER_PAGE,
+            state.currentPage * FILES_PER_PAGE + FILES_PER_PAGE
+          )
+        }
+    case UPDATE_CURRENT_PAGE:
       return {
         ...state,
         currentPage: action.payload
       }
-    case UPDATE_ACTIVE_PAGE:
+    case UPDATE_TOTAL_PAGES:
       return {
         ...state,
-        activePage: state.pages[state.currentPage]
+        totalPages: state.displayFolder === null
+          ? Math.ceil((state.folderList.length + state.fileList.length) / FILES_PER_PAGE)
+          : Math.ceil((0.0001 + state.displayFolder.filesContained.length) / FILES_PER_PAGE)
       }
-    case UPDATE_TOTAL_DISPLAY_ELEMENTS:
+    case UPDATE_DISPLAY_FOLDER:
       return {
         ...state,
-        totalDisplayElements: state.pages.reduce((acc, curr) => acc + curr.length, 0)
+        displayFolder: action.payload
+      }
+    case LOAD_FILES:
+      return {
+        ...state,
+        fileList: [...state.fileList, ...action.payload]
+      }
+    case LOAD_FOLDERS:
+      return {
+        ...state,
+        folderList: [...state.folderList, ...action.payload]
       }
     default:
       return state
   }
 }
 
-export default config
-
-// Need to correct list props to reflect an array that may contain a mixture of 2+ object types
-
 /**
- * @typedef LibraryState
- * @property {FileResponse[]} fileList A list of files
- * @property {FolderResponse[]} folderList
- * @property {FileResponse[]|FolderResponse[]} currentList
- * @property {Object} currentFolder
- * @property {Number} currentPage
- * @property {Boolean} foldersLoaded
- * @property {Boolean} trashLoaded
- * @property {Error} loadingError
- * @property {FileResponse[][]|FolderResponse[][]} pages
- * @property {Number} totalPages
- * @property {Number} totalDisplayElements
- * @property {FileResponse[]|FolderResponse[]} activePage
- */
-
-/**
-  * @typedef ReduxAction
-  * @property {String} type
-  * @property {Any} payload
-  */
-
-/**
- * @function ActionCreator
+ * Adds a file to fileList
+ * @param {FileResponse} file File to add
  * @returns {ReduxAction}
  */
+export const addFileAction = file => ({
+  type: ADD_FILE,
+  payload: file
+})
+
+/**
+ * Applies changes to a file in fileList
+ * @param {FileResponse} file Updated file
+ * @returns {ReduxAction}
+ */
+export const editFileAction = file => ({
+  type: EDIT_FILE,
+  payload: file
+})
+
+/**
+ * Adds a folder to folderList
+ * @param {FolderResponse} folder Folder to add
+ * @returns {ReduxAction}
+ */
+export const addFolderAction = folder => ({
+  type: ADD_FOLDER,
+  payload: folder
+})
+
+/**
+ * Remnoves a file from fileList
+ * @param {FileResponse} file File to add
+ * @returns {ReduxAction}
+ */
+export const removeFileAction = file => ({
+  type: REMOVE_FILE,
+  payload: file
+})
+
+/**
+ * Removes a folder from folderList
+ * @param {FolderResponse} folder Folder to add
+ * @returns {ReduxAction}
+ */
+export const removeFolderAction = folder => ({
+  type: REMOVE_FOLDER,
+  payload: folder
+})
+
+/**
+ * Removes a folder from folderList
+ * @returns {ReduxAction}
+ */
+export const updateCurrentListAction = () => ({
+  type: UPDATE_CURRENT_LIST
+})
+
+/**
+ * Sets page of results to display
+ * @param {Number} page Index of results to show
+ * @returns {ReduxAction}
+ */
+export const updateCurrentPageAction = page => ({
+  type: UPDATE_CURRENT_PAGE,
+  payload: page
+})
+
+/**
+* Updates number of total pages of results
+* @returns {ReduxAction}
+*/
+export const updateTotalPagesAction = () => ({
+  type: UPDATE_TOTAL_PAGES
+})
+
+/**
+ * Sets folder to display contents
+ * @param {FolderResponse} [folder] Folder to display, defaults to null which is root
+ * @returns {ReduxAction}
+ */
+export const updateDisplayFolderAction = (folder = null) => ({
+  type: UPDATE_DISPLAY_FOLDER,
+  payload: folder
+})
+
+/**
+* Adds files into fileList
+* @returns {ReduxAction}
+*/
+export const loadFilesAction = files => ({
+  type: LOAD_FILES,
+  payload: files
+})
+
+/**
+* Adds folders into folderList
+* @returns {ReduxAction}
+*/
+export const loadFoldersAction = folders => ({
+  type: LOAD_FOLDERS,
+  payload: folders
+})
+
+/**
+ * Load files to initialize fileList with
+ * @param {FileResponse[]} files Files to load
+ */
+export const loadFiles = files => dispatch => {
+  dispatch(loadFilesAction(files.map(e => ({ ...e, isFolder: false }))))
+  dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
+}
+
+/**
+ * Load folders to initialize folderList with
+ * @param {FolderResponse[]} folders Folders to load
+ */
+export const loadFolders = folders => dispatch => {
+  dispatch(loadFoldersAction(folders.map(e => ({ ...e, isFolder: true }))))
+  dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
+}
+
+/**
+ * Adds a file to state
+ * @param {FileResponse} file File to add
+ */
+export const addFile = file => dispatch => {
+  dispatch(addFileAction(file))
+  dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
+}
+
+/**
+ * Adds a folder to state
+ * @param {FolderResponse} folder Folder to add
+ */
+export const addFolder = folder => dispatch => {
+  dispatch(addFolderAction(folder))
+  dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
+}
+
+/**
+ * Uploads a file
+ * @param {FileResponse} file File to add
+ */
+export const uploadFile = file => dispatch => {
+  LiveEndpoints.File.uploadFile(file).then(({ data }) => {
+    dispatch(addFile(data))
+    // dispatch(updateCurrentListAction())
+    // dispatch(updateTotalPagesAction())
+  }).catch(err => {
+    console.error(err)
+  })
+}
+
+/**
+ * Uploads a folder
+ * @param {FolderResponse} folder Folder to add
+ */
+export const uploadFolder = folder => dispatch => {
+  LiveEndpoints.Folder.uploadFolder(folder).then(({ data }) => {
+    dispatch(addFolder(data))
+    // dispatch(updateCurrentListAction())
+    // dispatch(updateTotalPagesAction())
+    console.log(data)
+  }).catch(err => {
+    console.error(err)
+  })
+}
+
+/**
+ * Uploads a folder via zip method
+ * @param {Blob} folder Folder to add
+ */
+export const uploadFolderZip = (folder) => dispatch => {
+  LiveEndpoints.Folder.uploadFolderZip(folder).then(({ data }) => {
+    dispatch(addFolder(data))
+    // dispatch(updateCurrentListAction())
+    // dispatch(updateTotalPagesAction())
+    console.log(data)
+  }).catch(err => {
+    console.error(err)
+  })
+}
+
+/**
+ * Removes a file
+ * @param {FileResponse} file File to remove
+ */
+export const removeFile = file => dispatch => {
+  dispatch(removeFileAction(file))
+  dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
+  dispatch(checkBackPage())
+}
+
+/**
+ * Removes a folder
+ * @param {FolderResponse} folder Folder to remove
+ */
+export const removeFolder = folder => dispatch => {
+  dispatch(removeFolderAction(folder))
+  dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
+  dispatch(checkBackPage())
+}
+
+/**
+ * Updates an individual file
+ * @param {FileResponse} file Updated file
+ */
+export const editFile = file => dispatch => {
+  dispatch(editFileAction(file))
+  dispatch(updateCurrentListAction())
+  dispatch(updateTotalPagesAction())
+}
+
+/**
+ * Set currently displayed page of results
+ * @param {Number} index Index of results page to show
+ */
+export const setPage = index => (dispatch, getState) => {
+  const { totalPages } = getState().library
+
+  if (index >= 0 && index < totalPages) {
+    dispatch(updateCurrentPageAction(index))
+    dispatch(updateCurrentListAction())
+  } else {
+    console.error('Index out of range!')
+  }
+}
+
+/**
+ * Finds a file by UID in fileList
+ * @param {Number} uid of file to find
+ * @param {Function} getState redux-thunk getState method
+ * @returns {FileResponse}
+ */
+const getFileByUID = (uid, getState) => {
+  const file = getState().library.fileList.filter(e => e.uid === uid)[0]
+
+  if (typeof file !== 'undefined') {
+    return file
+  } else {
+    throw new Error('Invalid file UID!')
+  }
+}
+
+/**
+ * Finds a folder by UID in folderList
+ * @param {Number} uid of folder to find
+ * @param {Function} getState redux-thunk getState method
+ * @returns {folderResponse}
+ */
+const getFolderByUID = (uid, getState) => {
+  const folder = getState().library.folderList.filter(e => e.uid === uid)[0]
+
+  if (typeof folder !== 'undefined') {
+    return folder
+  } else {
+    // throw new Error('Invalid folder UID!')
+    console.error('Invalid folder UID!')
+    return null
+  }
+}
+
+/**
+ * Move a file to trashbin
+ * @param {Number} uid UID of file to trashbin
+ */
+export const trashFile = uid => (dispatch, getState) => {
+  const file = getFileByUID(uid, getState)
+  dispatch(removeFile(file))
+  LiveEndpoints.File.trashFile(uid).then(({ data }) => {
+    // dispatch(removeFile(data))
+    dispatch(Trash.addFile(data))
+  }).catch(err => {
+    console.error(err)
+    dispatch(addFile(file))
+  })
+}
+
+/**
+ * Move a folder to trashbin
+ * @param {Number} uid UID of folder to trashbin
+ */
+export const trashFolder = uid => (dispatch, getState) => {
+  const folder = getFolderByUID(uid, getState)
+  dispatch(removeFolder(folder))
+  LiveEndpoints.Folder.trashFolder(uid).then(({ data }) => {
+    // dispatch(removeFolder(data))
+    dispatch(Trash.addFolder(data))
+  }).catch(err => {
+    console.error(err)
+    dispatch(addFolder(folder))
+  })
+}
+
+/**
+ * Create a new folder and add it to the UI
+ * @param {String} folderName Name for newly created folder
+ */
+export const createNewFolder = folderName => (dispatch, getState) =>
+  LiveEndpoints.Folder.createFolder(folderName)
+    .then(({ data }) => {
+      dispatch(addFolder(data))
+    })
+
+/**
+ * Renames a file
+ * @param {Number} uid UID of file to rename
+ * @param {String} newName New name to assign to file
+ */
+export const renameFile = (uid, newName) => (dispatch, getState) =>
+  LiveEndpoints.File.renameFile(uid, newName)
+    .then(({ data }) => {
+      dispatch(editFile(data))
+      dispatch(Modals.setEditingFileAction(data))
+    })
+
+/**
+ * Moves a file into a new directory
+ * @param {Number} uid UID of file to rename
+ * @param {Number} folderUid Destination to move folder to
+ */
+export const moveFile = (uid, folderUid) => (dispatch, getState) => {
+  const { displayFolder } = getState().library
+  LiveEndpoints.File.moveFile(uid, folderUid)
+    .then(({ data }) => {
+      dispatch(editFile(data))
+      dispatch(removeFile(data))
+      // Need editFolder method here
+      // dispatch(setDisplayFolder(displayFolder))
+      dispatch(Modals.setEditingFileAction(data))
+    })
+}
+
+/**
+ * Sets the currently displayed folder
+ * @param {Number} folderUid Folder contents to display
+ */
+export const setDisplayFolder = (folderUid = null) => (dispatch, getState) => {
+  if (folderUid) {
+    const newDisplayFolder = getFolderByUID(folderUid, getState)
+    dispatch(updateDisplayFolderAction(newDisplayFolder))
+    dispatch(updateCurrentListAction())
+    dispatch(updateTotalPagesAction())
+  } else {
+    dispatch(updateDisplayFolderAction())
+    dispatch(updateCurrentListAction())
+    dispatch(updateTotalPagesAction())
+  }
+  dispatch(checkBackPage())
+}
+
+/**
+ * Navigates to the previous page of results, when a page is empty, if appropriate
+ */
+export const checkBackPage = () => (dispatch, getState) => {
+  const { currentList, currentPage, displayFolder } = getState().library
+
+  if (currentList.length === 0 && currentPage > 0) {
+    dispatch(setPage(currentPage - 1))
+  } else if (currentList.length === 0 && currentPage === 0 && displayFolder) {
+    dispatch(setDisplayFolder())
+  }
+}

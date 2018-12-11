@@ -1,17 +1,21 @@
 package com.cooksys.ftd.drivestorageorange.services;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
-import com.cooksys.ftd.drivestorageorange.dtos.FolderViewDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
 import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
+import com.cooksys.ftd.drivestorageorange.mappers.FileMapper;
 import com.cooksys.ftd.drivestorageorange.mappers.FolderMapper;
 import com.cooksys.ftd.drivestorageorange.repositories.FileRepository;
 import com.cooksys.ftd.drivestorageorange.repositories.FolderRepository;
@@ -28,6 +32,10 @@ public class FolderService {
 	@Autowired
 	FolderMapper folderMapper;
 	
+	// John additions
+	@Autowired
+	FileMapper fileMapper;
+	
 	/**
 	 * Create a new empty folder
 	 * 
@@ -35,11 +43,11 @@ public class FolderService {
 	 * @return FolderDTO
 	 * @see FolderDTO
 	 */
-	public FolderViewDTO createFolder(String name) {
+	public FolderDTO createFolder(String name) {
 		FolderEntity uploadedFolder = new FolderEntity();
 		uploadedFolder.setName(name);
 		
-		return toFolderViewDto(saveFolder(uploadedFolder));
+		return toDto(saveFolder(uploadedFolder));
 	}
 
 	/**
@@ -51,25 +59,146 @@ public class FolderService {
 	 * @see FolderDTO
 	 * @see MultipartFile
 	 */
-	public FolderViewDTO uploadFolder(String name, Map<String, MultipartFile> uploadFolder) {
-		FolderEntity uploadedFolder = new FolderEntity();
-		uploadedFolder.setName(name);
+	public FolderDTO uploadFolder(MultipartFile uploadFolder) {
+		try(ZipInputStream zipInputStream = new ZipInputStream(uploadFolder.getInputStream());){
+//			File convFile = null;
+//			ZipFile zip = null;
 
-		try {
-			for(String fileName : uploadFolder.keySet()) {
-				FileEntity uploadedFile = new FileEntity();
-				uploadedFile.setData(uploadFolder.get(fileName).getBytes());
+			System.out.println("\n");
+
+			FolderEntity container = null;
+			ZipEntry entry;
+			while((entry = zipInputStream.getNextEntry()) != null) {
+				String[] path = entry.getName().split("/");
+				String entryName = path[path.length - 1];
 				
-				if(uploadedFile.getData() != null) {
-					this.fileRepository.save(uploadedFile);
+				if(entry.isDirectory()) {
+					System.out.println("Creating folder:");
+					System.out.println(entryName);
+					
+					createFolder(entryName);
+					
+					if(container == null) {
+						container = this.folderRepository.getByName(entryName).get(0);
+					}
+//					if(convFile == null) {
+//						convFile = new File(entry.getName() + ".zip");
+//					    uploadFolder.transferTo(convFile);
+//					    zip = new ZipFile(convFile);
+//					}
+				} else {
+					System.out.println("Uploading File:");
+					System.out.println(entryName);
+					FileEntity file = new FileEntity();
+
+					file.setName(entryName);
+					if(container != null) {
+						file.setContainer(container);
+					}
+					ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+					byte[] data = new byte[(int) entry.getSize()];
+					int nRead;
+
+//					HALP PLS FIX
+//					while ((nRead = entry.read(data, 0, data.length)) != -1) {
+//					  buffer.write(data, 0, nRead);
+//					}
+//
+//					return buffer.toByteArray();
+					
+					return null;
+					
+//					if(zip != null) {
+//						ZipEntry entryZip = zip.getEntry(entry.getName());
+//						InputStream inputStream = zip.getInputStream(entryZip);
+//						byte[] bytes = new byte[(int) entryZip.getSize()];
+//						DataInputStream dis = new DataInputStream(inputStream);
+//						dis.readFully(bytes);
+//						file.setData(bytes);
+//					}
+					
+//					this.fileRepository.save(file);
 				}
 			}
 			
-			return toFolderViewDto(saveFolder(uploadedFolder));
+			return toDto(container);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+//		System.out.println(folderZip);
+//		FolderEntity uploadedFolder = new FolderEntity();
+//		uploadedFolder.setName(name);
+//
+//		try {
+//			for(String fileName : uploadFolder.keySet()) {
+//				FileEntity uploadedFile = new FileEntity();
+//				uploadedFile.setData(uploadFolder.get(fileName).getBytes());
+//				
+//				if(uploadedFile.getData() != null) {
+//					this.fileRepository.save(uploadedFile);
+//				}
+//			}
+//			
+//			return toDto(saveFolder(uploadedFolder));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 
+		return null;
+	}
+	
+	/**
+	 * [CURRENTLY ONLY ONE LEVEL DEEP]
+	 * Accepts a zip file and creates a folder and contents from it
+	 * @param inputStream zip file
+	 * @return FolderDTO
+	 */
+	public FolderDTO uploadFolder(InputStream inputStream) {
+		FolderEntity uploadedFolder = new FolderEntity();
+		ZipInputStream zipInput = new ZipInputStream(inputStream);
+		byte[] buffer = new byte[2048];
+
+		try {
+			ZipEntry entry;
+			
+			// Depends on first entry being the "folder"
+			String uploadFolderName = zipInput.getNextEntry().getName().replaceAll("/", "");
+			
+			System.out.println(uploadFolderName);
+			
+			uploadedFolder.setName(uploadFolderName);
+			uploadedFolder = this.folderRepository.save(uploadedFolder);
+			
+			while((entry = zipInput.getNextEntry()) != null) {
+				
+				FileEntity uploadedFile = new FileEntity();
+				uploadedFile.setName(entry.getName().replaceAll(uploadFolderName + "/", ""));
+				uploadedFile.setContainer(uploadedFolder);
+				
+				ByteArrayOutputStream output = null;
+				try {
+					output = new ByteArrayOutputStream();
+					int len = 0;
+					while((len = zipInput.read(buffer)) > 0) {
+						output.write(buffer, 0, len);
+					}
+				}
+				finally {
+					
+					uploadedFile.setData(output.toByteArray());
+					
+					this.fileRepository.save(uploadedFile);
+					
+					if(output != null) {
+						output.close();
+					}
+				}
+			}
+			zipInput.close();
+			return this.getFolderWithContents(this.folderMapper.toDto(this.folderRepository.getOne(uploadedFolder.getUid())));
+		} catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
 		return null;
 	}
 	
@@ -80,19 +209,8 @@ public class FolderService {
 	 * @return FolderDTO
 	 * @see FolderDTO
 	 */
-	public FolderViewDTO getFolderByUID(Long uid) {
-		return toFolderViewDto(getFolder(uid));
-	}
-	
-	
-	/**
-	 * [NOT FULLY IMPLEMENTED] Returns a folder by uid
-	 * 
-	 * @param uid
-	 * @return FolderDTO
-	 */
-	public FolderDTO downloadFolder(Long uid) {
-		return toFolderDto(getFolder(uid));
+	public FolderDTO getFolderByUID(Long uid) {
+		return toDto(getFolder(uid));
 	}
 	
 	/**
@@ -101,8 +219,45 @@ public class FolderService {
 	 * @return List<FolderDTO>
 	 * @see FolderDTO
 	 */
-	public List<FolderViewDTO> getAllFolders() {
-		return this.folderMapper.toViewDto(this.folderRepository.findAll());
+	public List<FolderDTO> getAllFolders() {
+		// Default implementation
+//		return this.folderMapper.toDto(this.folderRepository.findAll());
+		
+		// John implementation
+		List<FolderEntity> folderEntities = this.folderRepository.findAll();
+		List<FolderDTO> folderDTOs = new ArrayList<>();
+		
+		for (FolderEntity entity : folderEntities) {
+			FolderDTO folderToAdd = this.folderMapper.toDto(entity);
+			folderToAdd.setFilesContained(this.fileMapper.toDto(this.fileRepository.getAllInContainer(entity.getUid())));
+			folderDTOs.add(folderToAdd);
+		}
+		
+		return folderDTOs;
+	}
+	
+	/**
+	 * Populates a folder's contained files
+	 * @param folder
+	 * @return FolderDTO
+	 */
+	private FolderDTO getFolderWithContents(FolderDTO folder) {
+		folder.setFilesContained(this.fileMapper.toDto(this.fileRepository.getAllInContainer(folder.getUid())));
+		return folder;
+	}
+	
+	/**
+	 * Populates a list of folders with their contained files
+	 * @param folder
+	 * @return FolderDTO
+	 */
+	private List<FolderDTO> getFolderWithContents(List<FolderDTO> folders) {
+		List<FolderDTO> populatedFolders = new ArrayList<>();
+		
+		for (FolderDTO folder : folders) {
+			populatedFolders.add(this.getFolderWithContents(folder));
+		}
+		return populatedFolders;
 	}
 
 	/**
@@ -111,21 +266,28 @@ public class FolderService {
 	 * @param uid     of folder to rename
 	 * @param newName to assign to folder
 	 */
-	public FolderViewDTO renameFolder(Long uid, String newName) {
+	public FolderDTO renameFolder(Long uid, String newName) {
 		FolderEntity editingFolder = getFolder(uid);
 		editingFolder.setName(newName);
-		return toFolderViewDto(saveFolder(editingFolder));
+		
+		return toDto(saveFolder(editingFolder));
 	}
 
 	/**
-	 * Stages a folder for deletion "in trash" by UID
+	 * Stages a folder and its files for deletion "in trash" by UID
 	 * 
 	 * @param uid of folder to put "in trash"
 	 */
-	public FolderViewDTO trashFolder(Long uid) {
+	public FolderDTO trashFolder(Long uid) {
 		FolderEntity editingFolder = getFolder(uid);
+		List<FileEntity> filesInFolder = getFilesInFolder(uid);
+
 		editingFolder.setInTrash(true);
-		return toFolderViewDto(saveFolder(editingFolder));
+		for(FileEntity file : filesInFolder) {
+			file.setInTrash(true);
+			this.fileRepository.save(file);
+		}
+		return toDto(saveFolder(editingFolder));
 	}
 
 	/**
@@ -133,10 +295,10 @@ public class FolderService {
 	 * 
 	 * @param folderUid of folder to move
 	 */
-	public FolderViewDTO moveFolder(Long uid) {
+	public FolderDTO moveFolder(Long uid) {
 		FolderEntity editingFolder = getFolder(uid);
 		editingFolder.setContainer(null);
-		return toFolderViewDto(saveFolder(editingFolder));
+		return toDto(saveFolder(editingFolder));
 	}
 
 	/**
@@ -145,10 +307,10 @@ public class FolderService {
 	 * @param folderUid    of folder to move
 	 * @param containerUid of destination to move file to
 	 */
-	public FolderViewDTO moveFolder(Long folderUid, Long containerUid) {
+	public FolderDTO moveFolder(Long folderUid, Long containerUid) {
 		FolderEntity editingFolder = getFolder(folderUid);
 		editingFolder.setContainer(getFolder(containerUid));
-		return toFolderViewDto(saveFolder(editingFolder));
+		return toDto(saveFolder(editingFolder));
 	}
 	
 	// Utility methods
@@ -163,24 +325,15 @@ public class FolderService {
 		return this.folderRepository.getOne(folderUid);
 	}
 	
-	/**
-	 * Map FolderEntity to FolderDTO
-	 * 
-	 * @param folderEntity
-	 * @return FolderDTO
-	 */
-	private FolderDTO toFolderDto(FolderEntity folderEntity) {
-		return this.folderMapper.toDto(folderEntity);
-	}
 	
 	/**
-	 * Map FolderEntity to FolderDTO
+	 * Returns a list of files in the folder with uid
 	 * 
-	 * @param folderEntity
-	 * @return FolderDTO
+	 * @param uid
+	 * @return List<FileEntity>
 	 */
-	private FolderViewDTO toFolderViewDto(FolderEntity folderEntity) {
-		return this.folderMapper.toViewDto(folderEntity);
+	public List<FileEntity> getFilesInFolder(Long uid) {
+		return this.fileRepository.getAllInContainer(uid);
 	}
 	
 	/**
@@ -192,4 +345,16 @@ public class FolderService {
 	private FolderEntity saveFolder(FolderEntity folderEntity) {
 		return this.folderRepository.save(folderEntity);
 	}
+	
+	/**
+	 * Map FolderEntity to FolderDTO
+	 * 
+	 * @param folderEntity
+	 * @return FolderDTO
+	 */
+	private FolderDTO toDto(FolderEntity folderEntity) {
+		return this.folderMapper.toDto(folderEntity);
+	}
+
+	
 }

@@ -5,10 +5,17 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
 import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
 
 public interface FolderRepository extends JpaRepository<FolderEntity, Long> {
+	
+	/**
+	 * Gets an entity from trashbin via UID, if it exists
+	 * @param uid to return from trashbin
+	 * @return
+	 */
+	@Query(value = "SELECT f FROM FolderEntity f WHERE f.name = ?1 ORDER BY f.id DESC")
+	List<FolderEntity> getByName(String name);
 	
 	/**
 	 * Gets an entity from trashbin via UID, if it exists

@@ -74,7 +74,15 @@ export const FolderIcon = props => (
 export const MoveIcon = props => (
   <Icon
     onClick={props.onClick}
-    iconClass={'fas fa-directions'}
+    iconClass={'fas fa-cog'}
+    wrapper={styles.cardIcon}
+  />
+)
+
+export const HomeIcon = props => (
+  <Icon
+    onClick={props.onClick}
+    iconClass={'fas fa-home'}
     wrapper={styles.cardIcon}
   />
 )

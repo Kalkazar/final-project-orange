@@ -1,5 +1,23 @@
 @import "../../index.scss";
 
+//File Card
+.cardHeaderClass {
+  display: flex;
+  flex-direction: row;
+}
+
+
+.cardTitle {
+  border-bottom: 1pt solid #221d1d;
+  padding: 5pt 10pt;
+  text-align: center;
+  width: 95%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 30%;
+  position: relative;
+}
 
 .uploadIconHolder {
   height: 80%;
@@ -10,43 +28,90 @@
   cursor: pointer;
 }
 
+.titleIconHolder {
+  float: right;
+  position: absolute; 
+  top: 0;
+  right: 0;
+  // color: rgb(216, 211, 211);
+  color: rgb(78, 75, 75);
+
+}
+
+
+.fileCardBody, .folderCardBody {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 60%;
+  align-items: flex-end;
+  box-sizing: border-box;
+  padding: 2pt;
+
+}
+
+//Folder
+.folderText {
+  position: relative;
+  text-align: center;
+  height: 10pt;
+  top: 25%;
+  font-size: 1.5em;
+  opacity: 0.4;
+  @include unselectable;
+}
+
+//Trash
+.trashCardHolder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  align-content: space-between;
+  padding: 5pt;
+  height: 80%;
+  width: 100%;
+}
+
+
+
 .uploadIconHolder:hover, .folderCardBody:hover {
   background-color: #ccc;
   border-radius: 5pt;
 }
 
-.trashCardHolder {
+.card.cardBody {
   display: flex;
-  flex-direction: column;
-  align-content: space-between;
-  padding: 10pt;
-  height: 80%;
-  width: 100%;
+
 }
 
+//file and folder card body
 .cardHolder {
   display: flex;
-  width: 200pt;
+  width: 210pt;
   height: 150pt;
   flex-direction: column;
-  box-shadow: 0 0 3px 1px rgba(107, 101, 101, 0.35);
+  box-shadow: 3px 3px;
+  border-radius: 5px;
+  color: rgb(78, 75, 75);
+  background-color: #d6b55f;
+  background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
   @include noselecttext;
+  // background-image: linear-gradient(bottom, rgb(221, 84, 10), rgb(245, 185, 56));
+  // background-image: linear-gradient(top ,rgb(29, 92, 95), rgb(19, 135, 141));
+  // background-color: #296C70;
+  // color: rgb(194, 188, 188);
+
 }
 
-
-
-.cardTitle {
-  border-bottom: 1pt solid #f3f3f3;
-  padding: 5pt 10pt;
-  text-align: center;
-  height: 40%;
-}
-
+//other styles on the card for some reason???
 .cardBody {
   padding: 5pt 10pt;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
+
 }
 
 .fileCardBody, .folderCardBody {
@@ -57,23 +122,25 @@
   height: 60%;
   align-items: flex-end;
   box-sizing: border-box;
-  padding: 10pt;
+  padding: 2pt;
+
 }
 
-.titleIconHolder {
-  float: right;
-}
 
 .folderCardBody {
   cursor: pointer;
+
+  // Addons
+  height: 40%;
 }
 
-.folderText {
-  position: relative;
-  text-align: center;
-  height: 0pt;
-  top: 25%;
-  font-size: 1.5em;
-  opacity: 0.4;
-  @include unselectable;
+.folderCardControls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 20%;
+  align-items: flex-end;
+  box-sizing: border-box;
+  padding: 2pt;
 }

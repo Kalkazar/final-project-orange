@@ -1,3 +1,4 @@
+@import '../../index.scss';
 .App {
   height: 100%;
   width: 100%;
@@ -6,4 +7,27 @@
 .nopadding {
   padding: 0 !important;
   margin: 0 !important;
+}
+.container-fluid {
+  height: 100vh;
+  display: flex;
+}
+.navAndLib {
+  padding: 0px;
+}
+// .wholePageClass{
+//   background-color: green;
+// }
+.bodyClass {
+  display: flex;
+  flex-direction: row;
+}
+
+.content-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 80%;
+  height: 100%;
+  padding-left: 30px;
 }

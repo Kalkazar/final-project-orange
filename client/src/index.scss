@@ -1,12 +1,22 @@
-body {
-  margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+html {
+  height: 100%;
 }
 
-code {
+body {
+  // background: rgb(216, 97, 42);
+  height: 100%;
+  background-image: linear-gradient(bottom,  rgb(16, 74, 88), rgb(41, 27, 233));
+  background-repeat: no-repeat ;
+  background-attachment: fixed ;
+  margin: 0px;
+  margin-right: 250px;
+  padding: 0px;
+  margin-bottom: 100px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ 
 }
+
 
 @mixin noselecttext {
   -webkit-touch-callout: none;

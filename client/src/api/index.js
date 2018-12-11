@@ -1,30 +1,22 @@
-import { files, folders, file, FileResponse, FolderResponse } from '../helpers/mock-responses'
+/**
+ * @typedef {import('../helpers/types').FileResponse} FileResponse
+ * @typedef {import('../helpers/types').FolderResponse} FolderResponse
+ * @typedef {import('../helpers/types').ViewState} LibraryState
+ */
+
 import Axios, { AxiosPromise } from 'axios'
 
-export const getFileList = () =>
-  new Promise((resolve, reject) => {
-    resolve(files)
-  })
-
-// Appropriate endpoint - get all files
-// Axios.get('file')
-//   .then()
-export const getFolderList = () =>
-  new Promise((resolve, reject) => {
-    resolve(folders)
-  })
-
-// Appropriate endpoint - get all folders
-// Axios.get('folder')
-//   .then()
-
 /**
- * [PARTIALLY IMPLEMENTED] Upload a new file
+ * Upload a new file
  * @param {Any} file File data to upload
  * @returns {AxiosPromise<FileResponse>}
  */
-const uploadFile = file =>
-  Axios.post('file', file)
+const uploadFile = file => {
+  const formData = new FormData()
+  formData.append('name', file.name)
+  formData.append('file', file)
+  return Axios.post('file', formData)
+}
 
 /**
  * Returns a file via UID if it exists
@@ -35,13 +27,14 @@ const getFile = uid =>
   Axios.get(`file/${uid}`)
 
 /**
- * [PARTIALLY IMPLEMENTED] Downloads a file’s data.
+ * Downloads a file’s data.
  * This should be called in-browser to initiate
  * file download by user
  * @param {Number} uid UID of file to download
  */
-const downloadFile = uid =>
-  Axios.get(`file/${uid}/download`)
+const downloadFile = uid => {
+  console.log('test')
+  return Axios.get(`file/${uid}/download`)
     .then(response => {
       getFile(uid).then(({ data }) => {
         const url = window.URL.createObjectURL(new Blob([response.data]))
@@ -60,6 +53,8 @@ const downloadFile = uid =>
       // link.click()
       // document.body.removeChild(link)
     })
+    .catch(err => (console.log(err)))
+}
 
 /**
  * Returns all files
@@ -71,10 +66,11 @@ const getAllFiles = () =>
 /**
  * Renames the given file by uid
  * @param {Number} uid UID of file to rename
+ * @param {String} newName New name to assign to file
  * @returns {AxiosPromise<FileResponse>}
  */
-const renameFile = uid =>
-  Axios.patch(`file/${uid}/download`)
+const renameFile = (uid, newName) =>
+  Axios.patch(`file/${uid}/rename/${newName}`)
 
 /**
  * Moves a file into a folder by UID
@@ -82,11 +78,11 @@ const renameFile = uid =>
  * @param {Number} [folderUid] UID of destination folder.  Moves the file to root if undefined
  * @returns {AxiosPromise<FileResponse>}
  */
-const moveFile = (fileUid, folderUid) =>
+const moveFile = (fileUid, folderUid = -1) =>
   Axios.patch(
-    folderUid
-      ? `file/move/${fileUid}/${folderUid}`
-      : `file/move/${fileUid}`
+    folderUid > -1
+      ? `file/${fileUid}/move/${folderUid}`
+      : `file/${fileUid}/move`
   )
 
 /**
@@ -98,12 +94,33 @@ const trashFile = uid =>
   Axios.delete(`file/${uid}`)
 
 /**
- * [PARTIALLY IMPLEMENTED] Upload a new folder
- * @param {Any} folder Folder to upload
+ * Upload a new folder
+ * @param {Any} folder Folder data to upload
  * @returns {AxiosPromise<FolderResponse>}
  */
-const uploadFolder = folder =>
-  Axios.post('folder', folder)
+const uploadFolder = folder => {
+  console.log(folder)
+  const formData = new FormData()
+  formData.append('folder', folder)
+  return Axios.post('folder', formData)
+}
+
+/**
+ * Upload a new folder as a zip file
+ * @param {String} folderName Name to assign this newly created folder
+ * @param {Blob} folder Folder data to upload
+ * @returns {AxiosPromise<FolderResponse>}
+ */
+const uploadFolderZip = (folder) => {
+  console.log(folder)
+  // const formData = new FormData()
+  // formData.append('folder', folder)
+  return Axios.post(`folder`, folder, {
+    headers: {
+      'Content-Type': 'application/zip'
+    }
+  })
+}
 
 /**
  * Creates a new empty folder
@@ -127,6 +144,27 @@ const getAllFolders = () =>
  */
 const getFolder = uid =>
   Axios.get(`folder/${uid}`)
+
+/**
+* Downloads a folder's data.
+* This should be called in-browser to initiate
+* file download by user
+* @param {Number} uid UID of file to download
+*/
+const downloadFolder = uid => {
+  return Axios.get(`folder/${uid}/download`, { responseType: 'arraybuffer' })
+    .then(response => {
+      getFolder(uid).then(({ data }) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', data.name + '.zip')
+        document.body.appendChild(link)
+        link.click()
+      })
+    })
+    .catch(err => console.log(err))
+}
 
 /**
  * Renames a folder by UID
@@ -161,6 +199,7 @@ const trashFolder = uid =>
 /**
  * Restores a file via uid
  * @param {Number} uid UID of file to restore
+ * @returns {AxiosPromise<FileResponse>} restored file
  */
 const restoreFile = uid =>
   Axios.patch(`trash/file/${uid}/restore`)
@@ -168,6 +207,7 @@ const restoreFile = uid =>
 /**
  * Restores a folder via uid
  * @param {Number} uid UID of folder to restore
+ * @returns {AxiosPromise<FolderResponse>} restored folder
  */
 const restoreFolder = uid =>
   Axios.patch(`trash/folder/${uid}/restore`)
@@ -190,13 +230,13 @@ const deleteFile = uid =>
  * @param {Number} uid UID of folder to permanently delete
  */
 const deleteFolder = uid =>
-  Axios.patch(`trash/folder/${uid}/delete`)
+  Axios.delete(`trash/folder/${uid}/delete`)
 
 /**
  * Permanently deletes all files and folders in trash
  */
 const deleteAll = () =>
-  Axios.patch(`trash/delete`)
+  Axios.delete(`trash/delete`)
 
 export const LiveEndpoints = {
   File: {
@@ -210,8 +250,10 @@ export const LiveEndpoints = {
   },
   Folder: {
     uploadFolder,
+    uploadFolderZip,
     createFolder,
     getFolder,
+    downloadFolder,
     getAllFolders,
     renameFolder,
     moveFolder,
