@@ -98,11 +98,15 @@ public class FolderService {
 					byte[] data = new byte[(int) entry.getSize()];
 					int nRead;
 
-					while ((nRead = entry.read(data, 0, data.length)) != -1) {
-					  buffer.write(data, 0, nRead);
-					}
-
-					return buffer.toByteArray();
+//					HALP PLS FIX
+//					while ((nRead = entry.read(data, 0, data.length)) != -1) {
+//					  buffer.write(data, 0, nRead);
+//					}
+//
+//					return buffer.toByteArray();
+					
+					return null;
+					
 //					if(zip != null) {
 //						ZipEntry entryZip = zip.getEntry(entry.getName());
 //						InputStream inputStream = zip.getInputStream(entryZip);
@@ -112,7 +116,7 @@ public class FolderService {
 //						file.setData(bytes);
 //					}
 					
-					this.fileRepository.save(file);
+//					this.fileRepository.save(file);
 				}
 			}
 			
