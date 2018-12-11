@@ -59,8 +59,10 @@ class UploadButton extends Component {
     return (
       <div className={`${styles.uploadButtonClass}`}>
         <Dropzone
+          className={`${styles.dropzoneClass}`}
           getDataTransferItems={evt => fromEvent(evt)}
           onDrop={this.handleUpload}
+          // style={{ height: '100px' }}
         >
           <div className={`${styles.buttonContent}`}>
             <span>Upload Files or Folders</span>

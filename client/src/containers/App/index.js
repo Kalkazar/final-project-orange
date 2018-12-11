@@ -12,25 +12,21 @@ import Modal from '../../components/Modal'
 class App extends Component {
   render () {
     return (
-      <div className='container-fluid'>
-        <div className='row justify-content-center'>
-          <div className={styles.navAndLib}>
-            <div className=' col-sm-12 col-md-3 col-lg-3 col-xl-3' />
-            <SideNav />
-          </div>
-          <div className=' col-sm-12 col-md-9 col-lg-8 col-xl-7'>
-            <Switch>
-              <Route exact path='/library' component={Library} />
-              <Route exact path='/trash' component={Trash} />
-              <Route path='/*' render={() => <Redirect to={'/library'} />} />
-            </Switch>
-            {/* <Pagination
+      <div className={styles['container-fluid']}>
+        <SideNav />
+        <div className={styles['content-box']}>
+          <Switch>
+            <Route exact path='/library' component={Library} />
+            <Route exact path='/trash' component={Trash} />
+            <Route path='/*' render={() => <Redirect to={'/library'} />} />
+          </Switch>
+        </div>
+
+        {/* <Pagination
               currentPage={2}
               totalPages={12}
               setPage={() => console.log('setPage called!')}
             /> */}
-          </div>
-        </div>
         <Modal />
       </div>
     )

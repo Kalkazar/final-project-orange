@@ -9,7 +9,8 @@
   margin: 0 !important;
 }
 .container-fluid {
-  width: 100%;
+  height: 100vh;
+  display: flex;
 }
 .navAndLib {
   padding: 0px;
@@ -20,4 +21,13 @@
 .bodyClass {
   display: flex;
   flex-direction: row;
+}
+
+.content-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 80%;
+  height: 100%;
+  padding-left: 30px;
 }
