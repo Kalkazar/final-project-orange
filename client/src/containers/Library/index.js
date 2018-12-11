@@ -5,6 +5,7 @@ import styles from './library.module.scss'
 import { FileCard, FolderCard } from '../../components/Card'
 import { HomeIcon } from '../../components/Icon'
 import Pagination from '../../components/Pagination'
+// import { Paginator } from './styled'
 import { Library as LibraryDuck, Modals as ModalsDuck } from '../../ducks'
 import { LiveEndpoints } from '../../api'
 import { groupArray } from '../../helpers/util'
@@ -71,7 +72,7 @@ class Library extends Component {
             }), 4).map((e, i) => (<Row key={i} >{e}</Row>))} </Container>
             : null}
         </div>
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center' }} >
+        <div className={styles.paginatorContainer} >
           <LibraryPaginator />
         </div>
       </Fragment>
