@@ -9,7 +9,7 @@ import styles from './folderNavButton.module.scss'
 const FolderNavButton = props => (
   <div className={`${styles.folderNavButtonClass}`} onClick={props.onClick}>
     <div className={`${styles.buttonContent}`}>
-      <span>Create Folder</span>
+      <span>{props.text}</span>
       <div className={`${styles.buttonIcon}`}>{props.icon}</div>
     </div>
   </div>
