@@ -78,7 +78,7 @@ const renameFile = (uid, newName) =>
  * @param {Number} [folderUid] UID of destination folder.  Moves the file to root if undefined
  * @returns {AxiosPromise<FileResponse>}
  */
-const moveFile = (fileUid, folderUid) =>
+const moveFile = (fileUid, folderUid = -1) =>
   Axios.patch(
     folderUid > -1
       ? `file/${fileUid}/move/${folderUid}`
@@ -226,10 +226,6 @@ export const LiveEndpoints = {
     uploadFile,
     getFile,
     downloadFile,
-    /**
-     * Returns all files
-     * @returns {AxiosPromise<FileResponse[]>}
-     */
     getAllFiles,
     renameFile,
     moveFile,
@@ -240,10 +236,6 @@ export const LiveEndpoints = {
     createFolder,
     getFolder,
     downloadFolder,
-    /**
-     * Gets all folders (dtos as List)
-     * @returns {AxiosPromise<FolderResponse[]>}
-     */
     getAllFolders,
     renameFolder,
     moveFolder,
