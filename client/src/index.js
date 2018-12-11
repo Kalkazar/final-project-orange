@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import './index.scss'
 import App from './containers/App'
 import { Provider } from 'react-redux'
+import Bubbles from './components/Bubbles'
 import createHistory from 'history/createBrowserHistory'
 import { BrowserRouter as Router } from 'react-router-dom'
 import getStore, { Library, UI } from './ducks'
@@ -20,6 +21,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <App />
+      <Bubbles />
     </Router>
   </Provider>,
   document.getElementById('root')
