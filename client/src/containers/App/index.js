@@ -8,12 +8,14 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Modal from '../../components/Modal'
+import TopNavBar from '../TopNavBar'
 
 class App extends Component {
   render () {
     return (
       <div className={styles['container-fluid']}>
         <SideNav />
+        <TopNavBar />
         <div className={styles['content-box']}>
           <Switch>
             <Route exact path='/library' component={Library} />
