@@ -4,18 +4,29 @@
  * @typedef {import('../helpers/types').ViewState} LibraryState
  */
 
-import Axios, { AxiosPromise } from 'axios'
+import Axios from 'axios'
+import JSZip from 'jszip'
 
 /**
  * Upload a new file
  * @param {Any} file File data to upload
  * @returns {AxiosPromise<FileResponse>}
  */
-const uploadFile = file => {
-  const formData = new FormData()
-  formData.append('name', file.name)
-  formData.append('file', file)
-  return Axios.post('file', formData)
+const uploadFiles = files => {
+  let zip = new JSZip()
+  files.forEach(file => {
+    zip.file(file.name, file)
+  })
+
+  return zip.generateAsync({ type: 'blob' })
+    .then(blob =>
+      Axios.post(`file`, blob, {
+        headers: {
+          'Content-Type': 'application/zip'
+        }
+      })
+    )
+    .catch(err => console.error(err))
 }
 
 /**
@@ -240,7 +251,7 @@ const deleteAll = () =>
 
 export const LiveEndpoints = {
   File: {
-    uploadFile,
+    uploadFiles,
     getFile,
     downloadFile,
     getAllFiles,

@@ -1,11 +1,15 @@
 package com.cooksys.ftd.drivestorageorange.services;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FileDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
@@ -27,28 +31,45 @@ public class FileService {
 
 	/**
 	 * Uploads a file and returns DTO of newly uploaded file
-	 * @param name to assign uploaded file
-	 * @param uploadFile file data uploaded
-	 * @return FileDTO
-	 * @see FileDTO
-	 * @see MultipartFile
+	 * @param inputStream file data uploaded as a zip
+	 * @return List<FileDTO>
+	 * @see List<FileDTO>
+	 * @see InputStream
 	 */
-	public FileDTO uploadFile(String name, MultipartFile uploadFile) {
-		FileEntity uploadedFile = new FileEntity();
+	public List<FileDTO> uploadFiles(InputStream inputStream) {
+		try (ZipInputStream zipInputStream = new ZipInputStream(inputStream);) {
+			List<FileDTO> uploadedFiles = new ArrayList<>();
+			ZipEntry entry;
+			byte[] buffer = new byte[2048];
+			while((entry = zipInputStream.getNextEntry()) != null) {
+				FileEntity fileToUpload = new FileEntity();
+				ByteArrayOutputStream output = null;
 
-		uploadedFile.setName(name);
-
-		try {
-			uploadedFile.setData(uploadFile.getBytes());
-		} catch (IOException e) {
+				fileToUpload.setName(entry.getName());
+				
+				try {
+					output = new ByteArrayOutputStream();
+					int len = 0;
+					
+					while((len = zipInputStream.read(buffer)) > 0) {
+						output.write(buffer, 0, len);
+					}
+				}
+				finally {
+					fileToUpload.setData(output.toByteArray());
+					
+					if(output != null) {
+						output.close();
+					}
+				}
+				uploadedFiles.add(this.fileMapper.toDto(this.fileRepository.save(fileToUpload)));
+			}
+			
+			return uploadedFiles;
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
-
-		if (uploadedFile.getData() != null) {
-			return this.fileMapper.toDto(this.fileRepository.save(uploadedFile));
-		} else {
-			return null;
-		}
+		return null;
 	}
 
 	/**
@@ -117,17 +138,6 @@ public class FileService {
 		editingFile.setContainer(this.folderRepository.getOne(folderUid));
 		return this.fileMapper.toDto(this.fileRepository.save(editingFile));
 	}
-
-	/**
-	 * [NOT IMPLEMENTED] Returns all stored files via pagination
-	 * 
-	 * @param sortBy Method to sort files
-	 * @param page   Page of sorted files to return
-	 * @param limit  Number of files to return
-	 */
-//	public void getFiles(String sortBy, Long page, Long limit) {
-////		this.fileRepository.findAll(sort)
-//	}
 
 	/**
 	 * Returns a file entity via UID
