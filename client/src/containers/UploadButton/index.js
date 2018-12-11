@@ -4,8 +4,9 @@ import PropTypes from 'prop-types'
 import Dropzone from 'react-dropzone'
 import styles from './uploadButton.module.scss'
 import { fromEvent } from 'file-selector'
+import JSZip from 'jszip'
 
-import { uploadFiles, addFolder, uploadFolderZip } from '../../ducks/library.duck'
+import { uploadFiles, uploadFolders } from '../../ducks/library.duck'
 
 /**
  *
@@ -20,25 +21,24 @@ class UploadButton extends Component {
   }
 
   handleUpload (files) {
-    // Need to update to handle folders. Back-end will need to be updated as well.
-    // Likely the best way is to create a zip in the api and send that.
-    console.log(files)
-    let topLevelFiles = []
-    // let folders = []
+    let topLevelFiles = files.filter(file =>
+      this.getFilePath(file).length === 1
+    )
+    let filesInFolders = files.filter(file =>
+      this.getFilePath(file).length > 1
+    )
 
-    files.forEach(file => {
-      console.log(file)
-      const filePath = file.path.includes('/') ? file.path.split('/').slice(1) : [file.path]
-      console.log(filePath)
-      if (filePath.length === 1) {
-        topLevelFiles = [...topLevelFiles, file]
-      } else {
-
-      }
-    })
     if (topLevelFiles.length >= 1) {
       this.props.uploadFiles(topLevelFiles)
     }
+    if (filesInFolders.length >= 1) {
+      let folderName = this.getFilePath(filesInFolders[0])[0]
+      this.props.uploadFolders(folderName, filesInFolders)
+    }
+  }
+
+  getFilePath (file) {
+    return file.path.includes('/') ? file.path.split('/').slice(1) : [file.path]
   }
 
   render () {
@@ -62,16 +62,14 @@ class UploadButton extends Component {
 
 UploadButton.propTypes = {
   uploadFiles: PropTypes.func.isRequired,
-  // addFolder: PropTypes.func.isRequired,
-  // uploadFolderZip: PropTypes.func.isRequired
+  uploadFolders: PropTypes.func.isRequired
 }
 
 const mapStateToProps = () => ({})
 
 const mapDispatchToProps = dispatch => ({
   uploadFiles: files => dispatch(uploadFiles(files)),
-  // addFolder: folder => dispatch(addFolder(folder)),
-  // uploadFolderZip: blob => dispatch(uploadFolderZip(blob))
+  uploadFolders: (folderName, files) => dispatch(uploadFolders(folderName, files))
 })
 
 export default connect(
