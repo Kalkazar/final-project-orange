@@ -1,6 +1,7 @@
 package com.cooksys.ftd.drivestorageorange.dtos;
 
 import java.util.Date;
+import java.util.List;
 
 public class FolderDTO {
 
@@ -13,6 +14,9 @@ public class FolderDTO {
 	private Date lastModified;
 
 	private Long containerId;
+	
+	// John addition
+	private List<FileDTO> containedFiles;
 
 	private boolean inTrash;
 
@@ -67,4 +71,12 @@ public class FolderDTO {
 		this.inTrash = inTrash;
 	}
 
+	public List<FileDTO> getContainedFiles() {
+		return containedFiles;
+	}
+
+	public void setContainedFiles(List<FileDTO> containedFiles) {
+		this.containedFiles = containedFiles;
+	}
+	
 }

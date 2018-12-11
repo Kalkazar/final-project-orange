@@ -1,24 +1,20 @@
 package com.cooksys.ftd.drivestorageorange.services;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
 import com.cooksys.ftd.drivestorageorange.entities.FolderEntity;
+import com.cooksys.ftd.drivestorageorange.mappers.FileMapper;
 import com.cooksys.ftd.drivestorageorange.mappers.FolderMapper;
 import com.cooksys.ftd.drivestorageorange.repositories.FileRepository;
 import com.cooksys.ftd.drivestorageorange.repositories.FolderRepository;
@@ -34,6 +30,10 @@ public class FolderService {
 
 	@Autowired
 	FolderMapper folderMapper;
+	
+	// John additions
+	@Autowired
+	FileMapper fileMapper;
 	
 	/**
 	 * Create a new empty folder
@@ -164,7 +164,20 @@ public class FolderService {
 	 * @see FolderDTO
 	 */
 	public List<FolderDTO> getAllFolders() {
-		return this.folderMapper.toDto(this.folderRepository.findAll());
+		// Default implementation
+//		return this.folderMapper.toDto(this.folderRepository.findAll());
+		
+		// John implementation
+		List<FolderEntity> folderEntities = this.folderRepository.findAll();
+		List<FolderDTO> folderDTOs = new ArrayList<>();
+		
+		for (FolderEntity entity : folderEntities) {
+			FolderDTO folderToAdd = this.folderMapper.toDto(entity);
+			folderToAdd.setContainedFiles(this.fileMapper.toDto(this.fileRepository.getAllInContainer(entity.getUid())));
+			folderDTOs.add(folderToAdd);
+		}
+		
+		return folderDTOs;
 	}
 
 	/**
