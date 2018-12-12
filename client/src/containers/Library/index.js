@@ -49,6 +49,33 @@ class Library extends Component {
 
           <div className={styles.libDivMain} >
             {this.props.activePage ? (
+              this.props.activePage.map((e, i) => {
+                return e.isFolder ? (
+                  <FolderCard
+                    key={i}
+                    folderName={e.name}
+                    folderId={e.uid}
+                    moveFolder={() => this.props.editFolder(e)}
+                    openFolder={() => this.props.openFolder(e.uid)}
+                    trashFolder={() => this.props.trashFolder(e.uid)}
+                    downloadFolder={() =>
+                      LiveEndpoints.Folder.downloadFolder(e.uid)
+                    }
+                  />
+                ) : (
+                  <FileCard
+                    key={i}
+                    fileName={e.name}
+                    fileId={e.uid}
+                    moveFile={() => this.props.editFile(e)}
+                    trashFile={() => this.props.trashFile(e.uid)}
+                    downloadFile={() =>
+                      LiveEndpoints.File.downloadFile(e.uid)
+                    }
+                  />
+                )
+              })) : null}
+            {/* {this.props.activePage ? (
               <Container fluid className={styles.containerFill}>
                 {' '}
                 {groupArray(
@@ -68,26 +95,26 @@ class Library extends Component {
                         />
                       </Col>
                     ) : (
-                        <Col xl={'3'} lg={'3'} md={'3'} key={i}>
-                          <FileCard
-                            key={i}
-                            fileName={e.name}
-                            fileId={e.uid}
-                            moveFile={() => this.props.editFile(e)}
-                            trashFile={() => this.props.trashFile(e.uid)}
-                            downloadFile={() =>
-                              LiveEndpoints.File.downloadFile(e.uid)
-                            }
-                          />
-                        </Col>
-                      )
+                      <Col xl={'3'} lg={'3'} md={'3'} key={i}>
+                        <FileCard
+                          key={i}
+                          fileName={e.name}
+                          fileId={e.uid}
+                          moveFile={() => this.props.editFile(e)}
+                          trashFile={() => this.props.trashFile(e.uid)}
+                          downloadFile={() =>
+                            LiveEndpoints.File.downloadFile(e.uid)
+                          }
+                        />
+                      </Col>
+                    )
                   }),
                   4
                 ).map((e, i) => (
                   <Row key={i}>{e}</Row>
                 ))}{' '}
-              </Container>
-            ) : null}
+              </Container> */}
+            {/* ) : null} */}
           </div>
 
           <div className={styles.libDivSmol}>
