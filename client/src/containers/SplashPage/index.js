@@ -5,7 +5,7 @@ import { Fade } from 'reactstrap'
 
 const StyledSplash = styled.div`
   padding: 20px;
-  font-size: 80pt;
+  font-size: 70pt;
   @media (max-width: 790px) {
     font-size: 40pt;
   }
@@ -37,7 +37,12 @@ class SplashPage extends Component {
 
     return (
       <Fade in={this.state.fadeIn} tag='h5' className='mt-3'>
-        <StyledSplash>Welcome to Goggle Dive!</StyledSplash>
+        <StyledSplash>
+          <span style={{ color: `red` }}>Welcome &nbsp;</span>
+          <span style={{ color: `blue` }}>to &nbsp;</span>
+          <span style={{ color: `yellow` }}>Goggle &nbsp;</span>
+          <span style={{ color: `green` }}>Dive!</span>
+        </StyledSplash>
       </Fade>
     )
   }
