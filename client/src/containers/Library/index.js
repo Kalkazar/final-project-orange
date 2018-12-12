@@ -33,7 +33,7 @@ class Library extends Component {
     return (
       <Fragment>
         <div className={styles.libDiv}>
-          <div className={`${styles.libDivSmol} ${styles.libTopSmol}`} >
+          <div className={styles.libDivSmol}>
             <HomeIcon
               className={`d-none d-md-block ${styles.iconWidthDown}`}
               onClick={() => this.props.openFolder()}
@@ -47,7 +47,7 @@ class Library extends Component {
             </span>
           </div>
 
-          <div className={styles.libDivMain} >
+          <div className={styles.libDivMain}>
             {this.props.activePage ? (
               this.props.activePage.map((e, i) => {
                 return e.isFolder ? (
@@ -120,7 +120,6 @@ class Library extends Component {
           <div className={styles.libDivSmol}>
             <LibraryPaginator />
           </div>
-
         </div>
       </Fragment>
     )
