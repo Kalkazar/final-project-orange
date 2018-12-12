@@ -105,9 +105,10 @@ export default function config (state = initialState, action) {
         fileList: state.fileList.map(e => e.uid === action.payload.uid ? action.payload : e)
       }
     case ADD_FOLDERS:
+    case LOAD_FOLDERS:
       return {
         ...state,
-        folderList: [...state.folderList, ({ ...action.payload, isFolder: true })]
+        folderList: [...state.folderList, ...action.payload]
       }
     case REMOVE_FILE:
       return {
@@ -151,11 +152,6 @@ export default function config (state = initialState, action) {
       return {
         ...state,
         displayFolder: action.payload
-      }
-    case LOAD_FOLDERS:
-      return {
-        ...state,
-        folderList: [...state.folderList, ...action.payload]
       }
     default:
       return state
@@ -301,8 +297,7 @@ export const addFiles = files => dispatch => {
  * @param {FolderResponse} folders Folder(s) to add
  */
 export const addFolders = folder => dispatch => {
-  // dispatch(addFoldersAction(folders.map(e => ({ ...e, isFolder: true }))))
-  dispatch(addFoldersAction(folder))
+  dispatch(addFoldersAction(folder.map(e => ({ ...e, isFolder: true }))))
   dispatch(updateCurrentListAction())
   dispatch(updateTotalPagesAction())
 }
@@ -328,7 +323,7 @@ export const uploadFolders = (folderName, files) => dispatch => {
   LiveEndpoints.Folder.uploadFolders(folderName, files)
     .then(({ data }) => {
       // console.log(data)
-      dispatch(addFolders(data))
+      dispatch(addFolders([data]))
     }).catch(err => {
       console.error(err)
     })
