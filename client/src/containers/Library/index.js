@@ -33,7 +33,7 @@ class Library extends Component {
     return (
       <Fragment>
         <div className={styles.libDiv}>
-          <div className={`d-block d-md-none ${styles.libTopMobileSpacing}`} />
+          {/* <div className={`d-block d-md-none ${styles.libTopMobileSpacing}`} /> */}
           <div className={styles.libDivSmol + ' ' + styles.libTopSmol}>
             <HomeIcon
               className={`d-none d-md-block ${styles.iconWidthDown}`}
