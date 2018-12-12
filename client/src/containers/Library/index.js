@@ -35,7 +35,7 @@ class Library extends Component {
         <div className={styles.libDiv}>
           <div className={styles.libDivSmol}>
             <HomeIcon
-              className={'d-none d-md-block'}
+              className={`d-none d-md-block ${styles.iconWidthDown}`}
               onClick={() => this.props.openFolder()}
             />
             <span className={styles.pathSpan + ' d-none d-md-block'}>
@@ -49,6 +49,33 @@ class Library extends Component {
 
           <div className={styles.libDivMain}>
             {this.props.activePage ? (
+              this.props.activePage.map((e, i) => {
+                return e.isFolder ? (
+                  <FolderCard
+                    key={i}
+                    folderName={e.name}
+                    folderId={e.uid}
+                    moveFolder={() => this.props.editFolder(e)}
+                    openFolder={() => this.props.openFolder(e.uid)}
+                    trashFolder={() => this.props.trashFolder(e.uid)}
+                    downloadFolder={() =>
+                      LiveEndpoints.Folder.downloadFolder(e.uid)
+                    }
+                  />
+                ) : (
+                  <FileCard
+                    key={i}
+                    fileName={e.name}
+                    fileId={e.uid}
+                    moveFile={() => this.props.editFile(e)}
+                    trashFile={() => this.props.trashFile(e.uid)}
+                    downloadFile={() =>
+                      LiveEndpoints.File.downloadFile(e.uid)
+                    }
+                  />
+                )
+              })) : null}
+            {/* {this.props.activePage ? (
               <Container fluid className={styles.containerFill}>
                 {' '}
                 {groupArray(
@@ -86,8 +113,8 @@ class Library extends Component {
                 ).map((e, i) => (
                   <Row key={i}>{e}</Row>
                 ))}{' '}
-              </Container>
-            ) : null}
+              </Container> */}
+            {/* ) : null} */}
           </div>
 
           <div className={styles.libDivSmol}>

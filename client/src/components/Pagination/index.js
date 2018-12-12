@@ -7,7 +7,7 @@ class Pagination extends Component {
     return (
       <div className={styles.paginatorContainer} >
         <nav>
-          <ul className='pagination'>
+          <ul className={'pagination ' + styles.paginationAug}>
             {new Array(this.props.totalPages).fill(0).map((e, i) => i + 1).map((page, index) => {
               return (
                 <li
@@ -17,7 +17,7 @@ class Pagination extends Component {
                   }`}
                 >
                   <a
-                    className='page-link'
+                    className={'page-link ' + styles.noBottomRadius}
                     // href='#'
                     onClick={() => this.props.setPage(index)}
                   >

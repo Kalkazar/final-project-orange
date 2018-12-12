@@ -17,3 +17,22 @@
     flex-direction: row;
     justify-content: center;
   }
+
+.noMargin {
+    margin: 0;
+}
+
+.noBottomRadius {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+
+    &.page-link {
+        border-bottom-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+    }
+}
+
+.paginationAug {
+    @extend .noMargin;
+    @extend .noBottomRadius;
+}
