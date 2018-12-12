@@ -24,6 +24,8 @@
   @extend .libDivSmol;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  padding-left: 2vw;
 }
 
 .libDivMain {
@@ -33,6 +35,10 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
+}
+
+.libTopDiv {
+
 }
 
 .iconWidthDown {
@@ -48,11 +54,14 @@
 // }
 
 .pathSpan {
-  display: block;
-  width: 90%;
+  // display: block;
+  // width: 90%;
   color: rgb(216, 211, 211);
   font-weight: bold;
   padding-left: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 @media (max-width: 790){
