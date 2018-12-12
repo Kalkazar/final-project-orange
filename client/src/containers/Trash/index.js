@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styles from './trash.module.scss'
+import libStyles from '../Library/library.module.scss'
 import { TrashCard } from '../../components/Card'
 import Pagination from '../../components/Pagination'
 import { Trash as TrashDuck } from '../../ducks'
@@ -33,7 +34,6 @@ export class Trash extends Component {
     return (
       <Fragment>
         <div className={styles.trashDiv}>
-          <span className={styles.pathSpan}>this/is/the/path/span</span>
           {/* If props.activePage exists, render cards for items */}
           {this.props.activePage
             ? this.props.activePage.map((e, i) =>
@@ -59,12 +59,7 @@ export class Trash extends Component {
             )
             : null}
         </div>
-        {/* <Pagination
-          currentPage={this.props.currentPage + 1}
-          totalPages={this.props.totalPages}
-          setPage={this.props.setPage}
-        /> */}
-        <TrashPaginator />
+        <div className={libStyles.libPaginatorContainer} ><TrashPaginator /></div>
       </Fragment>
     )
   }

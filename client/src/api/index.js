@@ -4,18 +4,29 @@
  * @typedef {import('../helpers/types').ViewState} LibraryState
  */
 
-import Axios, { AxiosPromise } from 'axios'
+import Axios from 'axios'
+import JSZip from 'jszip'
 
 /**
  * Upload a new file
  * @param {Any} file File data to upload
  * @returns {AxiosPromise<FileResponse>}
  */
-const uploadFile = file => {
-  const formData = new FormData()
-  formData.append('name', file.name)
-  formData.append('file', file)
-  return Axios.post('file', formData)
+const uploadFiles = files => {
+  let zip = new JSZip()
+  files.forEach(file => {
+    zip.file(file.name, file)
+  })
+
+  return zip.generateAsync({ type: 'blob' })
+    .then(blob =>
+      Axios.post(`file`, blob, {
+        headers: {
+          'Content-Type': 'application/zip'
+        }
+      })
+    )
+    .catch(err => console.error(err))
 }
 
 /**
@@ -33,7 +44,6 @@ const getFile = uid =>
  * @param {Number} uid UID of file to download
  */
 const downloadFile = uid => {
-  console.log('test')
   return Axios.get(`file/${uid}/download`)
     .then(response => {
       getFile(uid).then(({ data }) => {
@@ -43,15 +53,7 @@ const downloadFile = uid => {
         link.setAttribute('download', data.name)
         document.body.appendChild(link)
         link.click()
-        // document.body.removeChild(link)
       })
-      // const url = window.URL.createObjectURL(new Blob([response.data]))
-      // const link = document.createElement('a')
-      // link.href = url
-      // link.setAttribute('download', 'file.pdf')
-      // document.body.appendChild(link)
-      // link.click()
-      // document.body.removeChild(link)
     })
     .catch(err => (console.log(err)))
 }
@@ -98,28 +100,24 @@ const trashFile = uid =>
  * @param {Any} folder Folder data to upload
  * @returns {AxiosPromise<FolderResponse>}
  */
-const uploadFolder = folder => {
-  console.log(folder)
-  const formData = new FormData()
-  formData.append('folder', folder)
-  return Axios.post('folder', formData)
-}
-
-/**
- * Upload a new folder as a zip file
- * @param {String} folderName Name to assign this newly created folder
- * @param {Blob} folder Folder data to upload
- * @returns {AxiosPromise<FolderResponse>}
- */
-const uploadFolderZip = (folder) => {
-  console.log(folder)
-  // const formData = new FormData()
-  // formData.append('folder', folder)
-  return Axios.post(`folder`, folder, {
-    headers: {
-      'Content-Type': 'application/zip'
-    }
+const uploadFolders = (folderName, files) => {
+  let zip = new JSZip()
+  files.forEach(file => {
+    zip.file(file.name, file)
   })
+
+  return zip.generateAsync({ type: 'blob' })
+    .then(blob =>
+      Axios.post(`folder`, blob, {
+        headers: {
+          'Content-Type': 'application/zip'
+        },
+        params: {
+          'folderName': folderName
+        }
+      })
+    )
+    .catch(err => console.error(err))
 }
 
 /**
@@ -240,7 +238,7 @@ const deleteAll = () =>
 
 export const LiveEndpoints = {
   File: {
-    uploadFile,
+    uploadFiles,
     getFile,
     downloadFile,
     getAllFiles,
@@ -249,8 +247,7 @@ export const LiveEndpoints = {
     trashFile
   },
   Folder: {
-    uploadFolder,
-    uploadFolderZip,
+    uploadFolders,
     createFolder,
     getFolder,
     downloadFolder,

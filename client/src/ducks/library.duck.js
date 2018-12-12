@@ -12,7 +12,7 @@ import { Trash, Modals } from './'
 /**
  * Add file to state
  */
-export const ADD_FILE = 'drivestorage/library/ADD_FILE'
+export const ADD_FILES = 'drivestorage/library/ADD_FILES'
 
 /**
  * Edit file in state
@@ -27,7 +27,7 @@ export const REMOVE_FILE = 'drivestorage/library/REMOVE_FILE'
 /**
  * Add file to state
  */
-export const ADD_FOLDER = 'drivestorage/library/ADD_FOLDER'
+export const ADD_FOLDERS = 'drivestorage/library/ADD_FOLDERS'
 
 /**
  * Rename a folder in state
@@ -93,20 +93,22 @@ const initialState = {
  */
 export default function config (state = initialState, action) {
   switch (action.type) {
-    case ADD_FILE:
+    case ADD_FILES:
+    case LOAD_FILES:
       return {
         ...state,
-        fileList: [...state.fileList, ({ ...action.payload, isFolder: false })]
+        fileList: [...state.fileList, ...action.payload]
       }
     case EDIT_FILE:
       return {
         ...state,
         fileList: state.fileList.map(e => e.uid === action.payload.uid ? action.payload : e)
       }
-    case ADD_FOLDER:
+    case ADD_FOLDERS:
+    case LOAD_FOLDERS:
       return {
         ...state,
-        folderList: [...state.folderList, ({ ...action.payload, isFolder: true })]
+        folderList: [...state.folderList, ...action.payload]
       }
     case REMOVE_FILE:
       return {
@@ -151,29 +153,19 @@ export default function config (state = initialState, action) {
         ...state,
         displayFolder: action.payload
       }
-    case LOAD_FILES:
-      return {
-        ...state,
-        fileList: [...state.fileList, ...action.payload]
-      }
-    case LOAD_FOLDERS:
-      return {
-        ...state,
-        folderList: [...state.folderList, ...action.payload]
-      }
     default:
       return state
   }
 }
 
 /**
- * Adds a file to fileList
- * @param {FileResponse} file File to add
+ * Adds one or more files to fileList
+ * @param {FileResponse} files Files to add
  * @returns {ReduxAction}
  */
-export const addFileAction = file => ({
-  type: ADD_FILE,
-  payload: file
+export const addFilesAction = files => ({
+  type: ADD_FILES,
+  payload: files
 })
 
 /**
@@ -188,12 +180,12 @@ export const editFileAction = file => ({
 
 /**
  * Adds a folder to folderList
- * @param {FolderResponse} folder Folder to add
+ * @param {FolderResponse} folders Folder to add
  * @returns {ReduxAction}
  */
-export const addFolderAction = folder => ({
-  type: ADD_FOLDER,
-  payload: folder
+export const addFoldersAction = folders => ({
+  type: ADD_FOLDERS,
+  payload: folders
 })
 
 /**
@@ -253,7 +245,7 @@ export const updateDisplayFolderAction = (folder = null) => ({
 })
 
 /**
-* Adds files into fileList
+* Initializes fileList with loaded files
 * @returns {ReduxAction}
 */
 export const loadFilesAction = files => ({
@@ -291,67 +283,50 @@ export const loadFolders = folders => dispatch => {
 }
 
 /**
- * Adds a file to state
- * @param {FileResponse} file File to add
+ * Adds one or more files to state
+ * @param {FileResponse} file File(s) to add
  */
-export const addFile = file => dispatch => {
-  dispatch(addFileAction(file))
+export const addFiles = files => dispatch => {
+  dispatch(addFilesAction(files.map(e => ({ ...e, isFolder: false }))))
   dispatch(updateCurrentListAction())
   dispatch(updateTotalPagesAction())
 }
 
 /**
  * Adds a folder to state
- * @param {FolderResponse} folder Folder to add
+ * @param {FolderResponse} folders Folder(s) to add
  */
-export const addFolder = folder => dispatch => {
-  dispatch(addFolderAction(folder))
+export const addFolders = folder => dispatch => {
+  dispatch(addFoldersAction(folder.map(e => ({ ...e, isFolder: true }))))
   dispatch(updateCurrentListAction())
   dispatch(updateTotalPagesAction())
 }
 
 /**
- * Uploads a file
- * @param {FileResponse} file File to add
+ * Uploads one or more files
+ * @param {FileResponse} files Files to add
  */
-export const uploadFile = file => dispatch => {
-  LiveEndpoints.File.uploadFile(file).then(({ data }) => {
-    dispatch(addFile(data))
-    // dispatch(updateCurrentListAction())
-    // dispatch(updateTotalPagesAction())
-  }).catch(err => {
-    console.error(err)
-  })
+export const uploadFiles = files => dispatch => {
+  LiveEndpoints.File.uploadFiles(files)
+    .then(({ data }) => {
+      dispatch(addFiles(data))
+    }).catch(err => {
+      console.error(err)
+    })
 }
 
 /**
  * Uploads a folder
- * @param {FolderResponse} folder Folder to add
+ * @param {FolderResponse} folders Folders to add
  */
-export const uploadFolder = folder => dispatch => {
-  LiveEndpoints.Folder.uploadFolder(folder).then(({ data }) => {
-    dispatch(addFolder(data))
-    // dispatch(updateCurrentListAction())
-    // dispatch(updateTotalPagesAction())
-    console.log(data)
-  }).catch(err => {
-    console.error(err)
-  })
-}
-
-/**
- * Uploads a folder via zip method
- * @param {Blob} folder Folder to add
- */
-export const uploadFolderZip = (folder) => dispatch => {
-  LiveEndpoints.Folder.uploadFolderZip(folder).then(({ data }) => {
-    dispatch(addFolder(data))
-    // dispatch(updateCurrentListAction())
-    // dispatch(updateTotalPagesAction())
-    console.log(data)
-  }).catch(err => {
-    console.error(err)
-  })
+export const uploadFolders = (folderName, files) => dispatch => {
+  LiveEndpoints.Folder.uploadFolders(folderName, files)
+    .then(({ data }) => {
+      // console.log(data)
+      dispatch(addFolders([data]))
+    }).catch(err => {
+      console.error(err)
+    })
 }
 
 /**
@@ -443,11 +418,10 @@ export const trashFile = uid => (dispatch, getState) => {
   const file = getFileByUID(uid, getState)
   dispatch(removeFile(file))
   LiveEndpoints.File.trashFile(uid).then(({ data }) => {
-    // dispatch(removeFile(data))
     dispatch(Trash.addFile(data))
   }).catch(err => {
     console.error(err)
-    dispatch(addFile(file))
+    dispatch(addFiles([file]))
   })
 }
 
@@ -463,7 +437,7 @@ export const trashFolder = uid => (dispatch, getState) => {
     dispatch(Trash.addFolder(data))
   }).catch(err => {
     console.error(err)
-    dispatch(addFolder(folder))
+    dispatch(addFolders([folder]))
   })
 }
 
@@ -474,7 +448,7 @@ export const trashFolder = uid => (dispatch, getState) => {
 export const createNewFolder = folderName => (dispatch, getState) =>
   LiveEndpoints.Folder.createFolder(folderName)
     .then(({ data }) => {
-      dispatch(addFolder(data))
+      dispatch(addFolders([data]))
     })
 
 /**

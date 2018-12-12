@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.ftd.drivestorageorange.dtos.FolderDTO;
 import com.cooksys.ftd.drivestorageorange.entities.FileEntity;
@@ -45,31 +43,17 @@ public class FolderController {
 	}
 	
 	/**
-	 * [NOT FULLY IMPLEMENTED]Upload a new folder
+	 * Upload a new file
 	 * 
-	 * @return FolderDTO of newly uploaded folder
+	 * @return uid of newly uploaded file
 	 */
 	@PostMapping("")
-	public FolderDTO uploadFolder(@RequestParam("folder") MultipartFile uploadFolder) {
-		FolderDTO newUpload = this.folderService.uploadFolder(uploadFolder);
+	public FolderDTO uploadFolders(InputStream inputStream, @RequestParam("folderName") String folderName) {
+		System.out.println(folderName);
+		FolderDTO uploadedFolder = this.folderService.uploadFolders(folderName, inputStream);
 
-		if (newUpload != null) {
-			return newUpload;
-		}
-		return null;
-	}
-	
-	/**
-	 * [NOT FULLY IMPLEMENTED]Upload a new folder
-	 * 
-	 * @return FolderDTO of newly uploaded folder
-	 */
-	@RequestMapping(value = "", method = RequestMethod.POST, consumes = "application/zip")
-	public FolderDTO uploadFolder(InputStream inputStream) {
-		FolderDTO newUpload = this.folderService.uploadFolder(inputStream);
-
-		if (newUpload != null) {
-			return newUpload;
+		if (uploadedFolder != null) {
+			return uploadedFolder;
 		}
 		return null;
 	}

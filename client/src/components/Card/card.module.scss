@@ -1,12 +1,12 @@
 @import "../../index.scss";
 
-//File Card
+//controls file and folder top span including title and icon
 .cardHeaderClass {
   display: flex;
   flex-direction: row;
 }
 
-
+//applies to file and folder card
 .cardTitle {
   border-bottom: 1pt solid #221d1d;
   padding: 5pt 10pt;
@@ -18,16 +18,7 @@
   height: 30%;
   position: relative;
 }
-
-.uploadIconHolder {
-  height: 80%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
+//applies to file and folder card icons in the top right card corner
 .titleIconHolder {
   float: right;
   position: absolute; 
@@ -38,7 +29,7 @@
 
 }
 
-
+//applied to file and folder card
 .fileCardBody, .folderCardBody {
   display: flex;
   flex-direction: row;
@@ -51,18 +42,29 @@
 
 }
 
-//Folder
+//Folder message in center of card ("Open Folder")
 .folderText {
   position: relative;
   text-align: center;
   height: 10pt;
-  top: 25%;
+  top: 10%;
   font-size: 1.5em;
   opacity: 0.4;
   @include unselectable;
 }
 
-//Trash
+//File and Folder card pseudo footer with trash, cog, and download icons
+.cardControls{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 20%;
+  align-items: flex-start;
+  box-sizing: border-box;
+  padding: 4px;
+}
+//Trash card body styling for buttons and text
 .trashCardHolder {
   display: flex;
   justify-content: center;
@@ -74,38 +76,33 @@
   width: 100%;
 }
 
-
-
 .uploadIconHolder:hover, .folderCardBody:hover {
   background-color: #ccc;
   border-radius: 5pt;
 }
 
-.card.cardBody {
-  display: flex;
 
-}
-
-//file and folder card body
+//file, folder, and trash card size and background color
 .cardHolder {
   display: flex;
-  width: 210pt;
-  height: 150pt;
+  justify-content: center;
+  align-items: center;  
   flex-direction: column;
+  align-content: space-between;
+  padding: 5pt;
+  width: 200pt;
+  height: 140pt;
   box-shadow: 3px 3px;
   border-radius: 5px;
   color: rgb(78, 75, 75);
   background-color: #d6b55f;
   background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
   @include noselecttext;
-  // background-image: linear-gradient(bottom, rgb(221, 84, 10), rgb(245, 185, 56));
-  // background-image: linear-gradient(top ,rgb(29, 92, 95), rgb(19, 135, 141));
-  // background-color: #296C70;
-  // color: rgb(194, 188, 188);
-
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
-//other styles on the card for some reason???
+//File, Folder, and trash styling that keeps cards uniform regardless of content
 .cardBody {
   padding: 5pt 10pt;
   height: 100%;
@@ -113,20 +110,7 @@
   box-sizing: border-box;
 
 }
-
-.fileCardBody, .folderCardBody {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  height: 60%;
-  align-items: flex-end;
-  box-sizing: border-box;
-  padding: 2pt;
-
-}
-
-
+//applies only to the folder, allowing the center text ("Open Folder") to be selectable
 .folderCardBody {
   cursor: pointer;
 
@@ -134,13 +118,4 @@
   height: 40%;
 }
 
-.folderCardControls {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  height: 20%;
-  align-items: flex-end;
-  box-sizing: border-box;
-  padding: 2pt;
-}
+

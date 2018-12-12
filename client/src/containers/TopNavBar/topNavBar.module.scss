@@ -1,0 +1,53 @@
+
+.topNav {
+  display: none;
+}
+.navBar {
+  padding-left: 0px;
+  margin-left: 0px;
+}
+@media (max-width: 790px) {
+  .topNav {
+    display: block;
+    position: absolute;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 500px;
+    z-index: 10;
+  }
+}
+
+.navExtend {
+  background-color: rgb(7, 161, 226);
+  width: 100vw;
+  padding-right: 25px;
+}
+
+.fitWidth {
+  width: 100vw;
+}
+
+.noPadding {
+  padding: 0px;
+}
+
+.navBarSmol {
+  @extend .fitWidth;
+  @extend .noPadding;
+  background-color: #07a1e2;
+}
+
+.navBtnSpace {
+  margin: 8px 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100vw;
+}
+
+.navBarUpper {
+  position: fixed;
+  top: 0;
+}

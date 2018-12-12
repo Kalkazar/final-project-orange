@@ -67,12 +67,12 @@ export const TrashCard = ({ name, fileType, id, deleteForever, restore }) => (
       <InnerButton
         name={`Delete ${fileType}`}
         onClick={() => deleteForever(id)}
-        icon={<TrashIcon onClick={() => {}} />}
+        icon={<TrashIcon onClick={() => { }} />}
       />
       <InnerButton
         name={`Restore ${fileType}`}
         onClick={() => restore(id)}
-        icon={<RestoreIcon onClick={() => {}} />}
+        icon={<RestoreIcon onClick={() => { }} />}
       />
     </div>
   </Card>
@@ -85,24 +85,24 @@ export const FileCard = ({
   downloadFile,
   moveFile
 }) => (
-  <Card>
-    <div className={styles.cardHeader}>
-      <div className={styles.cardTitle}>
-        {fileName}{' '}
-        <div className={styles.titleIconHolder}>
-          <FileIcon onClick={() => {}} />
+    <Card>
+      <div className={styles.cardHeader}>
+        <div className={styles.cardTitle}>
+          {fileName}{' '}
+          <div className={styles.titleIconHolder}>
+            <FileIcon onClick={() => { }} />
+          </div>
         </div>
       </div>
-    </div>
-    {/* <div className={styles.cardFooter}> */}
-    <div className={styles.fileCardBody}>
-      <TrashIcon onClick={() => trashFile(fileId)} />
-      <MoveIcon onClick={() => moveFile(fileId)} />
-      <DownloadIcon onClick={() => downloadFile(fileId)} />
-    </div>
-    {/* </div> */}
-  </Card>
-)
+      <div className={styles.fileCardBody}>
+        <div className={styles.cardControls}>
+          <TrashIcon onClick={() => trashFile(fileId)} />
+          <MoveIcon onClick={() => moveFile(fileId)} />
+          <DownloadIcon onClick={() => downloadFile(fileId)} />
+        </div>
+      </div>
+    </Card>
+  )
 
 export const FolderCard = ({
   folderName,
@@ -112,31 +112,32 @@ export const FolderCard = ({
   openFolder,
   editFolder
 }) => (
-  <Card>
-    <div className={styles.cardTitle}>
-      {folderName}
-      <div className={styles.titleIconHolder}>
-        <FolderIcon onClick={() => openFolder(folderId)} />
+    <Card>
+      <div className={styles.cardTitle}>
+        {folderName}
+        <div className={styles.titleIconHolder}>
+          <FolderIcon onClick={() => openFolder(folderId)} />
+        </div>
       </div>
-    </div>
-    <div className={styles.folderText}>Open Folder</div>
+      <div className={styles.folderText}>Open Folder</div>
 
-    <div className={styles.folderCardBody} onClick={() => openFolder(folderId)} />
-    <div className={styles.folderCardControls} >
-      <TrashIcon
-        onClick={e => {
-          e.stopPropagation()
-          trashFolder(folderId)
-        }}
-      />
-      <MoveIcon onClick={() => editFolder()} />
-      <DownloadIcon
-        onClick={e => {
-          e.stopPropagation()
-          downloadFolder(folderId)
-        }}
-      />
-    </div>
-    {/* </div> */}
-  </Card>
-)
+      <div className={styles.folderCardBody} onClick={() => openFolder(folderId)}>
+        <div className={styles.cardControls}>
+          <TrashIcon
+            onClick={e => {
+              e.stopPropagation()
+              trashFolder(folderId)
+            }}
+          />
+          {/* <MoveIcon onClick={() => editFolder()} /> */}
+          <DownloadIcon
+            onClick={e => {
+              e.stopPropagation()
+              downloadFolder(folderId)
+            }}
+          />
+        </div>
+      </div>
+      {/* </div> */}
+    </Card>
+  )

@@ -4,8 +4,7 @@
   flex-direction: row;
   justify-content: space-evenly;
   background-color: transparent;
-  // background-image: linear-gradient(top, rgba(63, 59, 59, 0.7), rgba(119, 117, 113, 0.7));
-  // background-image: linear-gradient(top, rgb(63, 59, 59), rgb(119, 117, 113));
+  margin-top: 70px;
 }
 
 .trashDiv > * {
@@ -17,5 +16,6 @@
   width: 90%;
   color: rgb(216, 211, 211);
   font-weight: bold;
+  padding-left: 15px;
 }
 

@@ -12,12 +12,16 @@
   height: 100vh;
   display: flex;
 }
-.navAndLib {
-  padding: 0px;
+
+@media (max-width: 790px) {
+  .container-fluid{
+    height: 100hv;
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+  }
 }
-// .wholePageClass{
-//   background-color: green;
-// }
+
 .bodyClass {
   display: flex;
   flex-direction: row;
@@ -29,5 +33,5 @@
   justify-content: space-between;
   width: 80%;
   height: 100%;
-  padding-left: 30px;
+  padding: 0px;
 }
