@@ -118,12 +118,12 @@ export default function config (state = initialState, action) {
     case LOAD_FILES:
       return {
         ...state,
-        fileList: [...state.fileList, ...action.payload]
+        fileList: [...action.payload]
       }
     case LOAD_FOLDERS:
       return {
         ...state,
-        folderList: [...state.folderList, ...action.payload]
+        folderList: [...action.payload]
       }
     default:
       return state
@@ -275,11 +275,13 @@ export const removeFolder = folder => dispatch => {
 /**
  * Removes all files and folders from state
  */
-export const removeAll = () => (dispatch, getState) => {
+export const removeAll = () => (dispatch, getState) => Promise.resolve().then(data => {
   const { fileList: files, folderList: folders } = getState().trash
   files.forEach(e => dispatch(removeFile(e)))
   folders.forEach(e => dispatch(removeFolder(e)))
-}
+
+  return ({ files, folders })
+})
 
 /**
  * Set currently displayed page of results
@@ -396,11 +398,18 @@ export const deleteFolder = uid => (dispatch, getState) => {
  * Restores all trashbinned items back to the library
  */
 export const restoreAll = () => (dispatch, getState) => {
+  const { fileList: files, folderList: folders } = getState().trash
+  dispatch(removeAll())
   LiveEndpoints.Trash.restoreAll()
     .then(({ data: { files, folders } }) => {
-      dispatch(removeAll())
+      // dispatch(removeAll())
       dispatch(Library.addFiles(files))
       dispatch(Library.addFolders(folders))
+    })
+    .catch(err => {
+      console.error(err)
+      loadFiles(files)
+      loadFolders(folders)
     })
 }
 
@@ -408,6 +417,15 @@ export const restoreAll = () => (dispatch, getState) => {
  * PERMANENTLY DELETES all trashbinned items
  */
 export const deleteAll = () => (dispatch, getState) => {
+  const { fileList: files, folderList: folders } = getState().trash
+  dispatch(removeAll())
   LiveEndpoints.Trash.deleteAll()
-    .then(({ data }) => dispatch(removeAll()))
+    .then(({ data }) => {
+
+    })
+    .catch(err => {
+      console.error(err)
+      loadFiles(files)
+      loadFolders(folders)
+    })
 }
