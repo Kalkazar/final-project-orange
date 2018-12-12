@@ -1,6 +1,6 @@
 @import "../../index.scss";
 
-//File Card
+//controls file and folder top span including title and icon
 .cardHeaderClass {
   display: flex;
   flex-direction: row;
@@ -18,7 +18,7 @@
   height: 30%;
   position: relative;
 }
-
+//applies to file and folder card icons in the top right card corner
 .titleIconHolder {
   float: right;
   position: absolute; 
@@ -28,16 +28,6 @@
   color: rgb(78, 75, 75);
 
 }
-// .uploadIconHolder {
-//   height: 80%;
-//   width: 100%;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   cursor: pointer;
-// }
-
-
 
 //applied to file and folder card
 .fileCardBody, .folderCardBody {
@@ -52,7 +42,7 @@
 
 }
 
-//Folder
+//Folder message in center of card ("Open Folder")
 .folderText {
   position: relative;
   text-align: center;
@@ -63,7 +53,7 @@
   @include unselectable;
 }
 
-//card footer with trash, cog, and download
+//File and Folder card pseudo footer with trash, cog, and download icons
 .folderCardControls {
   display: flex;
   flex-direction: row;
@@ -74,7 +64,7 @@
   box-sizing: border-box;
   padding: 2pt;
 }
-//Trash
+//Trash card body styling for buttons and text
 .trashCardHolder {
   display: flex;
   justify-content: center;
@@ -85,30 +75,14 @@
   height: 80%;
   width: 100%;
 }
-//lib
-// .libCardHolder {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   flex-direction: column;
-//   align-content: space-between;
-//   padding: 5pt;
-//   height: 80%;
-//   width: 100%;
-// }
-
 
 .uploadIconHolder:hover, .folderCardBody:hover {
   background-color: #ccc;
   border-radius: 5pt;
 }
 
-// .card.cardBody {
-//   display: flex;
 
-// }
-
-//file and folder card body
+//file, folder, and trash card size and background color
 .cardHolder {
   display: flex;
   justify-content: center;
@@ -132,7 +106,7 @@
 
 }
 
-//other styles on the card for some reason???
+//File, Folder, and trash styling that keeps cards uniform regardless of content
 .cardBody {
   padding: 5pt 10pt;
   height: 100%;
@@ -140,7 +114,7 @@
   box-sizing: border-box;
 
 }
-
+//applies only to the folder, allowing the center text ("Open Folder") to be selectable
 .folderCardBody {
   cursor: pointer;
 

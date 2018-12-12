@@ -33,7 +33,7 @@ class Library extends Component {
     return (
       <Fragment>
         <div className={styles.libDiv}>
-          <div className={styles.libDivSmol} >
+          <div className={styles.libDivSmol}>
             <HomeIcon
               className={'d-none d-md-block'}
               onClick={() => this.props.openFolder()}
@@ -47,7 +47,7 @@ class Library extends Component {
             </span>
           </div>
 
-          <div className={styles.libDivMain} >
+          <div className={styles.libDivMain}>
             {this.props.activePage ? (
               <Container fluid className={styles.containerFill}>
                 {' '}
@@ -68,19 +68,19 @@ class Library extends Component {
                         />
                       </Col>
                     ) : (
-                        <Col xl={'3'} lg={'3'} md={'3'} key={i}>
-                          <FileCard
-                            key={i}
-                            fileName={e.name}
-                            fileId={e.uid}
-                            moveFile={() => this.props.editFile(e)}
-                            trashFile={() => this.props.trashFile(e.uid)}
-                            downloadFile={() =>
-                              LiveEndpoints.File.downloadFile(e.uid)
-                            }
-                          />
-                        </Col>
-                      )
+                      <Col xl={'3'} lg={'3'} md={'3'} key={i}>
+                        <FileCard
+                          key={i}
+                          fileName={e.name}
+                          fileId={e.uid}
+                          moveFile={() => this.props.editFile(e)}
+                          trashFile={() => this.props.trashFile(e.uid)}
+                          downloadFile={() =>
+                            LiveEndpoints.File.downloadFile(e.uid)
+                          }
+                        />
+                      </Col>
+                    )
                   }),
                   4
                 ).map((e, i) => (
@@ -93,7 +93,6 @@ class Library extends Component {
           <div className={styles.libDivSmol}>
             <LibraryPaginator />
           </div>
-
         </div>
       </Fragment>
     )
