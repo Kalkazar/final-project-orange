@@ -6,7 +6,7 @@
   flex-direction: row;
 }
 
-
+//applies to file and folder card
 .cardTitle {
   border-bottom: 1pt solid #221d1d;
   padding: 5pt 10pt;
@@ -19,15 +19,6 @@
   position: relative;
 }
 
-.uploadIconHolder {
-  height: 80%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
 .titleIconHolder {
   float: right;
   position: absolute; 
@@ -37,8 +28,18 @@
   color: rgb(78, 75, 75);
 
 }
+// .uploadIconHolder {
+//   height: 80%;
+//   width: 100%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   cursor: pointer;
+// }
 
 
+
+//applied to file and folder card
 .fileCardBody, .folderCardBody {
   display: flex;
   flex-direction: row;
@@ -62,6 +63,17 @@
   @include unselectable;
 }
 
+//card footer with trash, cog, and download
+.folderCardControls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 20%;
+  align-items: flex-end;
+  box-sizing: border-box;
+  padding: 2pt;
+}
 //Trash
 .trashCardHolder {
   display: flex;
@@ -73,7 +85,17 @@
   height: 80%;
   width: 100%;
 }
-
+//lib
+// .libCardHolder {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   flex-direction: column;
+//   align-content: space-between;
+//   padding: 5pt;
+//   height: 80%;
+//   width: 100%;
+// }
 
 
 .uploadIconHolder:hover, .folderCardBody:hover {
@@ -81,17 +103,21 @@
   border-radius: 5pt;
 }
 
-.card.cardBody {
-  display: flex;
+// .card.cardBody {
+//   display: flex;
 
-}
+// }
 
 //file and folder card body
 .cardHolder {
   display: flex;
+  justify-content: center;
+  align-items: center;  
+  flex-direction: column;
+  align-content: space-between;
+  padding: 5pt;
   width: 200pt;
   height: 140pt;
-  flex-direction: column;
   box-shadow: 3px 3px;
   border-radius: 5px;
   color: rgb(78, 75, 75);
@@ -102,8 +128,7 @@
   // background-image: linear-gradient(top ,rgb(29, 92, 95), rgb(19, 135, 141));
   // background-color: #296C70;
   // color: rgb(194, 188, 188);
-  margin-top: 20px;
-  margin-left: 10px;
+  margin: 20px;
 
 }
 
@@ -116,19 +141,6 @@
 
 }
 
-.fileCardBody, .folderCardBody {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  height: 60%;
-  align-items: flex-end;
-  box-sizing: border-box;
-  padding: 2pt;
-
-}
-
-
 .folderCardBody {
   cursor: pointer;
 
@@ -136,13 +148,4 @@
   height: 40%;
 }
 
-.folderCardControls {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  height: 20%;
-  align-items: flex-end;
-  box-sizing: border-box;
-  padding: 2pt;
-}
+
