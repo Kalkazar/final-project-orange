@@ -94,10 +94,14 @@ const initialState = {
 export default function config (state = initialState, action) {
   switch (action.type) {
     case ADD_FILES:
-    case LOAD_FILES:
       return {
         ...state,
         fileList: [...state.fileList, ...action.payload]
+      }
+    case LOAD_FILES:
+      return {
+        ...state,
+        fileList: [...action.payload]
       }
     case EDIT_FILE:
       return {
@@ -105,10 +109,14 @@ export default function config (state = initialState, action) {
         fileList: state.fileList.map(e => e.uid === action.payload.uid ? action.payload : e)
       }
     case ADD_FOLDERS:
-    case LOAD_FOLDERS:
       return {
         ...state,
         folderList: [...state.folderList, ...action.payload]
+      }
+    case LOAD_FOLDERS:
+      return {
+        ...state,
+        folderList: [...action.payload]
       }
     case REMOVE_FILE:
       return {
