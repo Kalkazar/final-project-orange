@@ -46,7 +46,7 @@ public class FolderService {
 		FolderEntity folder = new FolderEntity();
 		folder.setName(name);
 		
-		return toDto(saveFolder(folder));
+		return getFolderWithContents(toDto(saveFolder(folder)));
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class FolderService {
 	 * @param folder
 	 * @return FolderDTO
 	 */
-	private FolderDTO getFolderWithContents(FolderDTO folder) {
+	public FolderDTO getFolderWithContents(FolderDTO folder) {
 		folder.setFilesContained(this.fileMapper.toDto(this.fileRepository.getAllInContainer(folder.getUid())));
 		return folder;
 	}
@@ -146,7 +146,7 @@ public class FolderService {
 	 * @param folder
 	 * @return FolderDTO
 	 */
-	private List<FolderDTO> getFolderWithContents(List<FolderDTO> folders) {
+	public List<FolderDTO> getFolderWithContents(List<FolderDTO> folders) {
 		List<FolderDTO> populatedFolders = new ArrayList<>();
 		
 		for (FolderDTO folder : folders) {
@@ -248,7 +248,7 @@ public class FolderService {
 	 * @return FolderDTO
 	 */
 	private FolderDTO toDto(FolderEntity folderEntity) {
-		return this.folderMapper.toDto(folderEntity);
+		return getFolderWithContents(this.folderMapper.toDto(folderEntity));
 	}
 
 	

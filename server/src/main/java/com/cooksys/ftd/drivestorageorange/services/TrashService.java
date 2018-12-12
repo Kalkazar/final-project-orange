@@ -15,6 +15,7 @@ import com.cooksys.ftd.drivestorageorange.mappers.FileMapper;
 import com.cooksys.ftd.drivestorageorange.mappers.FolderMapper;
 import com.cooksys.ftd.drivestorageorange.repositories.FileRepository;
 import com.cooksys.ftd.drivestorageorange.repositories.FolderRepository;
+import com.cooksys.ftd.drivestorageorange.services.FolderService;
 
 @Service
 public class TrashService {
@@ -27,6 +28,8 @@ public class TrashService {
 	FileMapper fileMapper;
 	@Autowired
 	FolderMapper folderMapper;
+	@Autowired
+	FolderService folderService;
 
 	/**
 	 * Permanently deletes file by UID File must be inTrash to do so
@@ -70,7 +73,7 @@ public class TrashService {
 		} else {
 			System.out.println("No matching target for deletion!");
 		}
-		return deleted;
+		return folderService.getFolderWithContents(deleted);
 	}
 
 	/**
@@ -106,7 +109,7 @@ public class TrashService {
 				}
 			}
 		}
-		return this.folderMapper.toDto(this.folderRepository.save(restoreTarget));
+		return folderService.getFolderWithContents(this.folderMapper.toDto(this.folderRepository.save(restoreTarget)));
 	}
 
 	/**
@@ -166,7 +169,7 @@ public class TrashService {
 				if (folder != null) {
 					folder.setInTrash(false);
 				}
-				restoredFolders.add(this.folderMapper.toDto(this.folderRepository.save(folder)));
+				restoredFolders.add(folderService.getFolderWithContents(this.folderMapper.toDto(this.folderRepository.save(folder))));
 			}
 		} else {
 			System.out.println("No folders for restoration!");
