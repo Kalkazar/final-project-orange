@@ -7,7 +7,6 @@
   text-align: center;
   font-size: 1.3em;
   color: $Light;
-  // background-image: linear-gradient(top ,rgb(29, 92, 95), rgb(19, 135, 141));
   background-color: #d6b55f;
   background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
   border-radius: 5pt;
@@ -25,17 +24,7 @@
   }
 }
 
-// .activeNav {
-//   border: 2pt solid rgb(197, 94, 10);
-// }
-
 .navButtonText {
   @include noselecttext;
   text-decoration: none;
 }
-
-// .navButton:hover {
-//   text-decoration: none;
-//   background-color: rgb(100, 95, 95);
-//   color: black;
-// }

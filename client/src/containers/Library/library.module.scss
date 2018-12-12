@@ -2,19 +2,6 @@
   display: flex;
 }
 
-.libDiv {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-evenly;
-  background-color: transparent;
-  // width: 80vw;
-  // height: 100vh;
-  // background-image: linear-gradient(top, rgba(63, 59, 59, 0.7), rgba(119, 117, 113, 0.7));
-  // background-image: linear-gradient(top, rgb(63, 59, 59), rgb(119, 117, 113));
-
-}
-
 .libDivSmol {
   width: 100%;
   height: 5vh;
@@ -40,12 +27,6 @@
   padding: 0px;
   margin: 0px;
 }
-
-// .libDiv {
-//   //  margin: 5px 0px;
-//   width: 80vw;
-//   height: 100vh;
-// }
 
 .pathSpan {
   display: block;
