@@ -12,7 +12,7 @@ import { groupArray } from '../../helpers/util'
 import { Container, Row, Col } from 'reactstrap'
 
 const { trashFile, trashFolder, setPage, setDisplayFolder } = LibraryDuck
-const { toggleOpenFolder, editFile } = ModalsDuck
+const { toggleOpenFolder, editFile, editFolder } = ModalsDuck
 
 /**
  * Paginator connected to library store.
@@ -59,6 +59,7 @@ class Library extends Component {
                           key={i}
                           folderName={e.name}
                           folderId={e.uid}
+                          moveFolder={() => this.props.editFolder(e)}
                           openFolder={() => this.props.openFolder(e.uid)}
                           trashFolder={() => this.props.trashFolder(e.uid)}
                           downloadFolder={() =>
@@ -67,19 +68,19 @@ class Library extends Component {
                         />
                       </Col>
                     ) : (
-                      <Col xl={'3'} lg={'3'} md={'3'} key={i}>
-                        <FileCard
-                          key={i}
-                          fileName={e.name}
-                          fileId={e.uid}
-                          moveFile={() => this.props.editFile(e)}
-                          trashFile={() => this.props.trashFile(e.uid)}
-                          downloadFile={() =>
-                            LiveEndpoints.File.downloadFile(e.uid)
-                          }
-                        />
-                      </Col>
-                    )
+                        <Col xl={'3'} lg={'3'} md={'3'} key={i}>
+                          <FileCard
+                            key={i}
+                            fileName={e.name}
+                            fileId={e.uid}
+                            moveFile={() => this.props.editFile(e)}
+                            trashFile={() => this.props.trashFile(e.uid)}
+                            downloadFile={() =>
+                              LiveEndpoints.File.downloadFile(e.uid)
+                            }
+                          />
+                        </Col>
+                      )
                   }),
                   4
                 ).map((e, i) => (
@@ -125,6 +126,7 @@ const mapDispatchToProps = dispatch => ({
   toggleOpenFolder: () => dispatch(toggleOpenFolder()),
   openFolder: folder => dispatch(setDisplayFolder(folder)),
   editFile: file => dispatch(editFile(file)),
+  editFolder: folder => dispatch(editFolder(folder)),
   setPage: index => dispatch(setPage(index))
 })
 
