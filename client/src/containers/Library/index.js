@@ -33,7 +33,7 @@ class Library extends Component {
     return (
       <Fragment>
         <div className={styles.libDiv}>
-          <div className={styles.libDivSmol}>
+          <div className={styles.libDivSmol + ' ' + styles.libTopSmol}>
             <HomeIcon
               className={`d-none d-md-block ${styles.iconWidthDown}`}
               onClick={() => this.props.openFolder()}
@@ -75,49 +75,9 @@ class Library extends Component {
                   />
                 )
               })) : null}
-            {/* {this.props.activePage ? (
-              <Container fluid className={styles.containerFill}>
-                {' '}
-                {groupArray(
-                  this.props.activePage.map((e, i) => {
-                    return e.isFolder ? (
-                      <Col xl={'3'} lg={'3'} md={'3'} key={i}>
-                        <FolderCard
-                          key={i}
-                          folderName={e.name}
-                          folderId={e.uid}
-                          moveFolder={() => this.props.editFolder(e)}
-                          openFolder={() => this.props.openFolder(e.uid)}
-                          trashFolder={() => this.props.trashFolder(e.uid)}
-                          downloadFolder={() =>
-                            LiveEndpoints.Folder.downloadFolder(e.uid)
-                          }
-                        />
-                      </Col>
-                    ) : (
-                      <Col xl={'3'} lg={'3'} md={'3'} key={i}>
-                        <FileCard
-                          key={i}
-                          fileName={e.name}
-                          fileId={e.uid}
-                          moveFile={() => this.props.editFile(e)}
-                          trashFile={() => this.props.trashFile(e.uid)}
-                          downloadFile={() =>
-                            LiveEndpoints.File.downloadFile(e.uid)
-                          }
-                        />
-                      </Col>
-                    )
-                  }),
-                  4
-                ).map((e, i) => (
-                  <Row key={i}>{e}</Row>
-                ))}{' '}
-              </Container> */}
-            {/* ) : null} */}
           </div>
 
-          <div className={styles.libDivSmol}>
+          <div className={styles.libPaginatorContainer}>
             <LibraryPaginator />
           </div>
         </div>

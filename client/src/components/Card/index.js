@@ -95,9 +95,11 @@ export const FileCard = ({
       </div>
     </div>
     <div className={styles.fileCardBody}>
-      <TrashIcon onClick={() => trashFile(fileId)} />
-      <MoveIcon onClick={() => moveFile(fileId)} />
-      <DownloadIcon onClick={() => downloadFile(fileId)} />
+      <div className={styles.cardControls}>
+        <TrashIcon onClick={() => trashFile(fileId)} />
+        <MoveIcon onClick={() => moveFile(fileId)} />
+        <DownloadIcon onClick={() => downloadFile(fileId)} />
+      </div>
     </div>
   </Card>
 )
@@ -119,24 +121,22 @@ export const FolderCard = ({
     </div>
     <div className={styles.folderText}>Open Folder</div>
 
-    <div
-      className={styles.folderCardBody}
-      onClick={() => openFolder(folderId)}
-    />
-    <div className={styles.folderCardControls}>
-      <TrashIcon
-        onClick={e => {
-          e.stopPropagation()
-          trashFolder(folderId)
-        }}
-      />
-      <MoveIcon onClick={() => editFolder()} />
-      <DownloadIcon
-        onClick={e => {
-          e.stopPropagation()
-          downloadFolder(folderId)
-        }}
-      />
+    <div className={styles.folderCardBody} onClick={() => openFolder(folderId)}>
+      <div className={styles.cardControls}>
+        <TrashIcon
+          onClick={e => {
+            e.stopPropagation()
+            trashFolder(folderId)
+          }}
+        />
+        <MoveIcon onClick={() => editFolder()} />
+        <DownloadIcon
+          onClick={e => {
+            e.stopPropagation()
+            downloadFolder(folderId)
+          }}
+        />
+      </div>
     </div>
     {/* </div> */}
   </Card>
