@@ -174,9 +174,7 @@ class Modals extends Component {
                     console.log('Fired deleteAll confirmMethod!')
                     console.warn('deleteAll functions as intended, but is disabled for DB seed safety')
 
-                    // Disabled for DB seed safety
-                    // console.error('DISABLE THIS AFTER TESTING')
-                    // this.props.deleteAll()
+                    this.props.deleteAll()
                     this.props.toggleVerify()
                   }
                   default: return () => console.log('Fired default confirmMethod!')
