@@ -46,7 +46,7 @@ public class FolderService {
 		FolderEntity folder = new FolderEntity();
 		folder.setName(name);
 		
-		return toDto(saveFolder(folder));
+		return getFolderWithContents(toDto(saveFolder(folder)));
 	}
 
 	/**
@@ -248,7 +248,7 @@ public class FolderService {
 	 * @return FolderDTO
 	 */
 	private FolderDTO toDto(FolderEntity folderEntity) {
-		return this.folderMapper.toDto(folderEntity);
+		return getFolderWithContents(this.folderMapper.toDto(folderEntity));
 	}
 
 	
