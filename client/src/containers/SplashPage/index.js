@@ -6,12 +6,15 @@ import { Fade } from 'reactstrap'
 const StyledSplash = styled.div`
   padding: 20px;
   font-size: 80pt;
-  z-index: 20;
+  @media (max-width: 790px) {
+    font-size: 40pt;
+  }
+  @media (max-width: 400px) {
+    font-size: 25pt;
+  }
+  margin: 20% 5% 20% 10%;
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 `
 
 class SplashPage extends Component {
