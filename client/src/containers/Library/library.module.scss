@@ -7,6 +7,11 @@
   height: 5vh;
 }
 
+.libTopMobileSpacing {
+  @extend .libDivSmol;
+  height: 40px;
+}
+
 .libTopSmol {
   @extend .libDivSmol;
   display: flex;
